@@ -6,35 +6,36 @@ from sqlalchemy.orm import Session
 
 from . import models, schemas
 
+# ORM 中以 JSON 字符串存储的字段 -> 解析失败/为空时的默认值
+JSON_FIELDS = {
+    "eligible_grades": [],
+    "tags": [],
+    "link_status": {"notice": "待确认", "registration": "待确认"},
+}
+
 
 def _to_out(c: models.Contest) -> schemas.ContestOut:
-    return schemas.ContestOut(
-        id=c.id,
-        name=c.name,
-        category=c.category or "",
-        organizer=c.organizer or "",
-        eligible_grades=json.loads(c.eligible_grades or "[]"),
-        major_limit=c.major_limit or "不限",
-        school_limit=c.school_limit or "待确认",
-        registration_deadline=c.registration_deadline or "",
-        submission_deadline=c.submission_deadline or "",
-        materials=c.materials or "",
-        skills=c.skills or "",
-        estimated_time=c.estimated_time or "",
-        notice_url=c.notice_url or "",
-        registration_url=c.registration_url or "",
-        source_type=c.source_type or "其他",
-        verified_at=c.verified_at or "",
-        status=c.status or "待确认",
-        review_note=c.review_note or "",
-    )
+    data = {"id": c.id}
+    for field in schemas.ContestOut.model_fields:
+        if field == "id":
+            continue
+        raw = getattr(c, field, None)
+        if field in JSON_FIELDS:
+            try:
+                data[field] = json.loads(raw) if raw else JSON_FIELDS[field]
+            except (json.JSONDecodeError, TypeError):
+                data[field] = JSON_FIELDS[field]
+        elif raw is not None:
+            data[field] = raw
+        # raw 为 None 的字符串字段交给 schema 默认值
+    return schemas.ContestOut(**data)
 
 
 def _apply(obj: models.Contest, data: dict) -> None:
     for key, value in data.items():
         if value is None:
             continue
-        if key == "eligible_grades":
+        if key in JSON_FIELDS:
             setattr(obj, key, json.dumps(value, ensure_ascii=False))
         else:
             setattr(obj, key, value)

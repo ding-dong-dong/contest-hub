@@ -183,13 +183,34 @@ def infer_category(name: str) -> str:
     return "综合"
 
 
+# 标签关键词（与后端推荐引擎的兴趣词表保持一致）
+TAG_KEYWORDS = {
+    "AI": ["AI", "人工智能", "机器学习", "深度学习", "算法"],
+    "编程": ["编程", "程序设计", "ACM", "代码", "软件开发", "计算机"],
+    "创新创业": ["创业", "创新", "互联网+", "商业计划"],
+    "商业分析": ["商业", "经管", "市场", "财务", "电子商务", "电商"],
+    "设计": ["设计", "视觉", "UI", "UX", "短视频", "新媒体", "传媒"],
+    "数学建模": ["数学", "建模", "数模"],
+    "电子": ["电子", "嵌入式", "单片机", "硬件", "EDA"],
+    "公益": ["公益", "志愿", "社会服务"],
+    "英语": ["英语", "英文", "作文", "写作"],
+}
+
+
+def infer_tags(name: str, category: str, text: str) -> list:
+    """从名称/类别/材料文本推导竞赛标签。"""
+    tags = [category] if category and category != "综合" else []
+    blob = f"{name} {category} {text}"
+    for tag, kws in TAG_KEYWORDS.items():
+        if any(kw in blob for kw in kws) and tag not in tags:
+            tags.append(tag)
+    return tags
+
+
 def build_review_note(r: dict) -> str:
     """未直接映射的字段全部落入 review_note，信息不丢失。"""
     parts = []
-    if r[COL_FLOW]:
-        parts.append(f"【提交流程】\n{r[COL_FLOW]}")
     extra = [
-        ("本届届次", COL_EDITION),
         ("比赛等级", COL_LEVEL),
         ("适配专业(原文)", COL_MAJOR_SRC),
         ("适配理想/目标", COL_GOAL),
@@ -220,13 +241,22 @@ def build_review_note(r: dict) -> str:
 def convert_row(r: dict) -> dict:
     name = cell(r[COL_NAME])
     notice_url = cell(r[COL_NOTICE_URL])
+    reg_url = cell(r[COL_REG_URL])
     deadline_raw = cell(r[COL_DEADLINE])
+    category = infer_category(name)
     seq = cell(r[COL_SEQ])
     seq_num = re.sub(r"\D", "", seq)
+    # 数据未经人工逐条复核链接，link_status 一律先给「待确认」
+    link_status = {
+        "notice": "待确认" if notice_url else "待确认",
+        "registration": "待确认" if reg_url else "待确认",
+    }
     contest = {
         "id": f"imp_{int(seq_num):03d}" if seq_num else None,
         "name": name,
-        "category": infer_category(name),
+        "session": cell(r[COL_EDITION]),
+        "category": category,
+        "tags": infer_tags(name, category, cell(r[COL_MATERIALS]) + cell(r[COL_VALUE])),
         "organizer": extract_organizer(cell(r[COL_VALUE]), cell(r[COL_QUAL])),
         "eligible_grades": extract_grades(cell(r[COL_QUAL])),
         "major_limit": normalize_major(cell(r[COL_MAJOR_SRC])),
@@ -234,13 +264,16 @@ def convert_row(r: dict) -> dict:
         "registration_deadline": extract_deadline(deadline_raw),
         "submission_deadline": "",
         "materials": cell(r[COL_MATERIALS]),
+        "process": cell(r[COL_FLOW]),
         "skills": "",
+        "outcomes": "",
         "estimated_time": "",
         "notice_url": notice_url,
-        "registration_url": cell(r[COL_REG_URL]),
+        "registration_url": reg_url,
         "source_type": "官网" if notice_url else "其他",
         "verified_at": extract_deadline(cell(r[COL_VERIFIED])),
         "status": normalize_status(cell(r[COL_STATUS])),
+        "link_status": link_status,
         "review_note": build_review_note(r),
     }
     return contest

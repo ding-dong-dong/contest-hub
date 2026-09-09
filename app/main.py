@@ -7,6 +7,7 @@
 from typing import List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Query, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from . import crud, recommend, schemas
@@ -15,16 +16,47 @@ from .database import get_db, init_db
 app = FastAPI(
     title="竞赛信息管理后端",
     description=(
-        "竞赛信息 CRUD + 智能推荐服务。字段定义参考田淋元产品文档第四章。"
+        "竞赛信息 CRUD + 智能推荐服务。字段定义参考田淋元产品文档第四章与连诗钰前端 V1 契约。"
         "\n\n推荐接口使用硬过滤 + 软评分（100 分制）排序返回。"
+        "\n\n字段命名：接口统一 snake_case，前端 adapter 负责映射驼峰。"
     ),
-    version="1.0.0",
+    version="1.1.0",
+)
+
+# 跨域：前端 Vite 开发服务器（默认 5173）与 Netlify 部署需要
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 联调期放开；生产环境收敛到具体域名
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
 @app.on_event("startup")
 def _startup() -> None:
     init_db()
+
+
+@app.get("/", summary="服务信息", include_in_schema=False)
+def root():
+    return {
+        "service": "contest-hub-backend",
+        "version": "1.1.0",
+        "docs": "/docs",
+        "redoc": "/redoc",
+        "endpoints": {
+            "list": "GET /contests?category=&status=&eligible_grades=",
+            "detail": "GET /contests/{id}",
+            "create": "POST /contests",
+            "update": "PUT /contests/{id}",
+            "delete": "DELETE /contests/{id}",
+            "recommend": (
+                "GET /contests/recommend?grade=&major=&interests=&experience="
+                "&time_per_week=&school="
+            ),
+        },
+    }
 
 
 # ---- 推荐接口必须在 /contests/{id} 之前注册，避免路径冲突 ----

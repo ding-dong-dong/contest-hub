@@ -1,8 +1,8 @@
-"""SQLAlchemy ORM 模型。
+"""SQLAlchemy ORM ????
 
-字段对齐：产品文档第四章 + 连诗钰《V1 字段映射与交接》前端契约
-（session/tags/process/outcomes/link_status）。
-list/dict 字段以 JSON 字符串形式存储。
+??ζ??????????????? + ??????V1 ?????????????????
+??session/tags/process/outcomes/link_status????
+list/dict ????? JSON ?????????洢??
 """
 from sqlalchemy import Column, String
 
@@ -19,8 +19,8 @@ class Contest(Base):
     tags = Column(String, default="[]")
     organizer = Column(String, default="")
     eligible_grades = Column(String, default="[]")
-    major_limit = Column(String, default="不限")
-    school_limit = Column(String, default="待确认")
+    major_limit = Column(String, default="????")
+    school_limit = Column(String, default="?????")
     registration_deadline = Column(String, default="")
     submission_deadline = Column(String, default="")
     materials = Column(String, default="")
@@ -31,8 +31,8 @@ class Contest(Base):
     estimated_time = Column(String, default="")
     notice_url = Column(String, default="")
     registration_url = Column(String, default="")
-    source_type = Column(String, default="其他")
+    source_type = Column(String, default="????")
     verified_at = Column(String, default="")
-    status = Column(String, default="待确认")
-    link_status = Column(String, default='{"notice": "待确认", "registration": "待确认"}')
+    status = Column(String, default="?????")
+    link_status = Column(String, default='{"notice": "?????", "registration": "?????"}')
     review_note = Column(String, default="")

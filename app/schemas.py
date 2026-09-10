@@ -3,12 +3,30 @@
 对外字段统一使用 snake_case；前端 adapter 负责映射为页面驼峰字段
 （见连诗钰《V1 字段映射与交接》）。
 """
-from typing import List, Optional
+from typing import List, Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 # 链接复核状态：可用 / 失效 / 待确认（未提供时前端按「待确认」处理）
 LINK_STATUS_VALUES = ("可用", "失效", "待确认")
+
+# 来源类型：对外只输出这 4 个标准中文值（前端 V1 契约；openapi 以 enum 暴露）
+SOURCE_TYPE_VALUES = ("官网", "百度百科", "转载", "其他")
+_SOURCE_TYPE_ALIASES = {
+    "官网": "官网", "官方": "官网", "official": "官网", "website": "官网",
+    "百度百科": "百度百科", "百科": "百度百科", "baidu_baike": "百度百科",
+    "baike": "百度百科", "baidubaike": "百度百科",
+    "转载": "转载", "转发": "转载", "repost": "转载", "reposted": "转载", "forward": "转载",
+    "其他": "其他", "其它": "其他", "other": "其他", "others": "其他", "unknown": "其他",
+}
+
+
+def normalize_source_type(value) -> str:
+    """把历史英文值/近义写法归一为 4 个标准中文枚举；无法识别时安全降级为「其他」。"""
+    if value is None:
+        return "其他"
+    key = str(value).strip()
+    return _SOURCE_TYPE_ALIASES.get(key, _SOURCE_TYPE_ALIASES.get(key.lower(), "其他"))
 
 
 class LinkStatus(BaseModel):
@@ -38,7 +56,13 @@ class ContestBase(BaseModel):
     estimated_time: Optional[str] = ""
     notice_url: str = ""
     registration_url: Optional[str] = ""
-    source_type: str = "其他"
+    source_type: Literal["官网", "百度百科", "转载", "其他"] = "其他"
+
+    @field_validator("source_type", mode="before")
+    @classmethod
+    def _normalize_source_type(cls, value):
+        # 归一化历史英文值（official/baidu_baike/repost）与近义写法为中文契约值
+        return None if value is None else normalize_source_type(value)
     verified_at: str = ""
     status: str = "待确认"
     link_status: LinkStatus = Field(default_factory=LinkStatus)
@@ -60,7 +84,9 @@ class ContestUpdate(BaseModel):
     major_limit: Optional[str] = None
     school_limit: Optional[str] = None
     registration_deadline: Optional[str] = None
+    registration_deadline_note: Optional[str] = None
     submission_deadline: Optional[str] = None
+    submission_deadline_note: Optional[str] = None
     materials: Optional[str] = None
     process: Optional[str] = None
     skills: Optional[str] = None
@@ -69,11 +95,16 @@ class ContestUpdate(BaseModel):
     estimated_time: Optional[str] = None
     notice_url: Optional[str] = None
     registration_url: Optional[str] = None
-    source_type: Optional[str] = None
+    source_type: Optional[Literal["官网", "百度百科", "转载", "其他"]] = None
     verified_at: Optional[str] = None
     status: Optional[str] = None
     link_status: Optional[LinkStatus] = None
     review_note: Optional[str] = None
+
+    @field_validator("source_type", mode="before")
+    @classmethod
+    def _normalize_source_type(cls, value):
+        return None if value is None else normalize_source_type(value)
 
 
 class ContestOut(ContestBase):

@@ -535,6 +535,12 @@
           },
           "source_type": {
             "type": "string",
+            "enum": [
+              "官网",
+              "百度百科",
+              "转载",
+              "其他"
+            ],
             "title": "Source Type",
             "default": "其他"
           },
@@ -716,6 +722,12 @@
           },
           "source_type": {
             "type": "string",
+            "enum": [
+              "官网",
+              "百度百科",
+              "转载",
+              "其他"
+            ],
             "title": "Source Type",
             "default": "其他"
           },
@@ -863,6 +875,17 @@
             ],
             "title": "Registration Deadline"
           },
+          "registration_deadline_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Deadline Note"
+          },
           "submission_deadline": {
             "anyOf": [
               {
@@ -873,6 +896,17 @@
               }
             ],
             "title": "Submission Deadline"
+          },
+          "submission_deadline_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submission Deadline Note"
           },
           "materials": {
             "anyOf": [
@@ -965,7 +999,13 @@
           "source_type": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "官网",
+                  "百度百科",
+                  "转载",
+                  "其他"
+                ]
               },
               {
                 "type": "null"

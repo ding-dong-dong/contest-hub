@@ -1,4 +1,4 @@
-"""CRUD ??????"""
+"""CRUD 操作。"""
 import json
 from typing import List, Optional
 
@@ -6,11 +6,11 @@ from sqlalchemy.orm import Session
 
 from . import models, schemas
 
-# ORM ???? JSON ??????洢????? -> ???????/??????????
+# ORM 中以 JSON 字符串存储的字段 -> 解析失败/为空时的默认值
 JSON_FIELDS = {
     "eligible_grades": [],
     "tags": [],
-    "link_status": {"notice": "?????", "registration": "?????"},
+    "link_status": {"notice": "待确认", "registration": "待确认"},
 }
 
 
@@ -27,7 +27,7 @@ def _to_out(c: models.Contest) -> schemas.ContestOut:
                 data[field] = JSON_FIELDS[field]
         elif raw is not None:
             data[field] = raw
-        # raw ? None ?????????ν??? schema ????
+        # raw 为 None 的字符串字段交给 schema 默认值
     return schemas.ContestOut(**data)
 
 
@@ -58,8 +58,8 @@ def list_contests(
     if eligible_grades:
         result = [c for c in result if eligible_grades in c.eligible_grades]
     if major:
-        # ?????? R2???????????????????????????????????????
-        result = [c for c in result if c.major_limit == "????" or major in c.major_limit]
+        # 产品文档 R2：按专业方向筛选；「不限」专业的竞赛对所有专业可见
+        result = [c for c in result if c.major_limit == "不限" or major in c.major_limit]
     return result
 
 

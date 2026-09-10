@@ -1,22 +1,22 @@
-"""ÍÆ¼öËã·¨£ºÓ²¹ıÂË + ÈíÆÀ·Ö¡£
+"""æ¨èç®—æ³•ï¼šç¡¬è¿‡æ»¤ + è½¯è¯„åˆ†ã€‚
 
-¹æÔòÒÀ¾İ£ºÌïÁÜÔª¡¶´óÑ§Éú¾ºÈüĞÅÏ¢Æ½Ì¨ V1.0 ²úÆ·½»¸¶ÎÄµµ¡·µÚÎåÕÂ¡¸»ù´¡ÍÆ¼ö¹æÔò¡¹¡£
+è§„åˆ™ä¾æ®ï¼šç”°æ·‹å…ƒã€Šå¤§å­¦ç”Ÿç«èµ›ä¿¡æ¯å¹³å° V1.0 äº§å“äº¤ä»˜æ–‡æ¡£ã€‹ç¬¬äº”ç« ã€ŒåŸºç¡€æ¨èè§„åˆ™ã€ã€‚
 
-Ò»¡¢Ó²¹ıÂË£¨ÏÈÅĞ¶ÏÄÜ²»ÄÜ²Î¼Ó£©£º
-  1. ×´Ì¬Îª¡¸ÒÑ½ØÖ¹/È¡Ïû¡¹£¬»ò±¨Ãû½ØÖ¹ÈÕÆÚÒÑ¹ı ¡ú ²»½øÈëÍÆ¼ö£¨ÁĞ±í/ÀúÊ·ÈÔ¿É²é¿´£©
-  2. Äê¼¶Ã÷È·²»ÔÚÊÊÓÃ·¶Î§ ¡ú ÅÅ³ı£»ÊÊÓÃÄê¼¶Î´Öª ¡ú ±£Áô²¢±ê¼Ç¡¸×Ê¸ñ´ıÈ·ÈÏ¡¹
-  3. ×¨ÒµÎªÓ²ĞÔÏŞÖÆÇÒÓÃ»§²»·ûºÏ ¡ú ÅÅ³ı£»¡¸²»ÏŞ¡¹»ò½ö½¨Òé·½Ïò ¡ú ±£Áô
-  4. ÏŞÖ¸¶¨ÔºĞ£ÇÒÑ§Ğ£Ã÷È·²»·û ¡ú ÅÅ³ı£»ÓÃ»§Î´ÌîÑ§Ğ£ ¡ú ±£Áô²¢ÌáÊ¾²¹³ä
-  5. ¹Ù·½À´Ô´/Á´½ÓÎŞ·¨ºËÑé ¡ú ²»×÷¸ß¿ÉĞÅ£¬±ê¼Ç verification_pending
+ä¸€ã€ç¡¬è¿‡æ»¤ï¼ˆå…ˆåˆ¤æ–­èƒ½ä¸èƒ½å‚åŠ ï¼‰ï¼š
+  1. çŠ¶æ€ä¸ºã€Œå·²æˆªæ­¢/å–æ¶ˆã€ï¼Œæˆ–æŠ¥åæˆªæ­¢æ—¥æœŸå·²è¿‡ â†’ ä¸è¿›å…¥æ¨èï¼ˆåˆ—è¡¨/å†å²ä»å¯æŸ¥çœ‹ï¼‰
+  2. å¹´çº§æ˜ç¡®ä¸åœ¨é€‚ç”¨èŒƒå›´ â†’ æ’é™¤ï¼›é€‚ç”¨å¹´çº§æœªçŸ¥ â†’ ä¿ç•™å¹¶æ ‡è®°ã€Œèµ„æ ¼å¾…ç¡®è®¤ã€
+  3. ä¸“ä¸šä¸ºç¡¬æ€§é™åˆ¶ä¸”ç”¨æˆ·ä¸ç¬¦åˆ â†’ æ’é™¤ï¼›ã€Œä¸é™ã€æˆ–ä»…å»ºè®®æ–¹å‘ â†’ ä¿ç•™
+  4. é™æŒ‡å®šé™¢æ ¡ä¸”å­¦æ ¡æ˜ç¡®ä¸ç¬¦ â†’ æ’é™¤ï¼›ç”¨æˆ·æœªå¡«å­¦æ ¡ â†’ ä¿ç•™å¹¶æç¤ºè¡¥å……
+  5. å®˜æ–¹æ¥æº/é“¾æ¥æ— æ³•æ ¸éªŒ â†’ ä¸ä½œé«˜å¯ä¿¡ï¼Œæ ‡è®° verification_pending
 
-¶ş¡¢ÈíÆÀ·Ö£¨Âú·Ö 100£¬¼üÃû¶ÔÆëÇ°¶Ë V1 ÆõÔ¼ scores£©£º
-  major_interest    ×¨ÒµÓëĞËÈ¤   30  ×¨ÒµÃüÖĞ 20 + ĞËÈ¤°´ÃüÖĞ±ÈÀı 0¨C10
-  grade_experience  Äê¼¶Óë¾­Ñé   25  Äê¼¶ÊÊÅä 15 + ¾­Ñé¡Á½¨ÒéÄÑ¶ÈÆ¥Åä 10£¨×ÊÁÏÎ´ÖªÖĞĞÔ 5£©
-  time              Ê±¼ä¿ÉĞĞĞÔ   20  Í¶Èë²»¸ßÓÚ¿ÉÍ¶ÈëÊ±¼ä 20 / ¸ßÒ»µµ 10 / ¸ßÁ½µµ¼°ÒÔÉÏ 0£»Î´ÖªÖĞĞÔ 10
-  value             ¿ÉÑéÖ¤¼ÛÖµ   15  ÄÜÁ¦ÑµÁ· 5 + ³É¹û²ú³ö 5 + ¸²¸Ç·¶Î§Ã÷È· 5£¨¾ùĞëÓĞ×ÊÁÏÒÀ¾İ£©
-  trust             ĞÅÏ¢¿ÉĞÅ¶È   10  Í¨Öª¿É·ÃÎÊ 4 + ±¨ÃûÈë¿Ú¿É·ÃÎÊ 3 + ½ü 30 ÌìºË²é 3
+äºŒã€è½¯è¯„åˆ†ï¼ˆæ»¡åˆ† 100ï¼Œé”®åå¯¹é½å‰ç«¯ V1 å¥‘çº¦ scoresï¼‰ï¼š
+  major_interest    ä¸“ä¸šä¸å…´è¶£   30  ä¸“ä¸šå‘½ä¸­ 20 + å…´è¶£æŒ‰å‘½ä¸­æ¯”ä¾‹ 0â€“10
+  grade_experience  å¹´çº§ä¸ç»éªŒ   25  å¹´çº§é€‚é… 15 + ç»éªŒÃ—å»ºè®®éš¾åº¦åŒ¹é… 10ï¼ˆèµ„æ–™æœªçŸ¥ä¸­æ€§ 5ï¼‰
+  time              æ—¶é—´å¯è¡Œæ€§   20  æŠ•å…¥ä¸é«˜äºå¯æŠ•å…¥æ—¶é—´ 20 / é«˜ä¸€æ¡£ 10 / é«˜ä¸¤æ¡£åŠä»¥ä¸Š 0ï¼›æœªçŸ¥ä¸­æ€§ 10
+  value             å¯éªŒè¯ä»·å€¼   15  èƒ½åŠ›è®­ç»ƒ 5 + æˆæœäº§å‡º 5 + è¦†ç›–èŒƒå›´æ˜ç¡® 5ï¼ˆå‡é¡»æœ‰èµ„æ–™ä¾æ®ï¼‰
+  trust             ä¿¡æ¯å¯ä¿¡åº¦   10  é€šçŸ¥å¯è®¿é—® 4 + æŠ¥åå…¥å£å¯è®¿é—® 3 + è¿‘ 30 å¤©æ ¸æŸ¥ 3
 
-Èı¡¢ÅÅĞò£º×Ü·Ö½µĞò£»Í¬·ÖÒÀ´Î°´¡¸ÉĞÎ´½ØÖ¹ ¡ú ½ØÖ¹ÈÕÆÚ¸ü½ü ¡ú ºË²éÈÕÆÚ¸üĞÂ¡¹¡£
+ä¸‰ã€æ’åºï¼šæ€»åˆ†é™åºï¼›åŒåˆ†ä¾æ¬¡æŒ‰ã€Œå°šæœªæˆªæ­¢ â†’ æˆªæ­¢æ—¥æœŸæ›´è¿‘ â†’ æ ¸æŸ¥æ—¥æœŸæ›´æ–°ã€ã€‚
 """
 import re
 from datetime import date
@@ -24,51 +24,51 @@ from typing import List, Optional, Tuple
 
 from . import schemas
 
-# ---- ³£Á¿ ----
-EXCLUDED_STATUS = {"ÒÑ½ØÖ¹", "È¡Ïû"}
+# ---- å¸¸é‡ ----
+EXCLUDED_STATUS = {"å·²æˆªæ­¢", "å–æ¶ˆ"}
 
-# ÓÃ»§Ã¿ÖÜ¿ÉÍ¶ÈëÊ±¼äµµÎ»£¨Ë÷Òı¼´µµÎ»£¬Ô½´óÊ±¼äÔ½³äÔ££©
-TIME_BANDS = ["¡Ü3Ğ¡Ê±", "4-7Ğ¡Ê±", "8-14Ğ¡Ê±", "¡İ15Ğ¡Ê±"]
+# ç”¨æˆ·æ¯å‘¨å¯æŠ•å…¥æ—¶é—´æ¡£ä½ï¼ˆç´¢å¼•å³æ¡£ä½ï¼Œè¶Šå¤§æ—¶é—´è¶Šå……è£•ï¼‰
+TIME_BANDS = ["â‰¤3å°æ—¶", "4-7å°æ—¶", "8-14å°æ—¶", "â‰¥15å°æ—¶"]
 TIME_BAND_INDEX = {name: i for i, name in enumerate(TIME_BANDS)}
 
-# ¾ºÈüÔ¤¼ÆÍ¶ÈëµµÎ»Ãû³Æ£¨ÓëÓÃ»§Ê±¼äµµÎ»¶ÔÓ¦£©
-EFFORT_BAND_NAMES = ["µÍ£¨¡Ü3Ğ¡Ê±/ÖÜ£©", "ÖĞ£¨4-7Ğ¡Ê±/ÖÜ£©", "¸ß£¨8-14Ğ¡Ê±/ÖÜ£©", "ºÜ¸ß£¨¡İ15Ğ¡Ê±/ÖÜ£©"]
+# ç«èµ›é¢„è®¡æŠ•å…¥æ¡£ä½åç§°ï¼ˆä¸ç”¨æˆ·æ—¶é—´æ¡£ä½å¯¹åº”ï¼‰
+EFFORT_BAND_NAMES = ["ä½ï¼ˆâ‰¤3å°æ—¶/å‘¨ï¼‰", "ä¸­ï¼ˆ4-7å°æ—¶/å‘¨ï¼‰", "é«˜ï¼ˆ8-14å°æ—¶/å‘¨ï¼‰", "å¾ˆé«˜ï¼ˆâ‰¥15å°æ—¶/å‘¨ï¼‰"]
 
-# Ô¤¼ÆÍ¶Èë¹Ø¼ü´Ê -> µµÎ»£¨¹Ø¼ü´ÊÓÅÏÈÓÚĞ¡Ê±Êı½âÎö£©
+# é¢„è®¡æŠ•å…¥å…³é”®è¯ -> æ¡£ä½ï¼ˆå…³é”®è¯ä¼˜å…ˆäºå°æ—¶æ•°è§£æï¼‰
 _EFFORT_KEYWORD_BAND = (
-    (("µÍ", "ÇáËÉ", "½ÏÉÙ"), 0),
-    (("ÖĞ", "ÊÊ¶È", "ÊÊÖĞ"), 1),
-    (("¸ß", "ÃÜ¼¯", "½Ï¶à", "´óÁ¿", "³¤"), 2),
+    (("ä½", "è½»æ¾", "è¾ƒå°‘"), 0),
+    (("ä¸­", "é€‚åº¦", "é€‚ä¸­"), 1),
+    (("é«˜", "å¯†é›†", "è¾ƒå¤š", "å¤§é‡", "é•¿"), 2),
 )
 
-# ²ÎÈü¾­ÑéµÈ¼¶£»½¨ÒéÄÑ¶ÈµÈ¼¶£º0 µÍ / 1 ÖĞ / 2 ¸ß
-EXPERIENCE_LEVEL = {"ÎŞ¾­Ñé": 0, "²Î¼Ó¹ıµ«Î´»ñ½±": 1, "ÓĞ»ñ½±¾­Ñé": 2}
-DIFFICULTY_NAMES = ["µÍ", "ÖĞ", "¸ß"]
+# å‚èµ›ç»éªŒç­‰çº§ï¼›å»ºè®®éš¾åº¦ç­‰çº§ï¼š0 ä½ / 1 ä¸­ / 2 é«˜
+EXPERIENCE_LEVEL = {"æ— ç»éªŒ": 0, "å‚åŠ è¿‡ä½†æœªè·å¥–": 1, "æœ‰è·å¥–ç»éªŒ": 2}
+DIFFICULTY_NAMES = ["ä½", "ä¸­", "é«˜"]
 
-# ĞËÈ¤¹Ø¼ü´Ê -> ¾ºÈüÎÄ±¾ÖĞ¿ÉÄÜ³öÏÖµÄ¹ØÁª´Ê
+# å…´è¶£å…³é”®è¯ -> ç«èµ›æ–‡æœ¬ä¸­å¯èƒ½å‡ºç°çš„å…³è”è¯
 INTEREST_KEYWORDS = {
-    "AI": ["AI", "ÈË¹¤ÖÇÄÜ", "»úÆ÷Ñ§Ï°", "Éî¶ÈÑ§Ï°", "Ëã·¨"],
-    "±à³Ì": ["±à³Ì", "³ÌĞòÉè¼Æ", "ACM", "´úÂë", "Èí¼ş¿ª·¢"],
-    "´´ĞÂ´´Òµ": ["´´Òµ", "´´ĞÂ", "»¥ÁªÍø+", "ÉÌÒµ¼Æ»®"],
-    "ÉÌÒµ·ÖÎö": ["ÉÌÒµ", "¾­¹Ü", "ÊĞ³¡", "²ÆÎñ", "°¸Àı·ÖÎö"],
-    "Éè¼Æ": ["Éè¼Æ", "ÊÓ¾õ", "UI", "UX", "¹¤ÒµÉè¼Æ"],
-    "ÊıÑ§½¨Ä£": ["ÊıÑ§", "½¨Ä£", "ÊıÄ£"],
-    "µç×Ó": ["µç×Ó", "Ç¶ÈëÊ½", "µ¥Æ¬»ú", "Ó²¼ş", "EDA"],
-    "¹«Òæ": ["¹«Òæ", "Ö¾Ô¸", "Éç»á·şÎñ"],
+    "AI": ["AI", "äººå·¥æ™ºèƒ½", "æœºå™¨å­¦ä¹ ", "æ·±åº¦å­¦ä¹ ", "ç®—æ³•"],
+    "ç¼–ç¨‹": ["ç¼–ç¨‹", "ç¨‹åºè®¾è®¡", "ACM", "ä»£ç ", "è½¯ä»¶å¼€å‘"],
+    "åˆ›æ–°åˆ›ä¸š": ["åˆ›ä¸š", "åˆ›æ–°", "äº’è”ç½‘+", "å•†ä¸šè®¡åˆ’"],
+    "å•†ä¸šåˆ†æ": ["å•†ä¸š", "ç»ç®¡", "å¸‚åœº", "è´¢åŠ¡", "æ¡ˆä¾‹åˆ†æ"],
+    "è®¾è®¡": ["è®¾è®¡", "è§†è§‰", "UI", "UX", "å·¥ä¸šè®¾è®¡"],
+    "æ•°å­¦å»ºæ¨¡": ["æ•°å­¦", "å»ºæ¨¡", "æ•°æ¨¡"],
+    "ç”µå­": ["ç”µå­", "åµŒå…¥å¼", "å•ç‰‡æœº", "ç¡¬ä»¶", "EDA"],
+    "å…¬ç›Š": ["å…¬ç›Š", "å¿—æ„¿", "ç¤¾ä¼šæœåŠ¡"],
 }
 
-# ×¨Òµ´óÀà -> ¾ºÈüÎÄ±¾¹ØÁª´Ê£¨ÓÃÓÚÅĞ¶Ï×¨ÒµÊÇ·ñÃüÖĞ£©
+# ä¸“ä¸šå¤§ç±» -> ç«èµ›æ–‡æœ¬å…³è”è¯ï¼ˆç”¨äºåˆ¤æ–­ä¸“ä¸šæ˜¯å¦å‘½ä¸­ï¼‰
 MAJOR_KEYWORDS = {
-    "¼ÆËã»ú": ["¼ÆËã»ú", "Èí¼ş", "³ÌĞò", "±à³Ì", "Ëã·¨", "ÈË¹¤ÖÇÄÜ", "AI", "Êı¾İ", "»¥ÁªÍø", "ĞÅÏ¢"],
-    "µç×ÓĞÅÏ¢": ["µç×Ó", "Í¨ĞÅ", "Ç¶ÈëÊ½", "µ¥Æ¬»ú", "Ó²¼ş", "EDA", "¼¯³ÉµçÂ·", "×Ô¶¯»¯"],
-    "¾­¹Ü": ["¾­¼Ã", "¹ÜÀí", "ÉÌÒµ", "´´Òµ", "ÊĞ³¡", "²ÆÎñ", "½ğÈÚ", "ÓªÏú", "µç×ÓÉÌÎñ"],
-    "Éè¼Æ": ["Éè¼Æ", "ÊÓ¾õ", "UI", "UX", "¹¤ÒµÉè¼Æ", "¹ã¸æ", "ÒÕÊõ", "´«Ã½"],
-    "»úĞµ": ["»úĞµ", "ÖÆÔì", "»úÆ÷ÈË", "¹¤³ÌÖÆÍ¼", "»úµç"],
-    "²ÄÁÏ": ["²ÄÁÏ", "»¯Ñ§", "»¯¹¤", "¸ß·Ö×Ó"],
-    "ÀíÑ§": ["ÊıÑ§", "ÎïÀí", "Í³¼Æ", "ÀíÑ§", "½¨Ä£"],
-    "ÎÄ·¨": ["·¨Ñ§", "·¨ÂÉ", "ÖĞÎÄ", "ÓïÑÔ", "Ó¢Óï", "×÷ÎÄ", "ĞÂÎÅ", "´«²¥", "ĞÂÃ½Ìå", "Éç»á¹¤×÷"],
-    "Ò½Ñ§": ["Ò½Ñ§", "Ò©", "»¤Àí", "ÁÙ´²", "ÉúÎï"],
-    "ÆäËû": [],
+    "è®¡ç®—æœº": ["è®¡ç®—æœº", "è½¯ä»¶", "ç¨‹åº", "ç¼–ç¨‹", "ç®—æ³•", "äººå·¥æ™ºèƒ½", "AI", "æ•°æ®", "äº’è”ç½‘", "ä¿¡æ¯"],
+    "ç”µå­ä¿¡æ¯": ["ç”µå­", "é€šä¿¡", "åµŒå…¥å¼", "å•ç‰‡æœº", "ç¡¬ä»¶", "EDA", "é›†æˆç”µè·¯", "è‡ªåŠ¨åŒ–"],
+    "ç»ç®¡": ["ç»æµ", "ç®¡ç†", "å•†ä¸š", "åˆ›ä¸š", "å¸‚åœº", "è´¢åŠ¡", "é‡‘è", "è¥é”€", "ç”µå­å•†åŠ¡"],
+    "è®¾è®¡": ["è®¾è®¡", "è§†è§‰", "UI", "UX", "å·¥ä¸šè®¾è®¡", "å¹¿å‘Š", "è‰ºæœ¯", "ä¼ åª’"],
+    "æœºæ¢°": ["æœºæ¢°", "åˆ¶é€ ", "æœºå™¨äºº", "å·¥ç¨‹åˆ¶å›¾", "æœºç”µ"],
+    "ææ–™": ["ææ–™", "åŒ–å­¦", "åŒ–å·¥", "é«˜åˆ†å­"],
+    "ç†å­¦": ["æ•°å­¦", "ç‰©ç†", "ç»Ÿè®¡", "ç†å­¦", "å»ºæ¨¡"],
+    "æ–‡æ³•": ["æ³•å­¦", "æ³•å¾‹", "ä¸­æ–‡", "è¯­è¨€", "è‹±è¯­", "ä½œæ–‡", "æ–°é—»", "ä¼ æ’­", "æ–°åª’ä½“", "ç¤¾ä¼šå·¥ä½œ"],
+    "åŒ»å­¦": ["åŒ»å­¦", "è¯", "æŠ¤ç†", "ä¸´åºŠ", "ç”Ÿç‰©"],
+    "å…¶ä»–": [],
 }
 
 
@@ -82,7 +82,7 @@ def _parse_date(s: str) -> Optional[date]:
 
 
 def _effort_band(estimated_time: str) -> Optional[int]:
-    """°Ñ¾ºÈüÔ¤¼ÆÍ¶ÈëÎÄ±¾½âÎöÎªÊ±¼äµµÎ» 0¨C3£»ÎŞ¿É¿¿ÒÀ¾İ·µ»Ø None£¨°´ÖĞĞÔ´¦Àí£©¡£"""
+    """æŠŠç«èµ›é¢„è®¡æŠ•å…¥æ–‡æœ¬è§£æä¸ºæ—¶é—´æ¡£ä½ 0â€“3ï¼›æ— å¯é ä¾æ®è¿”å› Noneï¼ˆæŒ‰ä¸­æ€§å¤„ç†ï¼‰ã€‚"""
     if not estimated_time:
         return None
     for kws, band in _EFFORT_KEYWORD_BAND:
@@ -102,41 +102,41 @@ def _effort_band(estimated_time: str) -> Optional[int]:
 
 
 def _difficulty_level(band: Optional[int]) -> Optional[int]:
-    """Í¶ÈëµµÎ» -> ½¨ÒéÄÑ¶È£ºµÍ/ÖĞ/¸ß£¨8 Ğ¡Ê±/ÖÜÒÔÉÏÊÓÎª¸ß£©¡£"""
+    """æŠ•å…¥æ¡£ä½ -> å»ºè®®éš¾åº¦ï¼šä½/ä¸­/é«˜ï¼ˆ8 å°æ—¶/å‘¨ä»¥ä¸Šè§†ä¸ºé«˜ï¼‰ã€‚"""
     if band is None:
         return None
     return 0 if band == 0 else 1 if band == 1 else 2
 
 
-# ---------- Ó²¹ıÂË ----------
+# ---------- ç¡¬è¿‡æ»¤ ----------
 def _hard_filter(contest: schemas.ContestOut, user: schemas.UserProfile) -> Optional[str]:
-    """·µ»Ø None ±íÊ¾Í¨¹ı£»·µ»Ø×Ö·û´®±íÊ¾±»ÌŞ³ıµÄÔ­Òò¡£"""
+    """è¿”å› None è¡¨ç¤ºé€šè¿‡ï¼›è¿”å›å­—ç¬¦ä¸²è¡¨ç¤ºè¢«å‰”é™¤çš„åŸå› ã€‚"""
     if contest.status in EXCLUDED_STATUS:
-        return f"×´Ì¬Îª¡¸{contest.status}¡¹£¬²»½øÈëÍÆ¼ö"
+        return f"çŠ¶æ€ä¸ºã€Œ{contest.status}ã€ï¼Œä¸è¿›å…¥æ¨è"
     deadline = _parse_date(contest.registration_deadline)
     if deadline and deadline < date.today():
-        return f"±¨ÃûÒÑÓÚ {deadline.isoformat()} ½ØÖ¹"
+        return f"æŠ¥åå·²äº {deadline.isoformat()} æˆªæ­¢"
     if contest.eligible_grades and user.grade not in contest.eligible_grades:
-        return f"Äê¼¶²»Æ¥Åä£¨ÒªÇó {contest.eligible_grades}£©"
-    if contest.major_limit and contest.major_limit != "²»ÏŞ":
+        return f"å¹´çº§ä¸åŒ¹é…ï¼ˆè¦æ±‚ {contest.eligible_grades}ï¼‰"
+    if contest.major_limit and contest.major_limit != "ä¸é™":
         if user.major not in contest.major_limit:
-            return f"×¨ÒµÊÜÏŞÓÚ¡¸{contest.major_limit}¡¹"
-    if contest.school_limit and contest.school_limit not in {"È«¹ú", "´ıÈ·ÈÏ"}:
+            return f"ä¸“ä¸šå—é™äºã€Œ{contest.major_limit}ã€"
+    if contest.school_limit and contest.school_limit not in {"å…¨å›½", "å¾…ç¡®è®¤"}:
         if user.school and user.school not in contest.school_limit:
-            return f"ÔºĞ£ÊÜÏŞÓÚ¡¸{contest.school_limit}¡¹"
+            return f"é™¢æ ¡å—é™äºã€Œ{contest.school_limit}ã€"
     return None
 
 
-# ---------- ÈíÆÀ·Ö£¨Ã¿¸öÎ¬¶È·µ»Ø ·ÖÊı + ¼ò¶ÌÀíÓÉ£©----------
+# ---------- è½¯è¯„åˆ†ï¼ˆæ¯ä¸ªç»´åº¦è¿”å› åˆ†æ•° + ç®€çŸ­ç†ç”±ï¼‰----------
 def _major_interest_score(
     contest: schemas.ContestOut, user: schemas.UserProfile
 ) -> Tuple[float, str, bool, List[str]]:
-    """×¨ÒµÓëĞËÈ¤ 30£º×¨ÒµÃüÖĞ 20£»ĞËÈ¤°´ÃüÖĞ±ÈÀı 0¨C10¡£"""
+    """ä¸“ä¸šä¸å…´è¶£ 30ï¼šä¸“ä¸šå‘½ä¸­ 20ï¼›å…´è¶£æŒ‰å‘½ä¸­æ¯”ä¾‹ 0â€“10ã€‚"""
     text = " ".join(
         [contest.category, " ".join(contest.tags), contest.skills, contest.name, contest.major_limit]
     )
     major_hit = (
-        contest.major_limit == "²»ÏŞ"
+        contest.major_limit == "ä¸é™"
         or bool(user.major and user.major in contest.major_limit)
         or any(kw in text for kw in MAJOR_KEYWORDS.get(user.major, []))
     )
@@ -144,112 +144,112 @@ def _major_interest_score(
 
     hits: List[str] = []
     if not user.interests:
-        interest_part = 5.0  # Î´Ìá¹©ĞËÈ¤°´ÖĞĞÔ´¦Àí
-        interest_note = "Î´Ìá¹©ĞËÈ¤£¬ĞËÈ¤Ïî°´ÖĞĞÔ 5 ·Ö"
+        interest_part = 5.0  # æœªæä¾›å…´è¶£æŒ‰ä¸­æ€§å¤„ç†
+        interest_note = "æœªæä¾›å…´è¶£ï¼Œå…´è¶£é¡¹æŒ‰ä¸­æ€§ 5 åˆ†"
     else:
         for it in user.interests:
             kws = INTEREST_KEYWORDS.get(it, [it])
             if any(kw in text for kw in kws):
                 hits.append(it)
         interest_part = round(10 * len(hits) / len(user.interests), 1)
-        interest_note = f"ĞËÈ¤ÃüÖĞ£º{'¡¢'.join(hits)}" if hits else "ĞËÈ¤±êÇ©Î´ÃüÖĞ£¨0/10£©"
+        interest_note = f"å…´è¶£å‘½ä¸­ï¼š{'ã€'.join(hits)}" if hits else "å…´è¶£æ ‡ç­¾æœªå‘½ä¸­ï¼ˆ0/10ï¼‰"
 
     score = round(major_part + interest_part, 2)
-    note = f"×¨Òµ{'ÃüÖĞ' if major_hit else 'Î´ÃüÖĞ'}£¨{major_part:g}/20£©£»{interest_note}£¨{interest_part:g}/10£©"
+    note = f"ä¸“ä¸š{'å‘½ä¸­' if major_hit else 'æœªå‘½ä¸­'}ï¼ˆ{major_part:g}/20ï¼‰ï¼›{interest_note}ï¼ˆ{interest_part:g}/10ï¼‰"
     return score, note, major_hit, hits
 
 
 def _grade_exp_score(
     contest: schemas.ContestOut, user: schemas.UserProfile
 ) -> Tuple[float, str, Optional[int]]:
-    """Äê¼¶Óë¾­Ñé 25£ºÄê¼¶ÊÊÅä 15£»¾­ÑéÓë½¨ÒéÄÑ¶ÈÆ¥Åä 10£¨×ÊÁÏÎ´ÖªÖĞĞÔ 5£©¡£"""
+    """å¹´çº§ä¸ç»éªŒ 25ï¼šå¹´çº§é€‚é… 15ï¼›ç»éªŒä¸å»ºè®®éš¾åº¦åŒ¹é… 10ï¼ˆèµ„æ–™æœªçŸ¥ä¸­æ€§ 5ï¼‰ã€‚"""
     if not contest.eligible_grades:
         grade_part = 10.0
-        grade_note = "ÊÊÓÃÄê¼¶Î´Öª£¬Äê¼¶Ïî°´ÖĞĞÔ 10 ·Ö²¢±ê¼Ç×Ê¸ñ´ıÈ·ÈÏ"
+        grade_note = "é€‚ç”¨å¹´çº§æœªçŸ¥ï¼Œå¹´çº§é¡¹æŒ‰ä¸­æ€§ 10 åˆ†å¹¶æ ‡è®°èµ„æ ¼å¾…ç¡®è®¤"
     elif user.grade in contest.eligible_grades:
         grade_part = 15.0
-        grade_note = f"Äê¼¶{user.grade}ÔÚÊÊÓÃ·¶Î§ÄÚ£¨15/15£©"
+        grade_note = f"å¹´çº§{user.grade}åœ¨é€‚ç”¨èŒƒå›´å†…ï¼ˆ15/15ï¼‰"
     else:
         grade_part = 5.0
-        grade_note = "Äê¼¶²»ÔÚÊÊÓÃ·¶Î§£¨5/15£©"
+        grade_note = "å¹´çº§ä¸åœ¨é€‚ç”¨èŒƒå›´ï¼ˆ5/15ï¼‰"
 
     band = _effort_band(contest.estimated_time)
     diff = _difficulty_level(band)
     exp_lvl = EXPERIENCE_LEVEL.get(user.experience, 1)
     if diff is None:
         exp_part = 5.0
-        exp_note = "¾ºÈü½¨ÒéÄÑ¶È/Í¶ÈëÎŞ¿É¿¿ÒÀ¾İ£¬¾­ÑéÆ¥Åä°´ÖĞĞÔ 5 ·Ö"
+        exp_note = "ç«èµ›å»ºè®®éš¾åº¦/æŠ•å…¥æ— å¯é ä¾æ®ï¼Œç»éªŒåŒ¹é…æŒ‰ä¸­æ€§ 5 åˆ†"
     else:
         exp_part = float(max(0, 10 - 5 * abs(exp_lvl - diff)))
-        exp_note = f"¾­Ñé¡¸{user.experience}¡¹Óë½¨ÒéÄÑ¶È¡¸{DIFFICULTY_NAMES[diff]}¡¹Æ¥Åä£¨{exp_part:g}/10£©"
+        exp_note = f"ç»éªŒã€Œ{user.experience}ã€ä¸å»ºè®®éš¾åº¦ã€Œ{DIFFICULTY_NAMES[diff]}ã€åŒ¹é…ï¼ˆ{exp_part:g}/10ï¼‰"
 
     score = round(grade_part + exp_part, 2)
-    return score, f"{grade_note}£»{exp_note}", band
+    return score, f"{grade_note}ï¼›{exp_note}", band
 
 
 def _time_score(
     contest: schemas.ContestOut, user: schemas.UserProfile, band: Optional[int]
 ) -> Tuple[float, str]:
-    """Ê±¼ä¿ÉĞĞĞÔ 20£ºÍ¶Èë²»¸ßÓÚ¿ÉÍ¶ÈëÊ±¼ä 20£»¸ßÒ»µµ 10£»¸ßÁ½µµ¼°ÒÔÉÏ 0£»Î´ÖªÖĞĞÔ 10¡£"""
+    """æ—¶é—´å¯è¡Œæ€§ 20ï¼šæŠ•å…¥ä¸é«˜äºå¯æŠ•å…¥æ—¶é—´ 20ï¼›é«˜ä¸€æ¡£ 10ï¼›é«˜ä¸¤æ¡£åŠä»¥ä¸Š 0ï¼›æœªçŸ¥ä¸­æ€§ 10ã€‚"""
     u = TIME_BAND_INDEX.get(user.time_per_week)
     if u is None:
-        return 10.0, "Ã¿ÖÜ¿ÉÍ¶ÈëÊ±¼äµµÎ»Î´Öª£¬°´ÖĞĞÔ 10 ·Ö´¦Àí"
+        return 10.0, "æ¯å‘¨å¯æŠ•å…¥æ—¶é—´æ¡£ä½æœªçŸ¥ï¼ŒæŒ‰ä¸­æ€§ 10 åˆ†å¤„ç†"
     if band is None:
-        return 10.0, "¾ºÈüÔ¤¼ÆÍ¶ÈëÎŞ¿É¿¿Êı¾İ£¬°´ÖĞĞÔ 10 ·Ö²¢ÌáÊ¾"
+        return 10.0, "ç«èµ›é¢„è®¡æŠ•å…¥æ— å¯é æ•°æ®ï¼ŒæŒ‰ä¸­æ€§ 10 åˆ†å¹¶æç¤º"
     if band <= u:
-        return 20.0, f"Ô¤¼ÆÍ¶Èë{EFFORT_BAND_NAMES[band]}£¬²»¸ßÓÚÄãµÄ¿ÉÍ¶ÈëÊ±¼ä£¨{user.time_per_week}£©"
+        return 20.0, f"é¢„è®¡æŠ•å…¥{EFFORT_BAND_NAMES[band]}ï¼Œä¸é«˜äºä½ çš„å¯æŠ•å…¥æ—¶é—´ï¼ˆ{user.time_per_week}ï¼‰"
     if band == u + 1:
-        return 10.0, f"Ô¤¼ÆÍ¶Èë{EFFORT_BAND_NAMES[band]}£¬±ÈÄãµÄ¿ÉÍ¶ÈëÊ±¼ä£¨{user.time_per_week}£©¸ßÒ»µµ"
-    return 0.0, f"Ô¤¼ÆÍ¶Èë{EFFORT_BAND_NAMES[band]}£¬±ÈÄãµÄ¿ÉÍ¶ÈëÊ±¼ä£¨{user.time_per_week}£©¸ßÁ½µµ¼°ÒÔÉÏ"
+        return 10.0, f"é¢„è®¡æŠ•å…¥{EFFORT_BAND_NAMES[band]}ï¼Œæ¯”ä½ çš„å¯æŠ•å…¥æ—¶é—´ï¼ˆ{user.time_per_week}ï¼‰é«˜ä¸€æ¡£"
+    return 0.0, f"é¢„è®¡æŠ•å…¥{EFFORT_BAND_NAMES[band]}ï¼Œæ¯”ä½ çš„å¯æŠ•å…¥æ—¶é—´ï¼ˆ{user.time_per_week}ï¼‰é«˜ä¸¤æ¡£åŠä»¥ä¸Š"
 
 
 def _value_score(contest: schemas.ContestOut) -> Tuple[float, str]:
-    """¿ÉÑéÖ¤¼ÛÖµ 15£ºÄÜÁ¦ÑµÁ·ËµÃ÷ 5£»³É¹û²ú³öËµÃ÷ 5£»ÃæÏòÈ«¹ú»ò¸²¸Ç·¶Î§Ã÷È· 5¡£"""
+    """å¯éªŒè¯ä»·å€¼ 15ï¼šèƒ½åŠ›è®­ç»ƒè¯´æ˜ 5ï¼›æˆæœäº§å‡ºè¯´æ˜ 5ï¼›é¢å‘å…¨å›½æˆ–è¦†ç›–èŒƒå›´æ˜ç¡® 5ã€‚"""
     score = 0.0
     parts: List[str] = []
     if contest.skills and contest.skills.strip():
         score += 5.0
-        parts.append("ÓĞÄÜÁ¦ÑµÁ·ËµÃ÷£¨5£©")
+        parts.append("æœ‰èƒ½åŠ›è®­ç»ƒè¯´æ˜ï¼ˆ5ï¼‰")
     if contest.outcomes and contest.outcomes.strip():
         score += 5.0
-        parts.append("ÓĞ³É¹û²ú³öËµÃ÷£¨5£©")
-    if contest.school_limit and contest.school_limit != "´ıÈ·ÈÏ":
+        parts.append("æœ‰æˆæœäº§å‡ºè¯´æ˜ï¼ˆ5ï¼‰")
+    if contest.school_limit and contest.school_limit != "å¾…ç¡®è®¤":
         score += 5.0
-        parts.append(f"¸²¸Ç·¶Î§Ã÷È·£¨{contest.school_limit}£¬5£©")
+        parts.append(f"è¦†ç›–èŒƒå›´æ˜ç¡®ï¼ˆ{contest.school_limit}ï¼Œ5ï¼‰")
     if not parts:
-        parts.append("ÄÜÁ¦ÑµÁ·/³É¹û²ú³ö/¸²¸Ç·¶Î§¾ùÈ±ÉÙ×ÊÁÏÒÀ¾İ£¨0£©")
-    return score, "¡¢".join(parts)
+        parts.append("èƒ½åŠ›è®­ç»ƒ/æˆæœäº§å‡º/è¦†ç›–èŒƒå›´å‡ç¼ºå°‘èµ„æ–™ä¾æ®ï¼ˆ0ï¼‰")
+    return score, "ã€".join(parts)
 
 
 def _trust_score(contest: schemas.ContestOut) -> Tuple[float, str]:
-    """ĞÅÏ¢¿ÉĞÅ¶È 10£º¹Ù·½Í¨Öª¿É·ÃÎÊ 4£»¹Ù·½±¨ÃûÈë¿Ú¿É·ÃÎÊ 3£»½ü 30 ÌìºË²é 3¡£"""
+    """ä¿¡æ¯å¯ä¿¡åº¦ 10ï¼šå®˜æ–¹é€šçŸ¥å¯è®¿é—® 4ï¼›å®˜æ–¹æŠ¥åå…¥å£å¯è®¿é—® 3ï¼›è¿‘ 30 å¤©æ ¸æŸ¥ 3ã€‚"""
     score = 0.0
     parts: List[str] = []
     ls = contest.link_status
-    if contest.notice_url and ls.notice == "¿ÉÓÃ":
+    if contest.notice_url and ls.notice == "å¯ç”¨":
         score += 4.0
-        parts.append("¹Ù·½Í¨Öª¿É·ÃÎÊ£¨4£©")
+        parts.append("å®˜æ–¹é€šçŸ¥å¯è®¿é—®ï¼ˆ4ï¼‰")
     else:
-        parts.append("¹Ù·½Í¨Öª" + ("´ı¸´ºË/Ê§Ğ§£¨0£©" if contest.notice_url else "È±Ê§£¨0£©"))
-    if contest.registration_url and ls.registration == "¿ÉÓÃ":
+        parts.append("å®˜æ–¹é€šçŸ¥" + ("å¾…å¤æ ¸/å¤±æ•ˆï¼ˆ0ï¼‰" if contest.notice_url else "ç¼ºå¤±ï¼ˆ0ï¼‰"))
+    if contest.registration_url and ls.registration == "å¯ç”¨":
         score += 3.0
-        parts.append("¹Ù·½±¨ÃûÈë¿Ú¿É·ÃÎÊ£¨3£©")
+        parts.append("å®˜æ–¹æŠ¥åå…¥å£å¯è®¿é—®ï¼ˆ3ï¼‰")
     else:
-        parts.append("¹Ù·½±¨ÃûÈë¿Ú" + ("´ı¸´ºË/Ê§Ğ§£¨0£©" if contest.registration_url else "È±Ê§»òÎ´¿ª·Å£¨0£©"))
+        parts.append("å®˜æ–¹æŠ¥åå…¥å£" + ("å¾…å¤æ ¸/å¤±æ•ˆï¼ˆ0ï¼‰" if contest.registration_url else "ç¼ºå¤±æˆ–æœªå¼€æ”¾ï¼ˆ0ï¼‰"))
     v = _parse_date(contest.verified_at)
     if v:
         days = (date.today() - v).days
         if days <= 30:
             score += 3.0
-            parts.append(f"{days}ÌìÄÚ¸ÕºË²é£¨3£©")
+            parts.append(f"{days}å¤©å†…åˆšæ ¸æŸ¥ï¼ˆ3ï¼‰")
         else:
-            parts.append(f"ºË²éÒÑ³¬¹ı30Ìì£¨{days}Ìì£¬0£©")
+            parts.append(f"æ ¸æŸ¥å·²è¶…è¿‡30å¤©ï¼ˆ{days}å¤©ï¼Œ0ï¼‰")
     else:
-        parts.append("ÎŞºË²éÊ±¼ä¼ÇÂ¼£¨0£©")
-    return score, "¡¢".join(parts)
+        parts.append("æ— æ ¸æŸ¥æ—¶é—´è®°å½•ï¼ˆ0ï¼‰")
+    return score, "ã€".join(parts)
 
 
-# ---------- ¸æ¾¯Óë´ıÈ·ÈÏ±ê¼Ç ----------
+# ---------- å‘Šè­¦ä¸å¾…ç¡®è®¤æ ‡è®° ----------
 def _build_warnings(
     contest: schemas.ContestOut, user: schemas.UserProfile
 ) -> Tuple[List[str], bool, bool]:
@@ -258,41 +258,41 @@ def _build_warnings(
     verification_pending = False
 
     if not contest.registration_deadline:
-        warnings.append("±¨Ãû½ØÖ¹ÈÕÆÚ´ıÈ·ÈÏ£¬ÇëÒÔ¹ÙÍøÍ¨ÖªÎª×¼")
-    if contest.school_limit == "´ıÈ·ÈÏ" or not contest.eligible_grades:
+        warnings.append("æŠ¥åæˆªæ­¢æ—¥æœŸå¾…ç¡®è®¤ï¼Œè¯·ä»¥å®˜ç½‘é€šçŸ¥ä¸ºå‡†")
+    if contest.school_limit == "å¾…ç¡®è®¤" or not contest.eligible_grades:
         qualification_pending = True
-        warnings.append("ÊÊÓÃÔºĞ£/Äê¼¶·¶Î§´ıÈË¹¤È·ÈÏ")
-    if contest.school_limit and contest.school_limit not in {"È«¹ú", "´ıÈ·ÈÏ"} and not user.school:
+        warnings.append("é€‚ç”¨é™¢æ ¡/å¹´çº§èŒƒå›´å¾…äººå·¥ç¡®è®¤")
+    if contest.school_limit and contest.school_limit not in {"å…¨å›½", "å¾…ç¡®è®¤"} and not user.school:
         qualification_pending = True
-        warnings.append("¸Ã¾ºÈüÏŞÖ¸¶¨ÔºĞ££¬½¨Òé²¹³äÑ§Ğ£ĞÅÏ¢ÒÔºË¶Ô×Ê¸ñ")
-    if contest.status == "´ıÈ·ÈÏ":
+        warnings.append("è¯¥ç«èµ›é™æŒ‡å®šé™¢æ ¡ï¼Œå»ºè®®è¡¥å……å­¦æ ¡ä¿¡æ¯ä»¥æ ¸å¯¹èµ„æ ¼")
+    if contest.status == "å¾…ç¡®è®¤":
         verification_pending = True
-        warnings.append("¾ºÈüµ±Ç°×´Ì¬´ı¸´ºË")
+        warnings.append("ç«èµ›å½“å‰çŠ¶æ€å¾…å¤æ ¸")
     ls = contest.link_status
-    if not contest.notice_url or ls.notice != "¿ÉÓÃ":
+    if not contest.notice_url or ls.notice != "å¯ç”¨":
         verification_pending = True
-        warnings.append("¹Ù·½Í¨ÖªÁ´½Ó" + ("´ı¸´ºË/Ê§Ğ§" if contest.notice_url else "È±Ê§"))
+        warnings.append("å®˜æ–¹é€šçŸ¥é“¾æ¥" + ("å¾…å¤æ ¸/å¤±æ•ˆ" if contest.notice_url else "ç¼ºå¤±"))
     if contest.registration_url:
-        if ls.registration != "¿ÉÓÃ":
+        if ls.registration != "å¯ç”¨":
             verification_pending = True
-            warnings.append("¹Ù·½±¨ÃûÁ´½Ó´ı¸´ºË/Ê§Ğ§")
+            warnings.append("å®˜æ–¹æŠ¥åé“¾æ¥å¾…å¤æ ¸/å¤±æ•ˆ")
     else:
         verification_pending = True
-        warnings.append("¹Ù·½±¨ÃûÈë¿ÚÈ±Ê§»òÉĞÎ´¿ª·Å£¬ÇëÒÔ¹Ù·½Í¨ÖªÎª×¼")
+        warnings.append("å®˜æ–¹æŠ¥åå…¥å£ç¼ºå¤±æˆ–å°šæœªå¼€æ”¾ï¼Œè¯·ä»¥å®˜æ–¹é€šçŸ¥ä¸ºå‡†")
     if not contest.verified_at:
         verification_pending = True
     if not contest.estimated_time:
-        warnings.append("Ô¤¼ÆÍ¶ÈëÔİÎŞ¿É¿¿Êı¾İ£¬Ê±¼ä¿ÉĞĞĞÔ°´ÖĞĞÔÆÀ¹À")
+        warnings.append("é¢„è®¡æŠ•å…¥æš‚æ— å¯é æ•°æ®ï¼Œæ—¶é—´å¯è¡Œæ€§æŒ‰ä¸­æ€§è¯„ä¼°")
     return warnings, qualification_pending, verification_pending
 
 
 def _match_level(total: float) -> str:
-    """Õ¹Ê¾·Ö²ã£º80¨C100 ¸ß¶ÈÆ¥Åä£»60¨C79 ½ÏÎªÆ¥Åä£»0¨C59 ¿É½øÒ»²½ÁË½â¡£"""
+    """å±•ç¤ºåˆ†å±‚ï¼š80â€“100 é«˜åº¦åŒ¹é…ï¼›60â€“79 è¾ƒä¸ºåŒ¹é…ï¼›0â€“59 å¯è¿›ä¸€æ­¥äº†è§£ã€‚"""
     if total >= 80:
-        return "¸ß¶ÈÆ¥Åä"
+        return "é«˜åº¦åŒ¹é…"
     if total >= 60:
-        return "½ÏÎªÆ¥Åä"
-    return "¿É½øÒ»²½ÁË½â"
+        return "è¾ƒä¸ºåŒ¹é…"
+    return "å¯è¿›ä¸€æ­¥äº†è§£"
 
 
 def _summary_reason(
@@ -304,47 +304,47 @@ def _summary_reason(
     time_s: float,
     has_pending: bool,
 ) -> str:
-    """²úÆ·ÎÄµµµÚÎåÕÂµÚ 5 ½Ú£ºÍÆ¼öÀíÓÉÉú³ÉÄ£°å¡£"""
+    """äº§å“æ–‡æ¡£ç¬¬äº”ç« ç¬¬ 5 èŠ‚ï¼šæ¨èç†ç”±ç”Ÿæˆæ¨¡æ¿ã€‚"""
     facets: List[str] = []
     if major_hit:
-        facets.append(f"×¨Òµ¡¸{user.major}¡¹")
+        facets.append(f"ä¸“ä¸šã€Œ{user.major}ã€")
     if interest_hits:
-        facets.append(f"ĞËÈ¤¡¸{'¡¢'.join(interest_hits)}¡¹")
+        facets.append(f"å…´è¶£ã€Œ{'ã€'.join(interest_hits)}ã€")
     if contest.eligible_grades and user.grade in contest.eligible_grades:
-        facets.append(f"Äê¼¶¡¸{user.grade}¡¹")
-    facets.append(f"¾­Ñé¡¸{user.experience}¡¹")
+        facets.append(f"å¹´çº§ã€Œ{user.grade}ã€")
+    facets.append(f"ç»éªŒã€Œ{user.experience}ã€")
 
     targets: List[str] = []
     if contest.category or contest.tags:
-        tag_text = "¡¢".join(x for x in [contest.category, *contest.tags] if x)
+        tag_text = "ã€".join(x for x in [contest.category, *contest.tags] if x)
         if tag_text:
-            targets.append(f"ÈüµÀ£¨{tag_text}£©")
+            targets.append(f"èµ›é“ï¼ˆ{tag_text}ï¼‰")
     if contest.skills:
-        targets.append("ÄÜÁ¦ÒªÇó")
+        targets.append("èƒ½åŠ›è¦æ±‚")
     if contest.major_limit or contest.eligible_grades:
-        targets.append("²ÎÈü¶ÔÏó")
+        targets.append("å‚èµ›å¯¹è±¡")
 
     if band is None:
-        time_phrase = "¾ºÈüÔ¤¼ÆÃ¿ÖÜÍ¶ÈëÊ±³¤ÔİÎŞ¿É¿¿Êı¾İ£¬Ê±¼äÆ¥Åä°´ÖĞĞÔÆÀ¹À"
+        time_phrase = "ç«èµ›é¢„è®¡æ¯å‘¨æŠ•å…¥æ—¶é•¿æš‚æ— å¯é æ•°æ®ï¼Œæ—¶é—´åŒ¹é…æŒ‰ä¸­æ€§è¯„ä¼°"
     elif time_s >= 20:
         time_phrase = (
-            f"Ô¤¼ÆÃ¿ÖÜÍ¶Èë{contest.estimated_time}£¬ÔÚÄãµÄ¿ÉÍ¶ÈëÊ±¼ä£¨{user.time_per_week}£©·¶Î§ÄÚ"
+            f"é¢„è®¡æ¯å‘¨æŠ•å…¥{contest.estimated_time}ï¼Œåœ¨ä½ çš„å¯æŠ•å…¥æ—¶é—´ï¼ˆ{user.time_per_week}ï¼‰èŒƒå›´å†…"
         )
     else:
         time_phrase = (
-            f"Ô¤¼ÆÃ¿ÖÜÍ¶Èë{contest.estimated_time}£¬¿ÉÄÜ³¬¹ıÄãµÄ¿ÉÍ¶ÈëÊ±¼ä£¨{user.time_per_week}£©"
+            f"é¢„è®¡æ¯å‘¨æŠ•å…¥{contest.estimated_time}ï¼Œå¯èƒ½è¶…è¿‡ä½ çš„å¯æŠ•å…¥æ—¶é—´ï¼ˆ{user.time_per_week}ï¼‰"
         )
 
     msg = (
-        f"ÍÆ¼ö¸øÄã£º{contest.name}¡£"
-        f"ÄãµÄ{'¡¢'.join(facets)}Óë¸Ã¾ºÈüµÄ{'¡¢'.join(targets) or '²ÎÈüÒªÇó'}Æ¥Åä£»"
-        f"{time_phrase}¡£"
-        f"±¨Ãû½ØÖ¹{contest.registration_deadline or '´ıÈ·ÈÏ'}£¬"
-        f"ĞÅÏ¢×î½üºË²éÓÚ{contest.verified_at or '´ıÈ·ÈÏ'}¡£"
+        f"æ¨èç»™ä½ ï¼š{contest.name}ã€‚"
+        f"ä½ çš„{'ã€'.join(facets)}ä¸è¯¥ç«èµ›çš„{'ã€'.join(targets) or 'å‚èµ›è¦æ±‚'}åŒ¹é…ï¼›"
+        f"{time_phrase}ã€‚"
+        f"æŠ¥åæˆªæ­¢{contest.registration_deadline or 'å¾…ç¡®è®¤'}ï¼Œ"
+        f"ä¿¡æ¯æœ€è¿‘æ ¸æŸ¥äº{contest.verified_at or 'å¾…ç¡®è®¤'}ã€‚"
     )
     if has_pending:
-        msg += "´æÔÚ×Ê¸ñ»ò×ÊÁÏ´ıÈ·ÈÏÏî£¬Çë×¢ÒâÏÂ·½·çÏÕÌáÊ¾¡£"
-    msg += "ÇëÔÚ±¨ÃûÇ°ÔÄ¶Á¹Ù·½Í¨ÖªÈ·ÈÏ×îÖÕ×Ê¸ñ¡£"
+        msg += "å­˜åœ¨èµ„æ ¼æˆ–èµ„æ–™å¾…ç¡®è®¤é¡¹ï¼Œè¯·æ³¨æ„ä¸‹æ–¹é£é™©æç¤ºã€‚"
+    msg += "è¯·åœ¨æŠ¥åå‰é˜…è¯»å®˜æ–¹é€šçŸ¥ç¡®è®¤æœ€ç»ˆèµ„æ ¼ã€‚"
     return msg
 
 
@@ -362,11 +362,11 @@ def score_contest(contest: schemas.ContestOut, user: schemas.UserProfile) -> sch
     )
     reasons = [
         summary,
-        f"×¨ÒµÓëĞËÈ¤ {s1}/30£º{r1}",
-        f"Äê¼¶Óë¾­Ñé {s2}/25£º{r2}",
-        f"Ê±¼ä¿ÉĞĞĞÔ {s3}/20£º{r3}",
-        f"¿ÉÑéÖ¤¼ÛÖµ {s4}/15£º{r4}",
-        f"ĞÅÏ¢¿ÉĞÅ¶È {s5}/10£º{r5}",
+        f"ä¸“ä¸šä¸å…´è¶£ {s1}/30ï¼š{r1}",
+        f"å¹´çº§ä¸ç»éªŒ {s2}/25ï¼š{r2}",
+        f"æ—¶é—´å¯è¡Œæ€§ {s3}/20ï¼š{r3}",
+        f"å¯éªŒè¯ä»·å€¼ {s4}/15ï¼š{r4}",
+        f"ä¿¡æ¯å¯ä¿¡åº¦ {s5}/10ï¼š{r5}",
     ]
 
     return schemas.RecommendItem(
@@ -389,14 +389,14 @@ def score_contest(contest: schemas.ContestOut, user: schemas.UserProfile) -> sch
 
 
 def _sort_key(pair: Tuple[schemas.ContestOut, schemas.RecommendItem]):
-    """Í¬·ÖÅÅĞò£ºÉĞÎ´½ØÖ¹ÓÅÏÈ ¡ú ½ØÖ¹ÈÕÆÚ¸ü½üÓÅÏÈ ¡ú ºË²éÈÕÆÚ¸üĞÂÓÅÏÈ¡£"""
+    """åŒåˆ†æ’åºï¼šå°šæœªæˆªæ­¢ä¼˜å…ˆ â†’ æˆªæ­¢æ—¥æœŸæ›´è¿‘ä¼˜å…ˆ â†’ æ ¸æŸ¥æ—¥æœŸæ›´æ–°ä¼˜å…ˆã€‚"""
     contest, item = pair
     today = date.today()
     deadline = _parse_date(contest.registration_deadline)
     verified = _parse_date(contest.verified_at)
-    open_rank = 0 if (deadline and deadline >= today) else 1   # ½ØÖ¹ÈÕÆÚÃ÷È·ÇÒÎ´¹ıµÄÅÅÇ°
-    deadline_key = deadline.toordinal() if deadline else 999999  # ÈÕÆÚ¸ü½ü£¨ordinal ¸üĞ¡£©ÅÅÇ°
-    verified_key = -verified.toordinal() if verified else 0     # ¸üĞÂ£¨ordinal ¸ü´ó ¡ú ¸ºÖµ¸üĞ¡£©ÅÅÇ°
+    open_rank = 0 if (deadline and deadline >= today) else 1   # æˆªæ­¢æ—¥æœŸæ˜ç¡®ä¸”æœªè¿‡çš„æ’å‰
+    deadline_key = deadline.toordinal() if deadline else 999999  # æ—¥æœŸæ›´è¿‘ï¼ˆordinal æ›´å°ï¼‰æ’å‰
+    verified_key = -verified.toordinal() if verified else 0     # æ›´æ–°ï¼ˆordinal æ›´å¤§ â†’ è´Ÿå€¼æ›´å°ï¼‰æ’å‰
     return (-item.total_score, open_rank, deadline_key, verified_key)
 
 

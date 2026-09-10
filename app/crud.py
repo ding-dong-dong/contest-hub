@@ -1,4 +1,4 @@
-"""CRUD ²Ù×÷¡£"""
+"""CRUD æ“ä½œã€‚"""
 import json
 from typing import List, Optional
 
@@ -6,11 +6,11 @@ from sqlalchemy.orm import Session
 
 from . import models, schemas
 
-# ORM ÖĞÒÔ JSON ×Ö·û´®´æ´¢µÄ×Ö¶Î -> ½âÎöÊ§°Ü/Îª¿ÕÊ±µÄÄ¬ÈÏÖµ
+# ORM ä¸­ä»¥ JSON å­—ç¬¦ä¸²å­˜å‚¨çš„å­—æ®µ -> è§£æå¤±è´¥/ä¸ºç©ºæ—¶çš„é»˜è®¤å€¼
 JSON_FIELDS = {
     "eligible_grades": [],
     "tags": [],
-    "link_status": {"notice": "´ıÈ·ÈÏ", "registration": "´ıÈ·ÈÏ"},
+    "link_status": {"notice": "å¾…ç¡®è®¤", "registration": "å¾…ç¡®è®¤"},
 }
 
 
@@ -27,7 +27,7 @@ def _to_out(c: models.Contest) -> schemas.ContestOut:
                 data[field] = JSON_FIELDS[field]
         elif raw is not None:
             data[field] = raw
-        # raw Îª None µÄ×Ö·û´®×Ö¶Î½»¸ø schema Ä¬ÈÏÖµ
+        # raw ä¸º None çš„å­—ç¬¦ä¸²å­—æ®µäº¤ç»™ schema é»˜è®¤å€¼
     return schemas.ContestOut(**data)
 
 
@@ -58,8 +58,8 @@ def list_contests(
     if eligible_grades:
         result = [c for c in result if eligible_grades in c.eligible_grades]
     if major:
-        # ²úÆ·ÎÄµµ R2£º°´×¨Òµ·½ÏòÉ¸Ñ¡£»¡¸²»ÏŞ¡¹×¨ÒµµÄ¾ºÈü¶ÔËùÓĞ×¨Òµ¿É¼û
-        result = [c for c in result if c.major_limit == "²»ÏŞ" or major in c.major_limit]
+        # äº§å“æ–‡æ¡£ R2ï¼šæŒ‰ä¸“ä¸šæ–¹å‘ç­›é€‰ï¼›ã€Œä¸é™ã€ä¸“ä¸šçš„ç«èµ›å¯¹æ‰€æœ‰ä¸“ä¸šå¯è§
+        result = [c for c in result if c.major_limit == "ä¸é™" or major in c.major_limit]
     return result
 
 

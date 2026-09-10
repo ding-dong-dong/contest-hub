@@ -1,25 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""¹Ù·½Á´½Ó×Ô¶¯¿É´ïĞÔ¼ì²â£¨³ÂÓñæÃ£üĞÅÏ¢Î¬»¤¹¤¾ß£©¡£
+"""å®˜æ–¹é“¾æ¥è‡ªåŠ¨å¯è¾¾æ€§æ£€æµ‹ï¼ˆé™ˆç‰å©·ï½œä¿¡æ¯ç»´æŠ¤å·¥å…·ï¼‰ã€‚
 
-·Ö¹¤ÒÀ¾İ£º
-  - ÎÄ²©»ÜÊÕ¼¯×ÊÁÏ²¢ÌîĞ´¹Ù·½Á´½Ó£¨±ê¼Ç¡°´ıÉóºË¡±£©£»
-  - ÌïÁÜÔªÈË¹¤¸´ºËÁ´½ÓÊÇ·ñÎª¹Ù·½Ò³Ãæ£¨±ê¼Ç¡°¿ÉÂ¼Èë/Ğè²¹³ä¡±£©£»
-  - ±¾½Å±¾Ö»×ö¡¾¼¼Êõ¿É´ïĞÔ¡¿Ô¤¼ì£º×Ô¶¯ÇëÇóÃ¿¸öÁ´½Ó£¬¿´ÄÜ·ñ´ò¿ª¡¢·µ»ØÊ²Ã´×´Ì¬£¬
-    Éú³É¼ì²â±¨¸æ½»¸øÌïÁÜÔª/ÎÄ²©»Ü×öÈË¹¤ÄÚÈİÈ·ÈÏ£¬½Å±¾±¾Éí²»ĞŞ¸ÄÊı¾İ¿â¡£
+åˆ†å·¥ä¾æ®ï¼š
+  - æ–‡åšå‰æ”¶é›†èµ„æ–™å¹¶å¡«å†™å®˜æ–¹é“¾æ¥ï¼ˆæ ‡è®°â€œå¾…å®¡æ ¸â€ï¼‰ï¼›
+  - ç”°æ·‹å…ƒäººå·¥å¤æ ¸é“¾æ¥æ˜¯å¦ä¸ºå®˜æ–¹é¡µé¢ï¼ˆæ ‡è®°â€œå¯å½•å…¥/éœ€è¡¥å……â€ï¼‰ï¼›
+  - æœ¬è„šæœ¬åªåšã€æŠ€æœ¯å¯è¾¾æ€§ã€‘é¢„æ£€ï¼šè‡ªåŠ¨è¯·æ±‚æ¯ä¸ªé“¾æ¥ï¼Œçœ‹èƒ½å¦æ‰“å¼€ã€è¿”å›ä»€ä¹ˆçŠ¶æ€ï¼Œ
+    ç”Ÿæˆæ£€æµ‹æŠ¥å‘Šäº¤ç»™ç”°æ·‹å…ƒ/æ–‡åšå‰åšäººå·¥å†…å®¹ç¡®è®¤ï¼Œè„šæœ¬æœ¬èº«ä¸ä¿®æ”¹æ•°æ®åº“ã€‚
 
-¼ì²âÂß¼­£º
-  - ¶ÔÃ¿Ìõ¾ºÈüµÄ notice_url£¨¹Ù·½Í¨Öª£©ºÍ registration_url£¨±¨ÃûÈë¿Ú£©·¢ HTTP ÇëÇó£»
-  - ¸úËæÌø×ª¡¢³¬Ê± 12 Ãë¡¢Ö¤Êé´íÎóÊ±½µ¼¶ÖØÊÔ²¢±ê×¢£»
-  - ½á¹û·ÖÈıÀà£º
-      ¿É·ÃÎÊ        HTTP 200£¨ÈË¹¤ÈÔĞèÈ·ÈÏÒ³ÃæÄÚÈİÊÇ·ñÎª¹Ù·½Í¨Öª/±¨ÃûÒ³£©
-      ÎŞ·¨·ÃÎÊ      DNS Ê§°Ü / ³¬Ê± / Á¬½Ó¾Ü¾ø / 4xx-5xx
-      ÎŞÁ´½Ó        ×Ö¶ÎÎª¿Õ£¨±¨ÃûÈë¿ÚÎ´¿ª·ÅÊôÕı³££¬µÇ¼Ç¡°´ıÈ·ÈÏ¡±¼´¿É£©
+æ£€æµ‹é€»è¾‘ï¼š
+  - å¯¹æ¯æ¡ç«èµ›çš„ notice_urlï¼ˆå®˜æ–¹é€šçŸ¥ï¼‰å’Œ registration_urlï¼ˆæŠ¥åå…¥å£ï¼‰å‘ HTTP è¯·æ±‚ï¼›
+  - è·Ÿéšè·³è½¬ã€è¶…æ—¶ 12 ç§’ã€è¯ä¹¦é”™è¯¯æ—¶é™çº§é‡è¯•å¹¶æ ‡æ³¨ï¼›
+  - ç»“æœåˆ†ä¸‰ç±»ï¼š
+      å¯è®¿é—®        HTTP 200ï¼ˆäººå·¥ä»éœ€ç¡®è®¤é¡µé¢å†…å®¹æ˜¯å¦ä¸ºå®˜æ–¹é€šçŸ¥/æŠ¥åé¡µï¼‰
+      æ— æ³•è®¿é—®      DNS å¤±è´¥ / è¶…æ—¶ / è¿æ¥æ‹’ç» / 4xx-5xx
+      æ— é“¾æ¥        å­—æ®µä¸ºç©ºï¼ˆæŠ¥åå…¥å£æœªå¼€æ”¾å±æ­£å¸¸ï¼Œç™»è®°â€œå¾…ç¡®è®¤â€å³å¯ï¼‰
 
-Êä³ö£ºscripts/link_check_report.csv£¨utf-8-sig£¬Excel ¿ÉÖ±½Ó´ò¿ª£©
-      ¡°ÈË¹¤¸´ºË½áÂÛ¡±ÁĞÁô¸øÌïÁÜÔª/ÎÄ²©»ÜÌîĞ´£º¿ÉÓÃ / Ê§Ğ§ / ´ıÈ·ÈÏ¡£
+è¾“å‡ºï¼šscripts/link_check_report.csvï¼ˆutf-8-sigï¼ŒExcel å¯ç›´æ¥æ‰“å¼€ï¼‰
+      â€œäººå·¥å¤æ ¸ç»“è®ºâ€åˆ—ç•™ç»™ç”°æ·‹å…ƒ/æ–‡åšå‰å¡«å†™ï¼šå¯ç”¨ / å¤±æ•ˆ / å¾…ç¡®è®¤ã€‚
 
-ÓÃ·¨£º
+ç”¨æ³•ï¼š
     python scripts/check_links.py
 """
 import csv
@@ -50,7 +50,7 @@ URL_RE = re.compile(r"https?://[A-Za-z0-9\-._~:/?#\[\]@!$&'*+,;=%]+")
 
 
 def normalize_url(raw: str) -> tuple:
-    """·µ»Ø (url »ò None, ËµÃ÷)¡£´¦Àí¡°URL+ÖĞÎÄ±¸×¢¡±»ìÅÅºÍÖĞÎÄÂ·¾¶¡£"""
+    """è¿”å› (url æˆ– None, è¯´æ˜)ã€‚å¤„ç†â€œURL+ä¸­æ–‡å¤‡æ³¨â€æ··æ’å’Œä¸­æ–‡è·¯å¾„ã€‚"""
     raw = (raw or "").strip()
     if not raw:
         return None, ""
@@ -60,15 +60,15 @@ def normalize_url(raw: str) -> tuple:
     else:
         m = URL_RE.search(raw)
         if not m:
-            return None, f"×Ö¶ÎÄÚÈİ²»ÊÇÓĞĞ§Á´½Ó£¨Ó¦Îª¿Õ²¢°ÑÇé¿öĞ´Èë¸´ºË±¸×¢£©£º{raw[:50]}"
+            return None, f"å­—æ®µå†…å®¹ä¸æ˜¯æœ‰æ•ˆé“¾æ¥ï¼ˆåº”ä¸ºç©ºå¹¶æŠŠæƒ…å†µå†™å…¥å¤æ ¸å¤‡æ³¨ï¼‰ï¼š{raw[:50]}"
         cand = m.group(0)
-        note = f"×Ö¶ÎÎªËµÃ÷ÎÄ×Ö£¬ÒÑ´ÓÖĞÌáÈ¡Á´½Ó£º{raw[:50]}"
-    # ½Ø¶ÏÁ´½ÓºóÃæ¸½´øµÄÀ¨ºÅ/¿Õ¸ñ±¸×¢£¬Èç ¡°...kdocs.cn/l/xxx(ÄÏ´«±¨Ãû±í)¡±
-    head = re.split(r"[\s£¨(]", cand, maxsplit=1)[0].rstrip("£¬¡£,.")
+        note = f"å­—æ®µä¸ºè¯´æ˜æ–‡å­—ï¼Œå·²ä»ä¸­æå–é“¾æ¥ï¼š{raw[:50]}"
+    # æˆªæ–­é“¾æ¥åé¢é™„å¸¦çš„æ‹¬å·/ç©ºæ ¼å¤‡æ³¨ï¼Œå¦‚ â€œ...kdocs.cn/l/xxx(å—ä¼ æŠ¥åè¡¨)â€
+    head = re.split(r"[\sï¼ˆ(]", cand, maxsplit=1)[0].rstrip("ï¼Œã€‚,.")
     if head != cand:
-        note += ("£»" if note else "") + f"ÒÑÌŞ³ıÁ´½ÓºóµÄ¸½´øËµÃ÷£º{cand[len(head):][:40]}"
+        note += ("ï¼›" if note else "") + f"å·²å‰”é™¤é“¾æ¥åçš„é™„å¸¦è¯´æ˜ï¼š{cand[len(head):][:40]}"
         cand = head
-    # ÖĞÎÄÂ·¾¶£¨Èç°Ù¶È°Ù¿Æ´ÊÌõ£©×ö°Ù·ÖºÅ±àÂë
+    # ä¸­æ–‡è·¯å¾„ï¼ˆå¦‚ç™¾åº¦ç™¾ç§‘è¯æ¡ï¼‰åšç™¾åˆ†å·ç¼–ç 
     if any(ord(ch) > 127 for ch in cand):
         try:
             p = urllib.parse.urlsplit(cand)
@@ -98,7 +98,7 @@ def _request(url: str, ctx) -> dict:
 
 
 def check_one(url: str) -> dict:
-    """ÇëÇóµ¥¸ö URL£¬·µ»Ø×´Ì¬ĞÅÏ¢¡£Ö¤Êé´íÎóÊ±½µ¼¶ÖØÊÔÒ»´Î¡£"""
+    """è¯·æ±‚å•ä¸ª URLï¼Œè¿”å›çŠ¶æ€ä¿¡æ¯ã€‚è¯ä¹¦é”™è¯¯æ—¶é™çº§é‡è¯•ä¸€æ¬¡ã€‚"""
     try:
         return _request(url, ssl.create_default_context())
     except urllib.error.HTTPError as e:
@@ -109,12 +109,12 @@ def check_one(url: str) -> dict:
         if is_ssl:
             try:
                 r = _request(url, ssl._create_unverified_context())
-                r["note"] = "¿É·ÃÎÊµ«Ö¤ÊéÒì³£"
+                r["note"] = "å¯è®¿é—®ä½†è¯ä¹¦å¼‚å¸¸"
                 return r
             except Exception as e2:  # noqa: BLE001
                 reason2 = getattr(e2, "reason", e2)
-                return {"status": "", "final_url": "", "note": f"Ö¤Êé/Á¬½Ó´íÎó£º{type(reason2).__name__}"}
-        return {"status": "", "final_url": "", "note": f"ÎŞ·¨·ÃÎÊ£º{type(reason).__name__}"}
+                return {"status": "", "final_url": "", "note": f"è¯ä¹¦/è¿æ¥é”™è¯¯ï¼š{type(reason2).__name__}"}
+        return {"status": "", "final_url": "", "note": f"æ— æ³•è®¿é—®ï¼š{type(reason).__name__}"}
 
 
 def main() -> None:
@@ -125,17 +125,17 @@ def main() -> None:
     finally:
         db.close()
 
-    # (id, name, kind, Ô­Ê¼×Ö¶Î, ´ı¼ì²âURL»òNone, Ô¤´¦ÀíËµÃ÷)
+    # (id, name, kind, åŸå§‹å­—æ®µ, å¾…æ£€æµ‹URLæˆ–None, é¢„å¤„ç†è¯´æ˜)
     tasks = []
     for c in contests:
-        for kind, raw in (("¹Ù·½Í¨Öª", c.notice_url), ("±¨ÃûÈë¿Ú", c.registration_url)):
+        for kind, raw in (("å®˜æ–¹é€šçŸ¥", c.notice_url), ("æŠ¥åå…¥å£", c.registration_url)):
             if not raw:
                 continue
             url, prep_note = normalize_url(raw)
             tasks.append((c.id, c.name, kind, raw, url, prep_note))
 
     checkable = [t for t in tasks if t[4]]
-    print(f"¹² {len(contests)} Ìõ¾ºÈü£¬Á´½Ó×Ö¶Î {len(tasks)} ¸ö£¬ÆäÖĞÓĞĞ§ URL {len(checkable)} ¸ö£¬²¢·¢¼ì²âÖĞ¡­¡­")
+    print(f"å…± {len(contests)} æ¡ç«èµ›ï¼Œé“¾æ¥å­—æ®µ {len(tasks)} ä¸ªï¼Œå…¶ä¸­æœ‰æ•ˆ URL {len(checkable)} ä¸ªï¼Œå¹¶å‘æ£€æµ‹ä¸­â€¦â€¦")
     results = {}
     with ThreadPoolExecutor(max_workers=8) as pool:
         future_map = {}
@@ -146,37 +146,37 @@ def main() -> None:
             try:
                 results[(cid, kind)] = fut.result()
             except Exception as e:  # noqa: BLE001
-                results[(cid, kind)] = {"status": "", "final_url": "", "note": f"¼ì²âÒì³££º{e}"}
+                results[(cid, kind)] = {"status": "", "final_url": "", "note": f"æ£€æµ‹å¼‚å¸¸ï¼š{e}"}
             print(f"  [{cid} {kind}] {results[(cid, kind)]['note'] or results[(cid, kind)]['status']}")
 
     rows = []
     for cid, name, kind, raw, url, prep_note in tasks:
         if url is None:
             r = {"status": "", "final_url": "", "note": prep_note}
-            auto = "·ÇÁ´½ÓÄÚÈİ£¨Ğè¸ÄÎª¿Õ²¢ÔÚ±¸×¢ËµÃ÷£©"
+            auto = "éé“¾æ¥å†…å®¹ï¼ˆéœ€æ”¹ä¸ºç©ºå¹¶åœ¨å¤‡æ³¨è¯´æ˜ï¼‰"
         else:
-            r = results.get((cid, kind), {"status": "", "final_url": "", "note": "Î´¼ì²â"})
-            note = "£»".join(x for x in (prep_note, r["note"]) if x)
+            r = results.get((cid, kind), {"status": "", "final_url": "", "note": "æœªæ£€æµ‹"})
+            note = "ï¼›".join(x for x in (prep_note, r["note"]) if x)
             r["note"] = note
             if r["status"] == 200:
-                auto = "¿É·ÃÎÊ£¨´ıÈË¹¤È·ÈÏÒ³ÃæÄÚÈİ£©"
+                auto = "å¯è®¿é—®ï¼ˆå¾…äººå·¥ç¡®è®¤é¡µé¢å†…å®¹ï¼‰"
             elif r["status"] != "":
-                auto = "ÎŞ·¨·ÃÎÊ£¨HTTP´íÎó£©"
+                auto = "æ— æ³•è®¿é—®ï¼ˆHTTPé”™è¯¯ï¼‰"
             else:
-                auto = "ÎŞ·¨·ÃÎÊ"
+                auto = "æ— æ³•è®¿é—®"
         rows.append(
             {
-                "¾ºÈüID": cid,
-                "¾ºÈüÃû³Æ": name,
-                "Á´½ÓÀàĞÍ": kind,
-                "Á´½ÓµØÖ·(Ô­Ê¼×Ö¶Î)": raw,
-                "HTTP×´Ì¬Âë": r["status"],
-                "×Ô¶¯¼ì²â½á¹û": auto,
-                "¼ì²â±¸×¢": r["note"],
-                "Ìø×ªºóµØÖ·": r["final_url"],
-                "ÈË¹¤¸´ºË½áÂÛ(¿ÉÓÃ/Ê§Ğ§/´ıÈ·ÈÏ)": "",
-                "¸´ºËÈË": "",
-                "¸´ºËÈÕÆÚ": "",
+                "ç«èµ›ID": cid,
+                "ç«èµ›åç§°": name,
+                "é“¾æ¥ç±»å‹": kind,
+                "é“¾æ¥åœ°å€(åŸå§‹å­—æ®µ)": raw,
+                "HTTPçŠ¶æ€ç ": r["status"],
+                "è‡ªåŠ¨æ£€æµ‹ç»“æœ": auto,
+                "æ£€æµ‹å¤‡æ³¨": r["note"],
+                "è·³è½¬ååœ°å€": r["final_url"],
+                "äººå·¥å¤æ ¸ç»“è®º(å¯ç”¨/å¤±æ•ˆ/å¾…ç¡®è®¤)": "",
+                "å¤æ ¸äºº": "",
+                "å¤æ ¸æ—¥æœŸ": "",
             }
         )
 
@@ -185,12 +185,12 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
 
-    ok = sum(1 for r in rows if r["×Ô¶¯¼ì²â½á¹û"].startswith("¿É·ÃÎÊ"))
-    bad = sum(1 for r in rows if r["×Ô¶¯¼ì²â½á¹û"].startswith("ÎŞ·¨·ÃÎÊ"))
-    text = sum(1 for r in rows if r["×Ô¶¯¼ì²â½á¹û"].startswith("·ÇÁ´½Ó"))
-    print(f"\n¼ì²âÍê³É£º¿É·ÃÎÊ {ok} ¸ö£¬ÎŞ·¨·ÃÎÊ {bad} ¸ö£¬·ÇÁ´½ÓÄÚÈİ {text} ¸ö")
-    print(f"±¨¸æÒÑÉú³É£º{REPORT}")
-    print("ÏÂÒ»²½£º°Ñ±¨¸æ·¢¸øÌïÁÜÔª/ÎÄ²©»ÜÈË¹¤¸´ºË£¬È·ÈÏºó»ØÌî½áÂÛÁĞ£¬ÔÙÓÉ³ÂÓñæÃÅúÁ¿¸üĞÂÊı¾İ¿â link_status¡£")
+    ok = sum(1 for r in rows if r["è‡ªåŠ¨æ£€æµ‹ç»“æœ"].startswith("å¯è®¿é—®"))
+    bad = sum(1 for r in rows if r["è‡ªåŠ¨æ£€æµ‹ç»“æœ"].startswith("æ— æ³•è®¿é—®"))
+    text = sum(1 for r in rows if r["è‡ªåŠ¨æ£€æµ‹ç»“æœ"].startswith("éé“¾æ¥"))
+    print(f"\næ£€æµ‹å®Œæˆï¼šå¯è®¿é—® {ok} ä¸ªï¼Œæ— æ³•è®¿é—® {bad} ä¸ªï¼Œéé“¾æ¥å†…å®¹ {text} ä¸ª")
+    print(f"æŠ¥å‘Šå·²ç”Ÿæˆï¼š{REPORT}")
+    print("ä¸‹ä¸€æ­¥ï¼šæŠŠæŠ¥å‘Šå‘ç»™ç”°æ·‹å…ƒ/æ–‡åšå‰äººå·¥å¤æ ¸ï¼Œç¡®è®¤åå›å¡«ç»“è®ºåˆ—ï¼Œå†ç”±é™ˆç‰å©·æ‰¹é‡æ›´æ–°æ•°æ®åº“ link_statusã€‚")
 
 
 if __name__ == "__main__":

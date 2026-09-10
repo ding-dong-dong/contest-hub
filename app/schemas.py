@@ -1,49 +1,49 @@
-"""Pydantic ÇëÇó/ÏìÓ¦Ä£ĞÍ¡£
+"""Pydantic è¯·æ±‚/å“åº”æ¨¡å‹ã€‚
 
-¶ÔÍâ×Ö¶ÎÍ³Ò»Ê¹ÓÃ snake_case£»Ç°¶Ë adapter ¸ºÔğÓ³ÉäÎªÒ³ÃæÍÕ·å×Ö¶Î
-£¨¼ûÁ¬Ê«îÚ¡¶V1 ×Ö¶ÎÓ³ÉäÓë½»½Ó¡·£©¡£
+å¯¹å¤–å­—æ®µç»Ÿä¸€ä½¿ç”¨ snake_caseï¼›å‰ç«¯ adapter è´Ÿè´£æ˜ å°„ä¸ºé¡µé¢é©¼å³°å­—æ®µ
+ï¼ˆè§è¿è¯—é’°ã€ŠV1 å­—æ®µæ˜ å°„ä¸äº¤æ¥ã€‹ï¼‰ã€‚
 """
 from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-# Á´½Ó¸´ºË×´Ì¬£º¿ÉÓÃ / Ê§Ğ§ / ´ıÈ·ÈÏ£¨Î´Ìá¹©Ê±Ç°¶Ë°´¡¸´ıÈ·ÈÏ¡¹´¦Àí£©
-LINK_STATUS_VALUES = ("¿ÉÓÃ", "Ê§Ğ§", "´ıÈ·ÈÏ")
+# é“¾æ¥å¤æ ¸çŠ¶æ€ï¼šå¯ç”¨ / å¤±æ•ˆ / å¾…ç¡®è®¤ï¼ˆæœªæä¾›æ—¶å‰ç«¯æŒ‰ã€Œå¾…ç¡®è®¤ã€å¤„ç†ï¼‰
+LINK_STATUS_VALUES = ("å¯ç”¨", "å¤±æ•ˆ", "å¾…ç¡®è®¤")
 
 
 class LinkStatus(BaseModel):
-    notice: str = "´ıÈ·ÈÏ"        # ¹Ù·½Í¨ÖªÁ´½Ó¸´ºË×´Ì¬
-    registration: str = "´ıÈ·ÈÏ"  # ¹Ù·½±¨ÃûÁ´½Ó¸´ºË×´Ì¬
+    notice: str = "å¾…ç¡®è®¤"        # å®˜æ–¹é€šçŸ¥é“¾æ¥å¤æ ¸çŠ¶æ€
+    registration: str = "å¾…ç¡®è®¤"  # å®˜æ–¹æŠ¥åé“¾æ¥å¤æ ¸çŠ¶æ€
 
 
 class ContestBase(BaseModel):
     name: str
-    # ---- Ç°¶Ë V1 ÆõÔ¼ĞÂÔö×Ö¶Î ----
-    session: str = ""                  # ±¾½ì½ì´Î
-    tags: List[str] = Field(default_factory=list)  # ¾ºÈü±êÇ©£¨¿É¶à¸ö£©
+    # ---- å‰ç«¯ V1 å¥‘çº¦æ–°å¢å­—æ®µ ----
+    session: str = ""                  # æœ¬å±Šå±Šæ¬¡
+    tags: List[str] = Field(default_factory=list)  # ç«èµ›æ ‡ç­¾ï¼ˆå¯å¤šä¸ªï¼‰
     category: str = ""
     organizer: str = ""
     eligible_grades: List[str] = Field(default_factory=list)
-    major_limit: str = "²»ÏŞ"
-    school_limit: str = "´ıÈ·ÈÏ"
+    major_limit: str = "ä¸é™"
+    school_limit: str = "å¾…ç¡®è®¤"
     registration_deadline: str = ""
     submission_deadline: Optional[str] = ""
     materials: str = ""
-    process: str = ""                  # Ìá½»Á÷³Ì
+    process: str = ""                  # æäº¤æµç¨‹
     skills: str = ""
-    outcomes: str = ""                 # ÄÜÁ¦/³É¹û²ú³ö
+    outcomes: str = ""                 # èƒ½åŠ›/æˆæœäº§å‡º
     estimated_time: Optional[str] = ""
     notice_url: str = ""
     registration_url: Optional[str] = ""
-    source_type: str = "ÆäËû"
+    source_type: str = "å…¶ä»–"
     verified_at: str = ""
-    status: str = "´ıÈ·ÈÏ"
+    status: str = "å¾…ç¡®è®¤"
     link_status: LinkStatus = Field(default_factory=LinkStatus)
     review_note: Optional[str] = ""
 
 
 class ContestCreate(ContestBase):
-    # ¿ÉÑ¡£¬Î´Ìá¹©Ê±ÓÉÏµÍ³Éú³É
+    # å¯é€‰ï¼Œæœªæä¾›æ—¶ç”±ç³»ç»Ÿç”Ÿæˆ
     id: Optional[str] = None
 
 
@@ -79,45 +79,45 @@ class ContestOut(ContestBase):
         from_attributes = True
 
 
-# ---- ÍÆ¼ö½Ó¿Ú ----
+# ---- æ¨èæ¥å£ ----
 class UserProfile(BaseModel):
-    grade: str  # ´óÒ»/´ó¶ş/´óÈı/´óËÄ/ÑĞ¾¿Éú/ÆäËû
-    major: str  # ¼ÆËã»ú/µç×ÓĞÅÏ¢/¾­¹Ü/Éè¼Æ/»úĞµ/²ÄÁÏ/ÀíÑ§/ÎÄ·¨/Ò½Ñ§/ÆäËû
+    grade: str  # å¤§ä¸€/å¤§äºŒ/å¤§ä¸‰/å¤§å››/ç ”ç©¶ç”Ÿ/å…¶ä»–
+    major: str  # è®¡ç®—æœº/ç”µå­ä¿¡æ¯/ç»ç®¡/è®¾è®¡/æœºæ¢°/ææ–™/ç†å­¦/æ–‡æ³•/åŒ»å­¦/å…¶ä»–
     interests: List[str] = Field(default_factory=list)
-    experience: str  # ÎŞ¾­Ñé/²Î¼Ó¹ıµ«Î´»ñ½±/ÓĞ»ñ½±¾­Ñé
-    time_per_week: str  # ¡Ü3Ğ¡Ê±/4-7Ğ¡Ê±/8-14Ğ¡Ê±/¡İ15Ğ¡Ê±
+    experience: str  # æ— ç»éªŒ/å‚åŠ è¿‡ä½†æœªè·å¥–/æœ‰è·å¥–ç»éªŒ
+    time_per_week: str  # â‰¤3å°æ—¶/4-7å°æ—¶/8-14å°æ—¶/â‰¥15å°æ—¶
     school: Optional[str] = ""
 
 
 class ScoreBreakdown(BaseModel):
-    """ÍÆ¼öÆÀ·ÖÃ÷Ï¸£¨Âú·Ö 100£©£¬ÓëÇ°¶ËÆõÔ¼¼üÃûÒ»ÖÂ¡£"""
-    major_interest: float = 0.0    # ×¨ÒµĞËÈ¤ 30
-    grade_experience: float = 0.0  # Äê¼¶¾­Ñé 25
-    time: float = 0.0              # Ê±¼ä¿ÉĞĞĞÔ 20
-    value: float = 0.0             # ¿ÉÑéÖ¤¼ÛÖµ 15
-    trust: float = 0.0             # ĞÅÏ¢¿ÉĞÅ¶È 10
+    """æ¨èè¯„åˆ†æ˜ç»†ï¼ˆæ»¡åˆ† 100ï¼‰ï¼Œä¸å‰ç«¯å¥‘çº¦é”®åä¸€è‡´ã€‚"""
+    major_interest: float = 0.0    # ä¸“ä¸šå…´è¶£ 30
+    grade_experience: float = 0.0  # å¹´çº§ç»éªŒ 25
+    time: float = 0.0              # æ—¶é—´å¯è¡Œæ€§ 20
+    value: float = 0.0             # å¯éªŒè¯ä»·å€¼ 15
+    trust: float = 0.0             # ä¿¡æ¯å¯ä¿¡åº¦ 10
 
 
 class RecommendItem(BaseModel):
-    """Ç°¶Ë V1 ÆõÔ¼£º±âÆ½×Ö¶Î + ·ÖÊıÃ÷Ï¸ + ÀíÓÉ/¸æ¾¯/´ıÈ·ÈÏ±ê¼Ç¡£"""
-    competition_id: str = Field(description="¾ºÈü ID£¬¶ÔÓ¦ contest.id")
-    total_score: float = Field(description="ÍÆ¼ö×Ü·Ö£¨0-100£©£¬µÈÓÚ scores ÎåÏîÖ®ºÍ")
+    """å‰ç«¯ V1 å¥‘çº¦ï¼šæ‰å¹³å­—æ®µ + åˆ†æ•°æ˜ç»† + ç†ç”±/å‘Šè­¦/å¾…ç¡®è®¤æ ‡è®°ã€‚"""
+    competition_id: str = Field(description="ç«èµ› IDï¼Œå¯¹åº” contest.id")
+    total_score: float = Field(description="æ¨èæ€»åˆ†ï¼ˆ0-100ï¼‰ï¼Œç­‰äº scores äº”é¡¹ä¹‹å’Œ")
     match_level: str = Field(
         default="",
-        description="Æ¥ÅäµµÎ»±êÇ©£¨²úÆ·ÎÄµµµÚÎåÕÂµÚ4½Ú£©£º¸ß¶ÈÆ¥Åä(80-100)/½ÏÎªÆ¥Åä(60-79)/¿É½øÒ»²½ÁË½â(0-59)",
+        description="åŒ¹é…æ¡£ä½æ ‡ç­¾ï¼ˆäº§å“æ–‡æ¡£ç¬¬äº”ç« ç¬¬4èŠ‚ï¼‰ï¼šé«˜åº¦åŒ¹é…(80-100)/è¾ƒä¸ºåŒ¹é…(60-79)/å¯è¿›ä¸€æ­¥äº†è§£(0-59)",
     )
     scores: ScoreBreakdown
     reasons: List[str] = Field(
-        default_factory=list, description="¸öĞÔ»¯ÍÆ¼öÀíÓÉ£¬µÚ1ÌõÎª×Ü½á£¨º¬ÃâÔğÉùÃ÷£©£¬ÖÁÉÙ2Ìõ"
+        default_factory=list, description="ä¸ªæ€§åŒ–æ¨èç†ç”±ï¼Œç¬¬1æ¡ä¸ºæ€»ç»“ï¼ˆå«å…è´£å£°æ˜ï¼‰ï¼Œè‡³å°‘2æ¡"
     )
-    warnings: List[str] = Field(default_factory=list, description="·çÏÕÌáÊ¾ÎÄ°¸£¬Èç½ØÖ¹ÈÕÆÚ´ıÈ·ÈÏ¡¢Á´½Ó´ı¸´ºË")
+    warnings: List[str] = Field(default_factory=list, description="é£é™©æç¤ºæ–‡æ¡ˆï¼Œå¦‚æˆªæ­¢æ—¥æœŸå¾…ç¡®è®¤ã€é“¾æ¥å¾…å¤æ ¸")
     qualification_pending: bool = Field(
-        default=False, description="×Ê¸ñ·¶Î§´ıÈË¹¤È·ÈÏ£¨ÊÊÓÃÄê¼¶/ÔºĞ£²»Ã÷£©£¬true Ê±Ç°¶Ë±ØĞëÏÔÊ¾·çÏÕÌáÊ¾"
+        default=False, description="èµ„æ ¼èŒƒå›´å¾…äººå·¥ç¡®è®¤ï¼ˆé€‚ç”¨å¹´çº§/é™¢æ ¡ä¸æ˜ï¼‰ï¼Œtrue æ—¶å‰ç«¯å¿…é¡»æ˜¾ç¤ºé£é™©æç¤º"
     )
     verification_pending: bool = Field(
-        default=False, description="Á´½Ó/×´Ì¬´ı¸´ºË£¬true Ê±¶ÔÓ¦¹Ù·½Èë¿ÚĞè±ê×¢´ıÈ·ÈÏ"
+        default=False, description="é“¾æ¥/çŠ¶æ€å¾…å¤æ ¸ï¼Œtrue æ—¶å¯¹åº”å®˜æ–¹å…¥å£éœ€æ ‡æ³¨å¾…ç¡®è®¤"
     )
-    # ¸½´øÍêÕû¾ºÈü¶ÔÏó£¬Ç°¶Ë¿ÉÖ±½ÓäÖÈ¾£¬ÎŞĞèÔÙ°´ id ¹ØÁª
+    # é™„å¸¦å®Œæ•´ç«èµ›å¯¹è±¡ï¼Œå‰ç«¯å¯ç›´æ¥æ¸²æŸ“ï¼Œæ— éœ€å†æŒ‰ id å…³è”
     contest: ContestOut
 
 

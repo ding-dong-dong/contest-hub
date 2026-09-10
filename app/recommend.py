@@ -208,7 +208,7 @@ def _value_score(contest: schemas.ContestOut) -> Tuple[float, str]:
     """可验证价值 15：能力训练说明 5；成果产出说明 5；面向全国或覆盖范围明确 5。"""
     score = 0.0
     parts: List[str] = []
-    if contest.skills and contest.skills.strip():
+    if contest.ability_training and contest.ability_training.strip():
         score += 5.0
         parts.append("有能力训练说明（5）")
     if contest.outcomes and contest.outcomes.strip():

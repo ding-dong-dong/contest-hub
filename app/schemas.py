@@ -32,6 +32,7 @@ class ContestBase(BaseModel):
     process: str = ""                  # 提交流程
     skills: str = ""
     outcomes: str = ""                 # 能力/成果产出
+    ability_training: str = ""         # 能力训练说明（详细描述）
     estimated_time: Optional[str] = ""
     notice_url: str = ""
     registration_url: Optional[str] = ""
@@ -62,6 +63,7 @@ class ContestUpdate(BaseModel):
     process: Optional[str] = None
     skills: Optional[str] = None
     outcomes: Optional[str] = None
+    ability_training: Optional[str] = None
     estimated_time: Optional[str] = None
     notice_url: Optional[str] = None
     registration_url: Optional[str] = None

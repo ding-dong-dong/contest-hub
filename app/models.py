@@ -27,6 +27,7 @@ class Contest(Base):
     process = Column(String, default="")
     skills = Column(String, default="")
     outcomes = Column(String, default="")
+    ability_training = Column(String, default="")
     estimated_time = Column(String, default="")
     notice_url = Column(String, default="")
     registration_url = Column(String, default="")

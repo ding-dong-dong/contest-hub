@@ -4,14 +4,31 @@
   Swagger UI: http://127.0.0.1:8000/docs
   ReDoc:      http://127.0.0.1:8000/redoc
 """
+import os
 from typing import List, Optional
 
-from fastapi import Depends, FastAPI, HTTPException, Query, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from . import crud, recommend, schemas
 from .database import get_db, init_db
+
+# ---- 写接口保护（环境变量，Render 部署时必须配置）----
+# ADMIN_KEY: 设置后 POST/PUT/DELETE 必须携带 X-Admin-Key: <ADMIN_KEY> 请求头
+# READ_ONLY: 设为 1 时写接口完全关闭（公开演示最安全）
+# CORS_ORIGINS: 逗号分隔的允许来源，如 https://xxx.netlify.app；未设置时默认放开（仅限本地开发）
+ADMIN_KEY = os.getenv("ADMIN_KEY", "")
+READ_ONLY = os.getenv("READ_ONLY", "").strip().lower() in ("1", "true", "yes")
+
+
+def require_admin_key(x_admin_key: str = Header(default="")) -> None:
+    """写接口鉴权：只读模式直接拒绝；配置了 ADMIN_KEY 时校验请求头。"""
+    if READ_ONLY:
+        raise HTTPException(status_code=403, detail="当前为只读演示环境，写接口已关闭")
+    if ADMIN_KEY and x_admin_key != ADMIN_KEY:
+        raise HTTPException(status_code=401, detail="缺少或错误的 X-Admin-Key 请求头")
+
 
 app = FastAPI(
     title="竞赛信息管理后端",
@@ -19,16 +36,18 @@ app = FastAPI(
         "竞赛信息 CRUD + 智能推荐服务。字段定义参考田淋元产品文档第四章与连诗钰前端 V1 契约。"
         "\n\n推荐接口使用硬过滤 + 软评分（100 分制）排序返回。"
         "\n\n字段命名：接口统一 snake_case，前端 adapter 负责映射驼峰。"
+        "\n\n写接口（POST/PUT/DELETE）受保护：服务端设置 ADMIN_KEY 后需携带 X-Admin-Key 请求头；READ_ONLY=1 时完全关闭。"
     ),
-    version="1.1.0",
+    version="1.2.0",
 )
 
-# 跨域：前端 Vite 开发服务器（默认 5173）与 Netlify 部署需要
+# 跨域：生产环境通过 CORS_ORIGINS 收敛到具体域名；未设置时默认放开（仅限本地开发）
+_cors_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 联调期放开；生产环境收敛到具体域名
+    allow_origins=_cors_origins or ["*"],
     allow_credentials=False,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -42,7 +61,7 @@ def _startup() -> None:
 def root():
     return {
         "service": "contest-hub-backend",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "docs": "/docs",
         "redoc": "/redoc",
         "endpoints": {
@@ -125,7 +144,8 @@ def get_contest(contest_id: str, db: Session = Depends(get_db)):
     "/contests",
     response_model=schemas.ContestOut,
     status_code=status.HTTP_201_CREATED,
-    summary="新增竞赛",
+    summary="新增竞赛（需管理员密钥）",
+    dependencies=[Depends(require_admin_key)],
 )
 def create_contest(payload: schemas.ContestCreate, db: Session = Depends(get_db)):
     return crud.create_contest(db, payload)
@@ -134,7 +154,8 @@ def create_contest(payload: schemas.ContestCreate, db: Session = Depends(get_db)
 @app.put(
     "/contests/{contest_id}",
     response_model=schemas.ContestOut,
-    summary="修改竞赛",
+    summary="修改竞赛（需管理员密钥）",
+    dependencies=[Depends(require_admin_key)],
 )
 def update_contest(contest_id: str, payload: schemas.ContestUpdate, db: Session = Depends(get_db)):
     out = crud.update_contest(db, contest_id, payload)
@@ -146,7 +167,8 @@ def update_contest(contest_id: str, payload: schemas.ContestUpdate, db: Session 
 @app.delete(
     "/contests/{contest_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    summary="删除竞赛",
+    summary="删除竞赛（需管理员密钥）",
+    dependencies=[Depends(require_admin_key)],
 )
 def delete_contest(contest_id: str, db: Session = Depends(get_db)):
     if not crud.delete_contest(db, contest_id):

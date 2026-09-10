@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "竞赛信息管理后端",
-    "description": "竞赛信息 CRUD + 智能推荐服务。字段定义参考田淋元产品文档第四章与连诗钰前端 V1 契约。\n\n推荐接口使用硬过滤 + 软评分（100 分制）排序返回。\n\n字段命名：接口统一 snake_case，前端 adapter 负责映射驼峰。",
-    "version": "1.1.0"
+    "description": "竞赛信息 CRUD + 智能推荐服务。字段定义参考田淋元产品文档第四章与连诗钰前端 V1 契约。\n\n推荐接口使用硬过滤 + 软评分（100 分制）排序返回。\n\n字段命名：接口统一 snake_case，前端 adapter 负责映射驼峰。\n\n写接口（POST/PUT/DELETE）受保护：服务端设置 ADMIN_KEY 后需携带 X-Admin-Key 请求头；READ_ONLY=1 时完全关闭。",
+    "version": "1.2.0"
   },
   "paths": {
     "/contests/recommend": {
@@ -213,8 +213,20 @@
         }
       },
       "post": {
-        "summary": "新增竞赛",
+        "summary": "新增竞赛（需管理员密钥）",
         "operationId": "create_contest_contests_post",
+        "parameters": [
+          {
+            "name": "x-admin-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Admin-Key"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -288,7 +300,7 @@
         }
       },
       "put": {
-        "summary": "修改竞赛",
+        "summary": "修改竞赛（需管理员密钥）",
         "operationId": "update_contest_contests__contest_id__put",
         "parameters": [
           {
@@ -298,6 +310,16 @@
             "schema": {
               "type": "string",
               "title": "Contest Id"
+            }
+          },
+          {
+            "name": "x-admin-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Admin-Key"
             }
           }
         ],
@@ -335,7 +357,7 @@
         }
       },
       "delete": {
-        "summary": "删除竞赛",
+        "summary": "删除竞赛（需管理员密钥）",
         "operationId": "delete_contest_contests__contest_id__delete",
         "parameters": [
           {
@@ -345,6 +367,16 @@
             "schema": {
               "type": "string",
               "title": "Contest Id"
+            }
+          },
+          {
+            "name": "x-admin-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "X-Admin-Key"
             }
           }
         ],
@@ -448,6 +480,11 @@
           "outcomes": {
             "type": "string",
             "title": "Outcomes",
+            "default": ""
+          },
+          "ability_training": {
+            "type": "string",
+            "title": "Ability Training",
             "default": ""
           },
           "estimated_time": {
@@ -607,6 +644,11 @@
           "outcomes": {
             "type": "string",
             "title": "Outcomes",
+            "default": ""
+          },
+          "ability_training": {
+            "type": "string",
+            "title": "Ability Training",
             "default": ""
           },
           "estimated_time": {
@@ -841,6 +883,17 @@
               }
             ],
             "title": "Outcomes"
+          },
+          "ability_training": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ability Training"
           },
           "estimated_time": {
             "anyOf": [

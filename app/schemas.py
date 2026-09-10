@@ -26,8 +26,10 @@ class ContestBase(BaseModel):
     eligible_grades: List[str] = Field(default_factory=list)
     major_limit: str = "不限"
     school_limit: str = "待确认"
-    registration_deadline: str = ""
+    registration_deadline: Optional[str] = ""  # ISO 8601, null=未知
+    registration_deadline_note: str = ""  # 补充说明（校内截止/赛道差异等）
     submission_deadline: Optional[str] = ""
+    submission_deadline_note: str = ""
     materials: str = ""
     process: str = ""                  # 提交流程
     skills: str = ""

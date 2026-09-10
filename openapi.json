@@ -446,8 +446,20 @@
             "default": "待确认"
           },
           "registration_deadline": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Registration Deadline",
+            "default": ""
+          },
+          "registration_deadline_note": {
+            "type": "string",
+            "title": "Registration Deadline Note",
             "default": ""
           },
           "submission_deadline": {
@@ -460,6 +472,11 @@
               }
             ],
             "title": "Submission Deadline",
+            "default": ""
+          },
+          "submission_deadline_note": {
+            "type": "string",
+            "title": "Submission Deadline Note",
             "default": ""
           },
           "materials": {
@@ -610,8 +627,20 @@
             "default": "待确认"
           },
           "registration_deadline": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Registration Deadline",
+            "default": ""
+          },
+          "registration_deadline_note": {
+            "type": "string",
+            "title": "Registration Deadline Note",
             "default": ""
           },
           "submission_deadline": {
@@ -624,6 +653,11 @@
               }
             ],
             "title": "Submission Deadline",
+            "default": ""
+          },
+          "submission_deadline_note": {
+            "type": "string",
+            "title": "Submission Deadline Note",
             "default": ""
           },
           "materials": {

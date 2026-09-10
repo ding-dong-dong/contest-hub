@@ -121,9 +121,10 @@ def _hard_filter(contest: schemas.ContestOut, user: schemas.UserProfile) -> Opti
     if contest.major_limit and contest.major_limit != "不限":
         if user.major not in contest.major_limit:
             return f"专业受限于「{contest.major_limit}」"
-    if contest.school_limit and contest.school_limit not in {"全国", "待确认"}:
-        if user.school and user.school not in contest.school_limit:
-            return f"院校受限于「{contest.school_limit}」"
+    if contest.school_limit and not contest.school_limit.startswith("\u5168\u56fd"):
+        if contest.school_limit not in {"\u5f85\u786e\u8ba4"}:
+            if user.school and user.school not in contest.school_limit:
+                return f"\u9662\u6821\u53d7\u9650\u4e8e\u300c{contest.school_limit}\u300d"
     return None
 
 

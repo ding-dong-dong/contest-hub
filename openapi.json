@@ -1,0 +1,1116 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "竞赛信息管理后端",
+    "description": "竞赛信息 CRUD + 智能推荐服务。字段定义参考田淋元产品文档第四章与连诗钰前端 V1 契约。\n\n推荐接口使用硬过滤 + 软评分（100 分制）排序返回。\n\n字段命名：接口统一 snake_case，前端 adapter 负责映射驼峰。",
+    "version": "1.1.0"
+  },
+  "paths": {
+    "/contests/recommend": {
+      "get": {
+        "summary": "智能推荐",
+        "description": "接收用户画像，按硬过滤（已截止/取消、年级、专业、院校）排除后，用软评分（专业兴趣30 + 年级经验25 + 时间可行性20 + 可验证价值15 + 信息可信度10）降序返回，每条附匹配理由。interests 可重复传参。",
+        "operationId": "get_recommend_contests_recommend_get",
+        "parameters": [
+          {
+            "name": "grade",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "大一/大二/大三/大四/研究生/其他",
+              "title": "Grade"
+            },
+            "description": "大一/大二/大三/大四/研究生/其他"
+          },
+          {
+            "name": "major",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "计算机/电子信息/经管/设计/机械/材料/理学/文法/医学/其他",
+              "title": "Major"
+            },
+            "description": "计算机/电子信息/经管/设计/机械/材料/理学/文法/医学/其他"
+          },
+          {
+            "name": "interests",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "兴趣标签，可重复传参",
+              "title": "Interests"
+            },
+            "description": "兴趣标签，可重复传参"
+          },
+          {
+            "name": "experience",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "无经验/参加过但未获奖/有获奖经验",
+              "title": "Experience"
+            },
+            "description": "无经验/参加过但未获奖/有获奖经验"
+          },
+          {
+            "name": "time_per_week",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "≤3小时/4-7小时/8-14小时/≥15小时",
+              "title": "Time Per Week"
+            },
+            "description": "≤3小时/4-7小时/8-14小时/≥15小时"
+          },
+          {
+            "name": "school",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "院校名称（可选）",
+              "default": "",
+              "title": "School"
+            },
+            "description": "院校名称（可选）"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests": {
+      "get": {
+        "summary": "查询所有竞赛",
+        "operationId": "list_contests_contests_get",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按类别筛选",
+              "title": "Category"
+            },
+            "description": "按类别筛选"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按状态筛选（报名中/即将截止/已截止/延期/取消/待确认）",
+              "title": "Status"
+            },
+            "description": "按状态筛选（报名中/即将截止/已截止/延期/取消/待确认）"
+          },
+          {
+            "name": "eligible_grades",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按适用年级筛选（精确匹配）",
+              "title": "Eligible Grades"
+            },
+            "description": "按适用年级筛选（精确匹配）"
+          },
+          {
+            "name": "major",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按专业方向筛选（如 计算机/电子信息/经管）",
+              "title": "Major"
+            },
+            "description": "按专业方向筛选（如 计算机/电子信息/经管）"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ContestOut"
+                  },
+                  "title": "Response List Contests Contests Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "新增竞赛",
+        "operationId": "create_contest_contests_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContestCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContestOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contests/{contest_id}": {
+      "get": {
+        "summary": "获取单条竞赛详情",
+        "operationId": "get_contest_contests__contest_id__get",
+        "parameters": [
+          {
+            "name": "contest_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Contest Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContestOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "修改竞赛",
+        "operationId": "update_contest_contests__contest_id__put",
+        "parameters": [
+          {
+            "name": "contest_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Contest Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContestUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContestOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "删除竞赛",
+        "operationId": "delete_contest_contests__contest_id__delete",
+        "parameters": [
+          {
+            "name": "contest_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Contest Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContestCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "session": {
+            "type": "string",
+            "title": "Session",
+            "default": ""
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "default": ""
+          },
+          "organizer": {
+            "type": "string",
+            "title": "Organizer",
+            "default": ""
+          },
+          "eligible_grades": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Eligible Grades"
+          },
+          "major_limit": {
+            "type": "string",
+            "title": "Major Limit",
+            "default": "不限"
+          },
+          "school_limit": {
+            "type": "string",
+            "title": "School Limit",
+            "default": "待确认"
+          },
+          "registration_deadline": {
+            "type": "string",
+            "title": "Registration Deadline",
+            "default": ""
+          },
+          "submission_deadline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submission Deadline",
+            "default": ""
+          },
+          "materials": {
+            "type": "string",
+            "title": "Materials",
+            "default": ""
+          },
+          "process": {
+            "type": "string",
+            "title": "Process",
+            "default": ""
+          },
+          "skills": {
+            "type": "string",
+            "title": "Skills",
+            "default": ""
+          },
+          "outcomes": {
+            "type": "string",
+            "title": "Outcomes",
+            "default": ""
+          },
+          "estimated_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Time",
+            "default": ""
+          },
+          "notice_url": {
+            "type": "string",
+            "title": "Notice Url",
+            "default": ""
+          },
+          "registration_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Url",
+            "default": ""
+          },
+          "source_type": {
+            "type": "string",
+            "title": "Source Type",
+            "default": "其他"
+          },
+          "verified_at": {
+            "type": "string",
+            "title": "Verified At",
+            "default": ""
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "待确认"
+          },
+          "link_status": {
+            "$ref": "#/components/schemas/LinkStatus"
+          },
+          "review_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review Note",
+            "default": ""
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "ContestCreate"
+      },
+      "ContestOut": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "session": {
+            "type": "string",
+            "title": "Session",
+            "default": ""
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "default": ""
+          },
+          "organizer": {
+            "type": "string",
+            "title": "Organizer",
+            "default": ""
+          },
+          "eligible_grades": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Eligible Grades"
+          },
+          "major_limit": {
+            "type": "string",
+            "title": "Major Limit",
+            "default": "不限"
+          },
+          "school_limit": {
+            "type": "string",
+            "title": "School Limit",
+            "default": "待确认"
+          },
+          "registration_deadline": {
+            "type": "string",
+            "title": "Registration Deadline",
+            "default": ""
+          },
+          "submission_deadline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submission Deadline",
+            "default": ""
+          },
+          "materials": {
+            "type": "string",
+            "title": "Materials",
+            "default": ""
+          },
+          "process": {
+            "type": "string",
+            "title": "Process",
+            "default": ""
+          },
+          "skills": {
+            "type": "string",
+            "title": "Skills",
+            "default": ""
+          },
+          "outcomes": {
+            "type": "string",
+            "title": "Outcomes",
+            "default": ""
+          },
+          "estimated_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Time",
+            "default": ""
+          },
+          "notice_url": {
+            "type": "string",
+            "title": "Notice Url",
+            "default": ""
+          },
+          "registration_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Url",
+            "default": ""
+          },
+          "source_type": {
+            "type": "string",
+            "title": "Source Type",
+            "default": "其他"
+          },
+          "verified_at": {
+            "type": "string",
+            "title": "Verified At",
+            "default": ""
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "待确认"
+          },
+          "link_status": {
+            "$ref": "#/components/schemas/LinkStatus"
+          },
+          "review_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review Note",
+            "default": ""
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "id"
+        ],
+        "title": "ContestOut"
+      },
+      "ContestUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "session": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "organizer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organizer"
+          },
+          "eligible_grades": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eligible Grades"
+          },
+          "major_limit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Major Limit"
+          },
+          "school_limit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "School Limit"
+          },
+          "registration_deadline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Deadline"
+          },
+          "submission_deadline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submission Deadline"
+          },
+          "materials": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Materials"
+          },
+          "process": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Process"
+          },
+          "skills": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Skills"
+          },
+          "outcomes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcomes"
+          },
+          "estimated_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Time"
+          },
+          "notice_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notice Url"
+          },
+          "registration_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Url"
+          },
+          "source_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Type"
+          },
+          "verified_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verified At"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "link_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LinkStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "review_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Review Note"
+          }
+        },
+        "type": "object",
+        "title": "ContestUpdate"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LinkStatus": {
+        "properties": {
+          "notice": {
+            "type": "string",
+            "title": "Notice",
+            "default": "待确认"
+          },
+          "registration": {
+            "type": "string",
+            "title": "Registration",
+            "default": "待确认"
+          }
+        },
+        "type": "object",
+        "title": "LinkStatus"
+      },
+      "RecommendItem": {
+        "properties": {
+          "competition_id": {
+            "type": "string",
+            "title": "Competition Id",
+            "description": "竞赛 ID，对应 contest.id"
+          },
+          "total_score": {
+            "type": "number",
+            "title": "Total Score",
+            "description": "推荐总分（0-100），等于 scores 五项之和"
+          },
+          "match_level": {
+            "type": "string",
+            "title": "Match Level",
+            "description": "匹配档位标签（产品文档第五章第4节）：高度匹配(80-100)/较为匹配(60-79)/可进一步了解(0-59)",
+            "default": ""
+          },
+          "scores": {
+            "$ref": "#/components/schemas/ScoreBreakdown"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reasons",
+            "description": "个性化推荐理由，第1条为总结（含免责声明），至少2条"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings",
+            "description": "风险提示文案，如截止日期待确认、链接待复核"
+          },
+          "qualification_pending": {
+            "type": "boolean",
+            "title": "Qualification Pending",
+            "description": "资格范围待人工确认（适用年级/院校不明），true 时前端必须显示风险提示",
+            "default": false
+          },
+          "verification_pending": {
+            "type": "boolean",
+            "title": "Verification Pending",
+            "description": "链接/状态待复核，true 时对应官方入口需标注待确认",
+            "default": false
+          },
+          "contest": {
+            "$ref": "#/components/schemas/ContestOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "competition_id",
+          "total_score",
+          "scores",
+          "contest"
+        ],
+        "title": "RecommendItem",
+        "description": "前端 V1 契约：扁平字段 + 分数明细 + 理由/告警/待确认标记。"
+      },
+      "RecommendResponse": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RecommendItem"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "items"
+        ],
+        "title": "RecommendResponse"
+      },
+      "ScoreBreakdown": {
+        "properties": {
+          "major_interest": {
+            "type": "number",
+            "title": "Major Interest",
+            "default": 0.0
+          },
+          "grade_experience": {
+            "type": "number",
+            "title": "Grade Experience",
+            "default": 0.0
+          },
+          "time": {
+            "type": "number",
+            "title": "Time",
+            "default": 0.0
+          },
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "default": 0.0
+          },
+          "trust": {
+            "type": "number",
+            "title": "Trust",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "title": "ScoreBreakdown",
+        "description": "推荐评分明细（满分 100），与前端契约键名一致。"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

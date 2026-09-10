@@ -1,6 +1,6 @@
-"""FastAPI å…¥å£ï¼Œæä¾›ç«èµ›ç®¡ç† API åŠæ¨èæ¥å£ã€‚
+"""FastAPI Èë¿Ú£¬Ìá¹©¾ºÈü¹ÜÀí API ¼°ÍÆ¼ö½Ó¿Ú¡£
 
-å¯åŠ¨åè®¿é—®è‡ªåŠ¨æ–‡æ¡£ï¼š
+Æô¶¯ºó·ÃÎÊ×Ô¶¯ÎÄµµ£º
   Swagger UI: http://127.0.0.1:8000/docs
   ReDoc:      http://127.0.0.1:8000/redoc
 """
@@ -14,19 +14,19 @@ from . import crud, recommend, schemas
 from .database import get_db, init_db
 
 app = FastAPI(
-    title="ç«èµ›ä¿¡æ¯ç®¡ç†åç«¯",
+    title="¾ºÈüĞÅÏ¢¹ÜÀíºó¶Ë",
     description=(
-        "ç«èµ›ä¿¡æ¯ CRUD + æ™ºèƒ½æ¨èæœåŠ¡ã€‚å­—æ®µå®šä¹‰å‚è€ƒç”°æ·‹å…ƒäº§å“æ–‡æ¡£ç¬¬å››ç« ä¸è¿è¯—é’°å‰ç«¯ V1 å¥‘çº¦ã€‚"
-        "\n\næ¨èæ¥å£ä½¿ç”¨ç¡¬è¿‡æ»¤ + è½¯è¯„åˆ†ï¼ˆ100 åˆ†åˆ¶ï¼‰æ’åºè¿”å›ã€‚"
-        "\n\nå­—æ®µå‘½åï¼šæ¥å£ç»Ÿä¸€ snake_caseï¼Œå‰ç«¯ adapter è´Ÿè´£æ˜ å°„é©¼å³°ã€‚"
+        "¾ºÈüĞÅÏ¢ CRUD + ÖÇÄÜÍÆ¼ö·şÎñ¡£×Ö¶Î¶¨Òå²Î¿¼ÌïÁÜÔª²úÆ·ÎÄµµµÚËÄÕÂÓëÁ¬Ê«îÚÇ°¶Ë V1 ÆõÔ¼¡£"
+        "\n\nÍÆ¼ö½Ó¿ÚÊ¹ÓÃÓ²¹ıÂË + ÈíÆÀ·Ö£¨100 ·ÖÖÆ£©ÅÅĞò·µ»Ø¡£"
+        "\n\n×Ö¶ÎÃüÃû£º½Ó¿ÚÍ³Ò» snake_case£¬Ç°¶Ë adapter ¸ºÔğÓ³ÉäÍÕ·å¡£"
     ),
     version="1.1.0",
 )
 
-# è·¨åŸŸï¼šå‰ç«¯ Vite å¼€å‘æœåŠ¡å™¨ï¼ˆé»˜è®¤ 5173ï¼‰ä¸ Netlify éƒ¨ç½²éœ€è¦
+# ¿çÓò£ºÇ°¶Ë Vite ¿ª·¢·şÎñÆ÷£¨Ä¬ÈÏ 5173£©Óë Netlify ²¿ÊğĞèÒª
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # è”è°ƒæœŸæ”¾å¼€ï¼›ç”Ÿäº§ç¯å¢ƒæ”¶æ•›åˆ°å…·ä½“åŸŸå
+    allow_origins=["*"],  # Áªµ÷ÆÚ·Å¿ª£»Éú²ú»·¾³ÊÕÁ²µ½¾ßÌåÓòÃû
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -38,7 +38,7 @@ def _startup() -> None:
     init_db()
 
 
-@app.get("/", summary="æœåŠ¡ä¿¡æ¯", include_in_schema=False)
+@app.get("/", summary="·şÎñĞÅÏ¢", include_in_schema=False)
 def root():
     return {
         "service": "contest-hub-backend",
@@ -46,7 +46,7 @@ def root():
         "docs": "/docs",
         "redoc": "/redoc",
         "endpoints": {
-            "list": "GET /contests?category=&status=&eligible_grades=",
+            "list": "GET /contests?category=&status=&eligible_grades=&major=",
             "detail": "GET /contests/{id}",
             "create": "POST /contests",
             "update": "PUT /contests/{id}",
@@ -59,24 +59,24 @@ def root():
     }
 
 
-# ---- æ¨èæ¥å£å¿…é¡»åœ¨ /contests/{id} ä¹‹å‰æ³¨å†Œï¼Œé¿å…è·¯å¾„å†²çª ----
+# ---- ÍÆ¼ö½Ó¿Ú±ØĞëÔÚ /contests/{id} Ö®Ç°×¢²á£¬±ÜÃâÂ·¾¶³åÍ» ----
 @app.get(
     "/contests/recommend",
     response_model=schemas.RecommendResponse,
-    summary="æ™ºèƒ½æ¨è",
+    summary="ÖÇÄÜÍÆ¼ö",
     description=(
-        "æ¥æ”¶ç”¨æˆ·ç”»åƒï¼ŒæŒ‰ç¡¬è¿‡æ»¤ï¼ˆå·²æˆªæ­¢/å–æ¶ˆã€å¹´çº§ã€ä¸“ä¸šã€é™¢æ ¡ï¼‰æ’é™¤åï¼Œ"
-        "ç”¨è½¯è¯„åˆ†ï¼ˆä¸“ä¸šå…´è¶£30 + å¹´çº§ç»éªŒ25 + æ—¶é—´å¯è¡Œæ€§20 + å¯éªŒè¯ä»·å€¼15 + ä¿¡æ¯å¯ä¿¡åº¦10ï¼‰"
-        "é™åºè¿”å›ï¼Œæ¯æ¡é™„åŒ¹é…ç†ç”±ã€‚interests å¯é‡å¤ä¼ å‚ã€‚"
+        "½ÓÊÕÓÃ»§»­Ïñ£¬°´Ó²¹ıÂË£¨ÒÑ½ØÖ¹/È¡Ïû¡¢Äê¼¶¡¢×¨Òµ¡¢ÔºĞ££©ÅÅ³ıºó£¬"
+        "ÓÃÈíÆÀ·Ö£¨×¨ÒµĞËÈ¤30 + Äê¼¶¾­Ñé25 + Ê±¼ä¿ÉĞĞĞÔ20 + ¿ÉÑéÖ¤¼ÛÖµ15 + ĞÅÏ¢¿ÉĞÅ¶È10£©"
+        "½µĞò·µ»Ø£¬Ã¿Ìõ¸½Æ¥ÅäÀíÓÉ¡£interests ¿ÉÖØ¸´´«²Î¡£"
     ),
 )
 def get_recommend(
-    grade: str = Query(..., description="å¤§ä¸€/å¤§äºŒ/å¤§ä¸‰/å¤§å››/ç ”ç©¶ç”Ÿ/å…¶ä»–"),
-    major: str = Query(..., description="è®¡ç®—æœº/ç”µå­ä¿¡æ¯/ç»ç®¡/è®¾è®¡/æœºæ¢°/ææ–™/ç†å­¦/æ–‡æ³•/åŒ»å­¦/å…¶ä»–"),
-    interests: List[str] = Query(default_factory=list, description="å…´è¶£æ ‡ç­¾ï¼Œå¯é‡å¤ä¼ å‚"),
-    experience: str = Query(..., description="æ— ç»éªŒ/å‚åŠ è¿‡ä½†æœªè·å¥–/æœ‰è·å¥–ç»éªŒ"),
-    time_per_week: str = Query(..., description="â‰¤3å°æ—¶/4-7å°æ—¶/8-14å°æ—¶/â‰¥15å°æ—¶"),
-    school: str = Query("", description="é™¢æ ¡åç§°ï¼ˆå¯é€‰ï¼‰"),
+    grade: str = Query(..., description="´óÒ»/´ó¶ş/´óÈı/´óËÄ/ÑĞ¾¿Éú/ÆäËû"),
+    major: str = Query(..., description="¼ÆËã»ú/µç×ÓĞÅÏ¢/¾­¹Ü/Éè¼Æ/»úĞµ/²ÄÁÏ/ÀíÑ§/ÎÄ·¨/Ò½Ñ§/ÆäËû"),
+    interests: List[str] = Query(default_factory=list, description="ĞËÈ¤±êÇ©£¬¿ÉÖØ¸´´«²Î"),
+    experience: str = Query(..., description="ÎŞ¾­Ñé/²Î¼Ó¹ıµ«Î´»ñ½±/ÓĞ»ñ½±¾­Ñé"),
+    time_per_week: str = Query(..., description="¡Ü3Ğ¡Ê±/4-7Ğ¡Ê±/8-14Ğ¡Ê±/¡İ15Ğ¡Ê±"),
+    school: str = Query("", description="ÔºĞ£Ãû³Æ£¨¿ÉÑ¡£©"),
     db: Session = Depends(get_db),
 ):
     user = schemas.UserProfile(
@@ -95,26 +95,29 @@ def get_recommend(
 @app.get(
     "/contests",
     response_model=List[schemas.ContestOut],
-    summary="æŸ¥è¯¢æ‰€æœ‰ç«èµ›",
+    summary="²éÑ¯ËùÓĞ¾ºÈü",
 )
 def list_contests(
-    category: Optional[str] = Query(None, description="æŒ‰ç±»åˆ«ç­›é€‰"),
-    status: Optional[str] = Query(None, description="æŒ‰çŠ¶æ€ç­›é€‰"),
-    eligible_grades: Optional[str] = Query(None, description="æŒ‰é€‚ç”¨å¹´çº§ç­›é€‰ï¼ˆç²¾ç¡®åŒ¹é…ï¼‰"),
+    category: Optional[str] = Query(None, description="°´Àà±ğÉ¸Ñ¡"),
+    status: Optional[str] = Query(None, description="°´×´Ì¬É¸Ñ¡£¨±¨ÃûÖĞ/¼´½«½ØÖ¹/ÒÑ½ØÖ¹/ÑÓÆÚ/È¡Ïû/´ıÈ·ÈÏ£©"),
+    eligible_grades: Optional[str] = Query(None, description="°´ÊÊÓÃÄê¼¶É¸Ñ¡£¨¾«È·Æ¥Åä£©"),
+    major: Optional[str] = Query(None, description="°´×¨Òµ·½ÏòÉ¸Ñ¡£¨Èç ¼ÆËã»ú/µç×ÓĞÅÏ¢/¾­¹Ü£©"),
     db: Session = Depends(get_db),
 ):
-    return crud.list_contests(db, category=category, status=status, eligible_grades=eligible_grades)
+    return crud.list_contests(
+        db, category=category, status=status, eligible_grades=eligible_grades, major=major
+    )
 
 
 @app.get(
     "/contests/{contest_id}",
     response_model=schemas.ContestOut,
-    summary="è·å–å•æ¡ç«èµ›è¯¦æƒ…",
+    summary="»ñÈ¡µ¥Ìõ¾ºÈüÏêÇé",
 )
 def get_contest(contest_id: str, db: Session = Depends(get_db)):
     out = crud.get_contest(db, contest_id)
     if not out:
-        raise HTTPException(status_code=404, detail="ç«èµ›ä¸å­˜åœ¨")
+        raise HTTPException(status_code=404, detail="¾ºÈü²»´æÔÚ")
     return out
 
 
@@ -122,7 +125,7 @@ def get_contest(contest_id: str, db: Session = Depends(get_db)):
     "/contests",
     response_model=schemas.ContestOut,
     status_code=status.HTTP_201_CREATED,
-    summary="æ–°å¢ç«èµ›",
+    summary="ĞÂÔö¾ºÈü",
 )
 def create_contest(payload: schemas.ContestCreate, db: Session = Depends(get_db)):
     return crud.create_contest(db, payload)
@@ -131,21 +134,21 @@ def create_contest(payload: schemas.ContestCreate, db: Session = Depends(get_db)
 @app.put(
     "/contests/{contest_id}",
     response_model=schemas.ContestOut,
-    summary="ä¿®æ”¹ç«èµ›",
+    summary="ĞŞ¸Ä¾ºÈü",
 )
 def update_contest(contest_id: str, payload: schemas.ContestUpdate, db: Session = Depends(get_db)):
     out = crud.update_contest(db, contest_id, payload)
     if not out:
-        raise HTTPException(status_code=404, detail="ç«èµ›ä¸å­˜åœ¨")
+        raise HTTPException(status_code=404, detail="¾ºÈü²»´æÔÚ")
     return out
 
 
 @app.delete(
     "/contests/{contest_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    summary="åˆ é™¤ç«èµ›",
+    summary="É¾³ı¾ºÈü",
 )
 def delete_contest(contest_id: str, db: Session = Depends(get_db)):
     if not crud.delete_contest(db, contest_id):
-        raise HTTPException(status_code=404, detail="ç«èµ›ä¸å­˜åœ¨")
+        raise HTTPException(status_code=404, detail="¾ºÈü²»´æÔÚ")
     return None

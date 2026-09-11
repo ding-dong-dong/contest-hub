@@ -1,0 +1,217 @@
+{
+  "_说明": "竞赛拾光 V1.0 推荐专业接口真实响应示例（2026-09-11，陈玉婷）",
+  "1_GET_/contests/imp_015_竞赛详情（含新字段）": {
+    "name": "中国大学生计算机设计大赛（4C）",
+    "session": "第19届·2026",
+    "tags": [
+      "A类",
+      "白名单",
+      "首次参赛适配",
+      "已有目标适配",
+      "时间有限适配",
+      "重视认定适配"
+    ],
+    "category": "设计",
+    "organizer": "中国大学生计算机设计大赛组织委员会",
+    "eligible_grades": [
+      "大一",
+      "大二",
+      "大三",
+      "大四",
+      "研究生"
+    ],
+    "major_limit": "待确认",
+    "recommended_majors": [
+      "计算机",
+      "电子信息",
+      "文法",
+      "设计"
+    ],
+    "recommended_major_reason": "设软件应用与开发、微课与教学辅助、物联网与人工智能、大数据应用、数媒设计（动漫、影视）5 大类;计算机/电子信息负责开发,文法/设计负责数媒赛道。",
+    "school_limit": "全国",
+    "registration_deadline": "2026-05-30T00:00:00+08:00",
+    "registration_deadline_note": "校/省报名待确认\n国赛填报核查",
+    "submission_deadline": "",
+    "submission_deadline_note": "按类别/校省通知，待确认。",
+    "materials": "按11大类模板准备作品/文档",
+    "process": "按11大类模板准备作品/文档→校省选拔→国赛平台填报核查→线下答辩（07-17至08-20分批）。",
+    "skills": "软件工程、交互设计、多媒体创作、信息可视化、Web/移动开发",
+    "outcomes": "软件作品、设计文档、答辩 PPT",
+    "ability_training": "通过选择软件应用、微课与教学辅助、物联网与 AI、大数据应用、数媒设计（动漫、影视、UI）、信息可视化、Web 应用等方向之一提交完整作品，训练软件与数字媒体综合开发能力",
+    "estimated_time": "4-7",
+    "notice_url": "https://jsjds.blcu.edu.cn/",
+    "registration_url": "https://jsjds.blcu.edu.cn/",
+    "source_type": "官网",
+    "verified_at": "2026-09-11",
+    "status": "已截止",
+    "link_status": {
+      "notice": "待确认",
+      "registration": "待确认"
+    },
+    "review_note": "参赛条件: 2026在籍本科生，含粤港澳大湾区学生/来华留学生；不含专科和研究生；需省赛晋级，人数按类别。\n来源: 官网/官方文件\n主要信息已核验\n状态说明: 已截止",
+    "id": "imp_015"
+  },
+  "2_GET_/contests/recommend_请求参数": {
+    "grade": "大二",
+    "major": "计算机",
+    "interests": [
+      "AI",
+      "编程"
+    ],
+    "experience": "无经验",
+    "time_per_week": "4-7小时",
+    "school": "杭州电子科技大学"
+  },
+  "3_GET_/contests/recommend_响应（节选前2条）": {
+    "total": 15,
+    "items": [
+      {
+        "competition_id": "imp_018",
+        "total_score": 73.0,
+        "match_level": "较为匹配",
+        "scores": {
+          "major_interest": 30.0,
+          "grade_experience": 15.0,
+          "time": 20.0,
+          "value": 5.0,
+          "trust": 3.0
+        },
+        "reasons": [
+          "推荐给你：蓝桥杯全国软件和信息技术专业人才大赛。你的专业「计算机」、兴趣「AI、编程」、经验「无经验」与该竞赛的赛道（AI/编程）、能力要求、参赛对象匹配；预计每周投入4-7，在你的可投入时间（4-7小时）范围内。报名截止待确认，信息最近核查于2026-09-11。存在资格或资料待确认项，请注意下方风险提示。请在报名前阅读官方通知确认最终资格。",
+          "专业与兴趣 30.0/30：专业「计算机」完全命中推荐专业（20/20）；兴趣命中：AI、编程（10/10）",
+          "年级与经验 15.0/25：适用年级未知，年级项按中性 10 分并标记资格待确认；经验「无经验」与建议难度「中」匹配（5/10）",
+          "时间可行性 20.0/20：预计投入中（4-7小时/周），不高于你的可投入时间（4-7小时）",
+          "可验证价值 5.0/15：有成果产出说明（5）",
+          "信息可信度 3.0/10：官方通知待复核/失效（0）、官方报名入口缺失或未开放（0）、0天内刚核查（3）"
+        ],
+        "warnings": [
+          "报名截止日期待确认，请以官网通知为准",
+          "官方参赛专业限制待确认，请以主办方最新通知为准",
+          "适用院校/年级范围待人工确认",
+          "竞赛当前状态待复核",
+          "官方通知链接待复核/失效",
+          "官方报名入口缺失或尚未开放，请以官方通知为准"
+        ],
+        "qualification_pending": true,
+        "verification_pending": true,
+        "contest": {
+          "name": "蓝桥杯全国软件和信息技术专业人才大赛",
+          "session": "每年一届，2026 届（第十五届）",
+          "tags": [],
+          "category": "AI/编程",
+          "organizer": "",
+          "eligible_grades": [],
+          "major_limit": "待确认",
+          "recommended_majors": [
+            "计算机",
+            "电子信息",
+            "理学"
+          ],
+          "recommended_major_reason": "设 Java/C++/Python/单片机/嵌入式/Web/数据科学/视觉设计 13 个赛项;工信部人才交流中心主办,被誉为「IT 类第一校招赛事」;计算机/电子信息/软工/数学背景考生最有优势。",
+          "school_limit": "待确认",
+          "registration_deadline": "",
+          "registration_deadline_note": "个人赛报名: 2026 年 3 月 15 日截止（软件/电子类）; 4 月 27 日（视觉/数科）",
+          "submission_deadline": "",
+          "submission_deadline_note": "",
+          "materials": "",
+          "process": "",
+          "skills": "算法设计、编程实现、数据结构、限时调试、工程实践",
+          "outcomes": "在线注册账号、报名费缴纳凭证、参赛确认书",
+          "ability_training": "",
+          "estimated_time": "4-7",
+          "notice_url": "https://dasai.lanqiao.cn/",
+          "registration_url": "",
+          "source_type": "官网",
+          "verified_at": "2026-09-11",
+          "status": "待确认",
+          "link_status": {
+            "notice": "待确认",
+            "registration": "待确认"
+          },
+          "review_note": "通知未发布；按 V1.0 写\"待确认\"",
+          "id": "imp_018"
+        }
+      },
+      {
+        "competition_id": "imp_012",
+        "total_score": 70.0,
+        "match_level": "较为匹配",
+        "scores": {
+          "major_interest": 12.0,
+          "grade_experience": 20.0,
+          "time": 20.0,
+          "value": 15.0,
+          "trust": 3.0
+        },
+        "reasons": [
+          "推荐给你：第五届大学生新媒体大赛。你的专业「计算机」、年级「大二」、经验「无经验」与该竞赛的赛道（综合、专项赛、首次参赛适配、已有目标适配、时间有限适配）、能力要求、参赛对象匹配；预计每周投入4-7，在你的可投入时间（4-7小时）范围内。报名截止2026-12-20T00:00:00+08:00，信息最近核查于2026-09-11。存在资格或资料待确认项，请注意下方风险提示。请在报名前阅读官方通知确认最终资格。",
+          "专业与兴趣 12.0/30：官方不限专业，人人可报（中性 12/20）；兴趣标签未命中（0/10）（0/10）",
+          "年级与经验 20.0/25：年级大二在适用范围内（15/15）；经验「无经验」与建议难度「中」匹配（5/10）",
+          "时间可行性 20.0/20：预计投入中（4-7小时/周），不高于你的可投入时间（4-7小时）",
+          "可验证价值 15.0/15：有能力训练说明（5）、有成果产出说明（5）、覆盖范围明确（全国(普通高等院校+高职)，5）",
+          "信息可信度 3.0/10：官方通知待复核/失效（0）、官方报名入口待复核/失效（0）、0天内刚核查（3）"
+        ],
+        "warnings": [
+          "竞赛当前状态待复核",
+          "官方通知链接待复核/失效",
+          "官方报名链接待复核/失效"
+        ],
+        "qualification_pending": false,
+        "verification_pending": true,
+        "contest": {
+          "name": "第五届大学生新媒体大赛",
+          "session": "第五届·2026",
+          "tags": [
+            "专项赛",
+            "首次参赛适配",
+            "已有目标适配",
+            "时间有限适配"
+          ],
+          "category": "综合",
+          "organizer": "大国英才（北京）职业技能鉴定中心",
+          "eligible_grades": [
+            "大一",
+            "大二",
+            "大三",
+            "大四",
+            "研究生"
+          ],
+          "major_limit": "不限专业",
+          "recommended_majors": [
+            "文法",
+            "设计",
+            "经管"
+          ],
+          "recommended_major_reason": "设摄影组/公众号组/短视频组/AI 智能创作组四组,文法则全部能参加,设计负责视觉/排版/AI 智能创作,经管负责商业分析与账号运营。",
+          "school_limit": "全国(普通高等院校+高职)",
+          "registration_deadline": "2026-12-20T00:00:00+08:00",
+          "registration_deadline_note": "报名栏显示23:59",
+          "submission_deadline": "",
+          "submission_deadline_note": "一场：09-01（结束）\n二场：10-31\n三场：12-20\n作品截止时分待确认",
+          "materials": "摄影/公众号/短视频/AI组作品",
+          "process": "摄影/公众号/短视频/AI组作品→赛氪报名缴费→按场提交→评审/证书；组织经费50元/人。",
+          "skills": "内容策划、视觉设计、平台运营、数据分析",
+          "outcomes": "新媒体传播案例、运营报告",
+          "ability_training": "通过选择摄影、公众号、短视频、AI 智能创作四个组别之一提交完整作品，训练跨工具协作的内容生产综合能力",
+          "estimated_time": "4-7",
+          "notice_url": "https://www.saikr.com/vse/XMTDX2026",
+          "registration_url": "https://www.saikr.com/vse/XMTDX2026",
+          "source_type": "官网",
+          "verified_at": "2026-09-11",
+          "status": "待确认",
+          "link_status": {
+            "notice": "待确认",
+            "registration": "待确认"
+          },
+          "review_note": "参赛条件: 高校/高职本专科及研究生，专业不限；按场次、组别和主题参赛。\n来源: 主办方平台/盖章文件\n主要信息已核验\n状态说明: 第二/三场报名中\n第一场已截止",
+          "id": "imp_012"
+        }
+      }
+    ]
+  },
+  "4_旧数据兼容说明": {
+    "recommended_majors_缺省": "[]（数组，永不为 null，不报错）",
+    "recommended_major_reason_缺省": "null",
+    "major_limit": "官方原文：不限专业 / 待确认 / 原文摘录，不与推荐专业互相覆盖"
+  }
+}

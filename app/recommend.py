@@ -311,7 +311,14 @@ def _build_warnings(
     if contest.school_limit == "待确认" or not contest.eligible_grades:
         qualification_pending = True
         warnings.append("适用院校/年级范围待人工确认")
-    if contest.school_limit and contest.school_limit not in {"全国", "待确认"} and not user.school:
+    # V1.0：以「全国」开头的赛事为公开全国范围，不提示补充学校；
+    # 仅当明确限定到具体院校（非「全国/待确认」）且用户未填学校时才提示
+    if (
+        contest.school_limit
+        and not contest.school_limit.startswith("全国")
+        and contest.school_limit != "待确认"
+        and not user.school
+    ):
         qualification_pending = True
         warnings.append("该竞赛限指定院校，建议补充学校信息以核对资格")
     if contest.status == "待确认":

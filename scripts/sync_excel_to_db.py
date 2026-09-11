@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""¶Ô±ÈÎÄ²©»ÜĞÂExcelÓëÊı¾İ¿â²îÒì£¬Éú³ÉĞŞÕı±¨¸æ¡£
+"""å¯¹æ¯”æ–‡åšå‰æ–°Excelä¸æ•°æ®åº“å·®å¼‚ï¼Œç”Ÿæˆä¿®æ­£æŠ¥å‘Šã€‚
 
-¶Ô±ÈÎ¬¶È£º
-1. major_limit£ºÊÇ·ñÊ¹ÓÃ10¸ö±ê×¼×¨Òµ´óÀà´Ê±í
-2. notice_url/registration_url£ºÊÇ·ñÓĞĞ§URL£¨·ÇÁ´½ÓÎÄ×ÖÓ¦Çå¿Õ£©
-3. status£ºÊÇ·ñ¸ù¾İ"¹Ù·½±¨ÃûÈë¿Ú×´Ì¬"¸üĞÂ
-4. registration_deadline£ºÊÇ·ñÈ±Ê§»òĞèÒª¸üĞÂ
-5. link_status£ºÊÇ·ñ¸ù¾İ±¨ÃûÈë¿Ú×´Ì¬¸üĞÂ
-6. ÆäËû×Ö¶Î£ºmaterials/process/skills/outcomes/review_noteµÈÊÇ·ñĞèÒª¸üĞÂ
+å¯¹æ¯”ç»´åº¦ï¼š
+1. major_limitï¼šæ˜¯å¦ä½¿ç”¨10ä¸ªæ ‡å‡†ä¸“ä¸šå¤§ç±»è¯è¡¨
+2. notice_url/registration_urlï¼šæ˜¯å¦æœ‰æ•ˆURLï¼ˆéé“¾æ¥æ–‡å­—åº”æ¸…ç©ºï¼‰
+3. statusï¼šæ˜¯å¦æ ¹æ®"å®˜æ–¹æŠ¥åå…¥å£çŠ¶æ€"æ›´æ–°
+4. registration_deadlineï¼šæ˜¯å¦ç¼ºå¤±æˆ–éœ€è¦æ›´æ–°
+5. link_statusï¼šæ˜¯å¦æ ¹æ®æŠ¥åå…¥å£çŠ¶æ€æ›´æ–°
+6. å…¶ä»–å­—æ®µï¼šmaterials/process/skills/outcomes/review_noteç­‰æ˜¯å¦éœ€è¦æ›´æ–°
 """
 import sqlite3
 import openpyxl
@@ -16,12 +16,12 @@ import re
 import json
 
 DB = r"d:\contest-hub\contests.db"
-XLSX = r"C:\Users\Lenovo\Documents\xwechat_files\wxid_xiyy9d1l0ic222_0726\msg\file\2026-09\ÎÄµÚÒ»Ìì½»¸¶ĞŞ¸ÄA°æ£¨°´Ê®Ïî·ÖÀà£©.xlsx"
+XLSX = r"C:\Users\Lenovo\Documents\xwechat_files\wxid_xiyy9d1l0ic222_0726\msg\file\2026-09\æ–‡ç¬¬ä¸€å¤©äº¤ä»˜ä¿®æ”¹Aç‰ˆï¼ˆæŒ‰åé¡¹åˆ†ç±»ï¼‰.xlsx"
 
-# 10¸ö±ê×¼×¨Òµ´óÀà
-VALID_MAJORS = {"¼ÆËã»ú", "µç×ÓĞÅÏ¢", "¾­¹Ü", "Éè¼Æ", "»úĞµ", "²ÄÁÏ", "ÀíÑ§", "ÎÄ·¨", "Ò½Ñ§", "ÆäËû", "²»ÏŞ"}
+# 10ä¸ªæ ‡å‡†ä¸“ä¸šå¤§ç±»
+VALID_MAJORS = {"è®¡ç®—æœº", "ç”µå­ä¿¡æ¯", "ç»ç®¡", "è®¾è®¡", "æœºæ¢°", "ææ–™", "ç†å­¦", "æ–‡æ³•", "åŒ»å­¦", "å…¶ä»–", "ä¸é™"}
 
-URL_RE = re.compile(r"https?://[^\s£¬¡£¡¢£»;£©)\"'<>]+")
+URL_RE = re.compile(r"https?://[^\sï¼Œã€‚ã€ï¼›;ï¼‰)\"'<>]+")
 
 
 def is_url(s):
@@ -34,38 +34,38 @@ def extract_url(s):
     if not s:
         return ""
     m = URL_RE.search(s)
-    return m.group(0).rstrip(".,¡£") if m else ""
+    return m.group(0).rstrip(".,ã€‚") if m else ""
 
 
-# Excel"¹Ù·½±¨ÃûÈë¿Ú×´Ì¬" -> Êı¾İ¿âstatusÓ³Éä
+# Excel"å®˜æ–¹æŠ¥åå…¥å£çŠ¶æ€" -> æ•°æ®åº“statusæ˜ å°„
 ENTRY_STATUS_MAP = {
-    "ÒÑ¿ª·Å": "±¨ÃûÖĞ",
-    "²¿·ÖĞ£ÒÑ¿ª·Å": "±¨ÃûÖĞ",
-    "Î´¿ª·Å": "´ıÈ·ÈÏ",
-    "ÒÑ½áÊøÕ÷¼¯": "ÒÑ½ØÖ¹",
-    "ÒÑ½áÊø": "ÒÑ½ØÖ¹",
+    "å·²å¼€æ”¾": "æŠ¥åä¸­",
+    "éƒ¨åˆ†æ ¡å·²å¼€æ”¾": "æŠ¥åä¸­",
+    "æœªå¼€æ”¾": "å¾…ç¡®è®¤",
+    "å·²ç»“æŸå¾é›†": "å·²æˆªæ­¢",
+    "å·²ç»“æŸ": "å·²æˆªæ­¢",
 }
 
 
 def map_entry_status(raw):
-    """´ÓExcel'¹Ù·½±¨ÃûÈë¿Ú×´Ì¬'ÁĞ½âÎö×´Ì¬¡£"""
+    """ä»Excel'å®˜æ–¹æŠ¥åå…¥å£çŠ¶æ€'åˆ—è§£æçŠ¶æ€ã€‚"""
     if not raw:
-        return "´ıÈ·ÈÏ"
+        return "å¾…ç¡®è®¤"
     for key, val in ENTRY_STATUS_MAP.items():
         if key in raw:
             return val
-    return "´ıÈ·ÈÏ"
+    return "å¾…ç¡®è®¤"
 
 
-# ¶ÁÈ¡Excel
+# è¯»å–Excel
 wb = openpyxl.load_workbook(XLSX, data_only=True)
 ws = wb.active
 
-# ¶Á±íÍ·
+# è¯»è¡¨å¤´
 headers = [cell.value for cell in ws[1]]
 hidx = {h: i for i, h in enumerate(headers) if h}
 
-# ¶ÁÈ¡Êı¾İ¿â
+# è¯»å–æ•°æ®åº“
 conn = sqlite3.connect(DB)
 conn.row_factory = sqlite3.Row
 cur = conn.cursor()
@@ -76,80 +76,80 @@ conn.close()
 issues = []
 
 for row in ws.iter_rows(min_row=2, values_only=True):
-    seq = row[hidx["ĞòºÅ"]]
+    seq = row[hidx["åºå·"]]
     cid = f"imp_{seq:03d}"
     db = db_rows.get(cid)
     if not db:
-        issues.append(f"[{cid}] Êı¾İ¿âÖĞ²»´æÔÚ£¨ĞÂÔö£¿£©")
+        issues.append(f"[{cid}] æ•°æ®åº“ä¸­ä¸å­˜åœ¨ï¼ˆæ–°å¢ï¼Ÿï¼‰")
         continue
 
-    name = row[hidx["¾ºÈüÃû³Æ"]]
-    major_raw = row[hidx["ÊÊÅä×¨Òµ"]] or ""
-    notice_raw = row[hidx["¹Ù·½Í¨ÖªURL"]] or ""
-    reg_raw = row[hidx["±¨ÃûÁ´½Ó"]] or ""
-    entry_status_raw = row[hidx["¹Ù·½±¨ÃûÈë¿Ú×´Ì¬"]] or ""
-    deadline_raw = row[hidx["±¨Ãû½ØÖ¹(±¾½ì)"]] or ""
-    verified_raw = row[hidx["×î½üºË²é"]] or ""
-    status_raw = row[hidx["×´Ì¬"]] or ""
+    name = row[hidx["ç«èµ›åç§°"]]
+    major_raw = row[hidx["é€‚é…ä¸“ä¸š"]] or ""
+    notice_raw = row[hidx["å®˜æ–¹é€šçŸ¥URL"]] or ""
+    reg_raw = row[hidx["æŠ¥åé“¾æ¥"]] or ""
+    entry_status_raw = row[hidx["å®˜æ–¹æŠ¥åå…¥å£çŠ¶æ€"]] or ""
+    deadline_raw = row[hidx["æŠ¥åæˆªæ­¢(æœ¬å±Š)"]] or ""
+    verified_raw = row[hidx["æœ€è¿‘æ ¸æŸ¥"]] or ""
+    status_raw = row[hidx["çŠ¶æ€"]] or ""
 
     row_issues = []
 
     # 1. major_limit
     db_major = db["major_limit"] or ""
     if db_major != major_raw:
-        # ¼ì²éDBÖĞÊÇ·ñÓĞ·Ç±ê×¼´Ê
-        if db_major != "²»ÏŞ":
+        # æ£€æŸ¥DBä¸­æ˜¯å¦æœ‰éæ ‡å‡†è¯
+        if db_major != "ä¸é™":
             db_parts = [p.strip() for p in db_major.split(",") if p.strip()]
             non_standard = [p for p in db_parts if p not in VALID_MAJORS]
             if non_standard:
-                row_issues.append(f"major_limit ²»±ê×¼: DB='{db_major}' -> Excel='{major_raw}' (º¬·Ç±ê×¼´Ê: {non_standard})")
+                row_issues.append(f"major_limit ä¸æ ‡å‡†: DB='{db_major}' -> Excel='{major_raw}' (å«éæ ‡å‡†è¯: {non_standard})")
             elif db_major != major_raw:
-                row_issues.append(f"major_limit ²»Ò»ÖÂ: DB='{db_major}' -> Excel='{major_raw}'")
+                row_issues.append(f"major_limit ä¸ä¸€è‡´: DB='{db_major}' -> Excel='{major_raw}'")
 
     # 2. notice_url
     db_notice = db["notice_url"] or ""
     if not is_url(db_notice) and db_notice:
-        row_issues.append(f"notice_url ·ÇURL: DB='{db_notice[:50]}' -> Ó¦Çå¿Õ»òÌáÈ¡")
+        row_issues.append(f"notice_url éURL: DB='{db_notice[:50]}' -> åº”æ¸…ç©ºæˆ–æå–")
     extracted = extract_url(notice_raw)
     if extracted and extracted != db_notice:
-        row_issues.append(f"notice_url Ğè¸üĞÂ: DB='{db_notice[:40]}' -> ExcelÌáÈ¡='{extracted[:40]}'")
+        row_issues.append(f"notice_url éœ€æ›´æ–°: DB='{db_notice[:40]}' -> Excelæå–='{extracted[:40]}'")
     elif not is_url(db_notice) and not extracted and notice_raw:
-        row_issues.append(f"notice_url ExcelÒ²·ÇURL: '{notice_raw[:40]}' -> Ó¦Çå¿Õ")
+        row_issues.append(f"notice_url Excelä¹ŸéURL: '{notice_raw[:40]}' -> åº”æ¸…ç©º")
 
     # 3. registration_url
     db_reg = db["registration_url"] or ""
     if not is_url(db_reg) and db_reg:
-        row_issues.append(f"registration_url ·ÇURL: DB='{db_reg[:50]}' -> Ó¦Çå¿Õ")
+        row_issues.append(f"registration_url éURL: DB='{db_reg[:50]}' -> åº”æ¸…ç©º")
     extracted_reg = extract_url(reg_raw)
     if extracted_reg and extracted_reg != db_reg:
-        row_issues.append(f"registration_url Ğè¸üĞÂ: DB='{db_reg[:40]}' -> ExcelÌáÈ¡='{extracted_reg[:40]}'")
+        row_issues.append(f"registration_url éœ€æ›´æ–°: DB='{db_reg[:40]}' -> Excelæå–='{extracted_reg[:40]}'")
     elif not is_url(db_reg) and not extracted_reg and reg_raw:
-        row_issues.append(f"registration_url ExcelÒ²·ÇURL: '{reg_raw[:40]}' -> Ó¦Çå¿Õ")
+        row_issues.append(f"registration_url Excelä¹ŸéURL: '{reg_raw[:40]}' -> åº”æ¸…ç©º")
 
     # 4. status
     new_status = map_entry_status(entry_status_raw)
     if db["status"] != new_status:
-        row_issues.append(f"status: DB='{db['status']}' -> ĞÂ'{new_status}' (ÒÀ¾İ: ¹Ù·½±¨ÃûÈë¿Ú×´Ì¬='{entry_status_raw}')")
+        row_issues.append(f"status: DB='{db['status']}' -> æ–°'{new_status}' (ä¾æ®: å®˜æ–¹æŠ¥åå…¥å£çŠ¶æ€='{entry_status_raw}')")
 
     # 5. registration_deadline
     db_deadline = db["registration_deadline"] or ""
     if not db_deadline:
-        row_issues.append(f"registration_deadline È±Ê§: Excel='{deadline_raw[:50]}'")
+        row_issues.append(f"registration_deadline ç¼ºå¤±: Excel='{deadline_raw[:50]}'")
 
     # 6. link_status
-    db_link = json.loads(db["link_status"] or '{"notice":"´ıÈ·ÈÏ","registration":"´ıÈ·ÈÏ"}')
-    # ¸ù¾İ±¨ÃûÈë¿Ú×´Ì¬ÍÆ¶Ïlink_status
-    if "ÒÑ¿ª·Å" in entry_status_raw:
-        new_link_reg = "¿ÉÓÃ" if is_url(extracted_reg) or is_url(reg_raw) else "´ıÈ·ÈÏ"
-    elif "ÒÑ½áÊø" in entry_status_raw:
-        new_link_reg = "Ê§Ğ§"
+    db_link = json.loads(db["link_status"] or '{"notice":"å¾…ç¡®è®¤","registration":"å¾…ç¡®è®¤"}')
+    # æ ¹æ®æŠ¥åå…¥å£çŠ¶æ€æ¨æ–­link_status
+    if "å·²å¼€æ”¾" in entry_status_raw:
+        new_link_reg = "å¯ç”¨" if is_url(extracted_reg) or is_url(reg_raw) else "å¾…ç¡®è®¤"
+    elif "å·²ç»“æŸ" in entry_status_raw:
+        new_link_reg = "å¤±æ•ˆ"
     else:
-        new_link_reg = "´ıÈ·ÈÏ"
-    new_link_notice = "¿ÉÓÃ" if is_url(extracted) or is_url(notice_raw) else "´ıÈ·ÈÏ"
+        new_link_reg = "å¾…ç¡®è®¤"
+    new_link_notice = "å¯ç”¨" if is_url(extracted) or is_url(notice_raw) else "å¾…ç¡®è®¤"
 
     if db_link.get("notice") != new_link_notice or db_link.get("registration") != new_link_reg:
         row_issues.append(
-            f"link_status: DB={db_link} -> ĞÂ={{notice:'{new_link_notice}', registration:'{new_link_reg}'}}"
+            f"link_status: DB={db_link} -> æ–°={{notice:'{new_link_notice}', registration:'{new_link_reg}'}}"
         )
 
     # 7. verified_at
@@ -158,25 +158,25 @@ for row in ws.iter_rows(min_row=2, values_only=True):
     if excel_verified and db_verified != excel_verified:
         row_issues.append(f"verified_at: DB='{db_verified}' -> Excel='{excel_verified}'")
 
-    # 8. ĞÂ×Ö¶ÎÊı¾İ
-    ideal = row[hidx.get("ÊÊÅäÀíÏë/Ä¿±ê", -1)] or ""
+    # 8. æ–°å­—æ®µæ•°æ®
+    ideal = row[hidx.get("é€‚é…ç†æƒ³/ç›®æ ‡", -1)] or ""
     if ideal and not db["skills"]:
-        row_issues.append(f"skills È±Ê§£¬ExcelÊÊÅäÀíÏë/Ä¿±ê='{ideal[:40]}'")
-    value = row[hidx.get("¾ºÈü×ÔÉí¼ÛÖµ(¿Í¹Û)", -1)] or ""
+        row_issues.append(f"skills ç¼ºå¤±ï¼ŒExcelé€‚é…ç†æƒ³/ç›®æ ‡='{ideal[:40]}'")
+    value = row[hidx.get("ç«èµ›è‡ªèº«ä»·å€¼(å®¢è§‚)", -1)] or ""
     if value and not db["outcomes"]:
-        row_issues.append(f"outcomes È±Ê§£¬Excel¾ºÈü×ÔÉí¼ÛÖµ='{value[:40]}'")
-    school_note = row[hidx.get("Ñ§Ğ£ÈÏ¶¨ËµÃ÷(ÒÑºËÊµ²ÅÂ¼Èë)", -1)] or ""
+        row_issues.append(f"outcomes ç¼ºå¤±ï¼ŒExcelç«èµ›è‡ªèº«ä»·å€¼='{value[:40]}'")
+    school_note = row[hidx.get("å­¦æ ¡è®¤å®šè¯´æ˜(å·²æ ¸å®æ‰å½•å…¥)", -1)] or ""
     if school_note and not db["review_note"]:
-        row_issues.append(f"review_note È±Ê§£¬ExcelÑ§Ğ£ÈÏ¶¨ËµÃ÷='{school_note[:40]}'")
-    materials = row[hidx.get("Ğè×¼±¸²ÄÁÏ", -1)] or ""
+        row_issues.append(f"review_note ç¼ºå¤±ï¼ŒExcelå­¦æ ¡è®¤å®šè¯´æ˜='{school_note[:40]}'")
+    materials = row[hidx.get("éœ€å‡†å¤‡ææ–™", -1)] or ""
     if materials and not db["materials"]:
-        row_issues.append(f"materials È±Ê§")
-    process = row[hidx.get("Ìá½»Á÷³Ì", -1)] or ""
+        row_issues.append(f"materials ç¼ºå¤±")
+    process = row[hidx.get("æäº¤æµç¨‹", -1)] or ""
     if process and not db["process"]:
-        row_issues.append(f"process È±Ê§")
-    grade_level = row[hidx.get("±ÈÈüµÈ¼¶", -1)] or ""
+        row_issues.append(f"process ç¼ºå¤±")
+    grade_level = row[hidx.get("æ¯”èµ›ç­‰çº§", -1)] or ""
     if grade_level:
-        row_issues.append(f"±ÈÈüµÈ¼¶(ĞÂ): '{grade_level[:30]}' -> Ğè´æÈëcategory»òtags")
+        row_issues.append(f"æ¯”èµ›ç­‰çº§(æ–°): '{grade_level[:30]}' -> éœ€å­˜å…¥categoryæˆ–tags")
 
     if row_issues:
         issues.append(f"\n{'='*60}")
@@ -186,4 +186,4 @@ for row in ws.iter_rows(min_row=2, values_only=True):
 
 print("\n".join(issues))
 print(f"\n{'='*60}")
-print(f"¹² {len(issues)} ÌõÎÊÌâ")
+print(f"å…± {len(issues)} æ¡é—®é¢˜")

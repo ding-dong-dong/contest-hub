@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""´ÓÐÂ°æExcel£¨º¬¼¼ÄÜ·ÖÎö£©¸üÐÂÊý¾Ý¿â¡£
+"""ä»Žæ–°ç‰ˆExcelï¼ˆå«æŠ€èƒ½åˆ†æžï¼‰æ›´æ–°æ•°æ®åº“ã€‚
 
-¸üÐÂÏî£º
-1. skills <- ¼¼ÄÜÐèÇó£¨¹Ø¼ü´ÊÁÐ±í£©
-2. ability_training <- ÄÜÁ¦ÑµÁ·ËµÃ÷£¨ÏêÏ¸ÃèÊö£©[ÐÂ×Ö¶Î]
-3. tags ¼ÓÈë³¡¾°±êÇ©£¨Ê×´Î²ÎÈü/ÒÑÓÐÄ¿±ê/Ê±¼äÓÐÏÞ/ÖØÊÓÈÏ¶¨£©
-4. tags ±£ÁôÔ­ÓÐ±ÈÈüµÈ¼¶±êÇ©
+æ›´æ–°é¡¹ï¼š
+1. skills <- æŠ€èƒ½éœ€æ±‚ï¼ˆå…³é”®è¯åˆ—è¡¨ï¼‰
+2. ability_training <- èƒ½åŠ›è®­ç»ƒè¯´æ˜Žï¼ˆè¯¦ç»†æè¿°ï¼‰[æ–°å­—æ®µ]
+3. tags åŠ å…¥åœºæ™¯æ ‡ç­¾ï¼ˆé¦–æ¬¡å‚èµ›/å·²æœ‰ç›®æ ‡/æ—¶é—´æœ‰é™/é‡è§†è®¤å®šï¼‰
+4. tags ä¿ç•™åŽŸæœ‰æ¯”èµ›ç­‰çº§æ ‡ç­¾
 """
 import json
 import sqlite3
@@ -19,35 +19,35 @@ XLSX = r"d:\contest-hub\scripts\_new_excel.xlsx"
 
 
 def extract_grade_tags(raw):
-    """´Ó±ÈÈüµÈ¼¶ÌáÈ¡¼ò¶Ì±êÇ©¡£"""
+    """ä»Žæ¯”èµ›ç­‰çº§æå–ç®€çŸ­æ ‡ç­¾ã€‚"""
     if not raw:
         return []
     raw = str(raw)
     tags = []
     if "A+" in raw:
-        tags.append("A+¼¶")
-    elif "AÀà" in raw:
-        tags.append("AÀà")
-    if "°×Ãûµ¥" in raw:
-        tags.append("°×Ãûµ¥")
-    if "×¨ÏîÈü" in raw:
-        tags.append("×¨ÏîÈü")
-    if "Ê¡¼¶" in raw:
-        tags.append("Ê¡¼¶")
-    if "´«Í³ÈüÊÂ" in raw:
-        tags.append("´«Í³ÈüÊÂ")
+        tags.append("A+çº§")
+    elif "Aç±»" in raw:
+        tags.append("Aç±»")
+    if "ç™½åå•" in raw:
+        tags.append("ç™½åå•")
+    if "ä¸“é¡¹èµ›" in raw:
+        tags.append("ä¸“é¡¹èµ›")
+    if "çœçº§" in raw:
+        tags.append("çœçº§")
+    if "ä¼ ç»Ÿèµ›äº‹" in raw:
+        tags.append("ä¼ ç»Ÿèµ›äº‹")
     return tags
 
 
 def map_scene_tag(val):
-    """½«³¡¾°ÊÊÅäÁÐµÄÖµÓ³ÉäÎª¼ò¶Ì±êÇ©¡£"""
+    """å°†åœºæ™¯é€‚é…åˆ—çš„å€¼æ˜ å°„ä¸ºç®€çŸ­æ ‡ç­¾ã€‚"""
     if not val:
         return None
     val = str(val)
-    if "ÊÊÅä" in val:
-        return "ÊÊÅä"
-    if "²»ÊÊÅä" in val:
-        return "²»ÊÊÅä"
+    if "é€‚é…" in val:
+        return "é€‚é…"
+    if "ä¸é€‚é…" in val:
+        return "ä¸é€‚é…"
     return None
 
 
@@ -59,35 +59,35 @@ hidx = {h: i for i, h in enumerate(headers) if h}
 conn = sqlite3.connect(DB)
 cur = conn.cursor()
 
-# ÏÈ¼ì²é ability_training ÁÐÊÇ·ñ´æÔÚ
+# å…ˆæ£€æŸ¥ ability_training åˆ—æ˜¯å¦å­˜åœ¨
 cur.execute("PRAGMA table_info(contests)")
 cols = [row[1] for row in cur.fetchall()]
 if "ability_training" not in cols:
     cur.execute("ALTER TABLE contests ADD COLUMN ability_training TEXT DEFAULT ''")
-    print("ÐÂÔö ability_training ÁÐ")
+    print("æ–°å¢ž ability_training åˆ—")
 
 changes_log = []
 
 for row in ws.iter_rows(min_row=2, values_only=True):
-    seq = row[hidx["ÐòºÅ"]]
+    seq = row[hidx["åºå·"]]
     cid = f"imp_{seq:03d}"
 
-    skills_new = row[hidx["¼¼ÄÜÐèÇó"]] or ""
-    ability_new = row[hidx["ÄÜÁ¦ÑµÁ·ËµÃ÷"]] or ""
-    grade_raw = row[hidx["±ÈÈüµÈ¼¶"]] or ""
+    skills_new = row[hidx["æŠ€èƒ½éœ€æ±‚"]] or ""
+    ability_new = row[hidx["èƒ½åŠ›è®­ç»ƒè¯´æ˜Ž"]] or ""
+    grade_raw = row[hidx["æ¯”èµ›ç­‰çº§"]] or ""
 
-    # ³¡¾°±êÇ©
+    # åœºæ™¯æ ‡ç­¾
     scene_tags = []
-    for col_name, label in [("Ê×´Î²ÎÈü", "Ê×´Î²ÎÈü"), ("ÒÑÓÐÄ¿±ê", "ÒÑÓÐÄ¿±ê"), ("Ê±¼äÓÐÏÞ", "Ê±¼äÓÐÏÞ"), ("ÖØÊÓÈÏ¶¨", "ÖØÊÓÈÏ¶¨")]:
+    for col_name, label in [("é¦–æ¬¡å‚èµ›", "é¦–æ¬¡å‚èµ›"), ("å·²æœ‰ç›®æ ‡", "å·²æœ‰ç›®æ ‡"), ("æ—¶é—´æœ‰é™", "æ—¶é—´æœ‰é™"), ("é‡è§†è®¤å®š", "é‡è§†è®¤å®š")]:
         if col_name in hidx:
             val = row[hidx[col_name]]
             mapped = map_scene_tag(val)
-            if mapped == "ÊÊÅä":
-                scene_tags.append(f"{label}ÊÊÅä")
-            elif mapped == "²»ÊÊÅä":
-                scene_tags.append(f"{label}²»ÊÊÅä")
+            if mapped == "é€‚é…":
+                scene_tags.append(f"{label}é€‚é…")
+            elif mapped == "ä¸é€‚é…":
+                scene_tags.append(f"{label}ä¸é€‚é…")
 
-    # ºÏ²¢±ÈÈüµÈ¼¶±êÇ© + ³¡¾°±êÇ©
+    # åˆå¹¶æ¯”èµ›ç­‰çº§æ ‡ç­¾ + åœºæ™¯æ ‡ç­¾
     grade_tags = extract_grade_tags(grade_raw)
     all_tags = grade_tags + scene_tags
 
@@ -104,9 +104,9 @@ for row in ws.iter_rows(min_row=2, values_only=True):
 
 conn.commit()
 
-# ÑéÖ¤
+# éªŒè¯
 cur.execute("SELECT COUNT(*) FROM contests")
-print(f"¸üÐÂÍê³É£¬¹² {cur.fetchone()[0]} Ìõ¼ÇÂ¼")
+print(f"æ›´æ–°å®Œæˆï¼Œå…± {cur.fetchone()[0]} æ¡è®°å½•")
 for log in changes_log:
     print(log)
 

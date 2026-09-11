@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""ÇåÀíÑùÀıÊı¾İ + ĞŞÕı skills/outcomes ×Ö¶ÎÓ³Éä¡£
+"""æ¸…ç†æ ·ä¾‹æ•°æ® + ä¿®æ­£ skills/outcomes å­—æ®µæ˜ å°„ã€‚
 
-1. É¾³ı c_001_ai_challenge ºÍ c_002_biz_plan Á½ÌõÑùÀı
-2. skills/outcomes ÄÚÈİ½»»»£ºoutcomes ·Å"ÊÊÅäÀíÏë/Ä¿±ê"£¬organizer ·Å"¾ºÈü×ÔÉí¼ÛÖµ"
-3. link_status °²È«½µ¼¶£º¿Õ URL ¶ÔÓ¦µÄ link_status Ç¿ÖÆÎª"´ıÈ·ÈÏ"
+1. åˆ é™¤ c_001_ai_challenge å’Œ c_002_biz_plan ä¸¤æ¡æ ·ä¾‹
+2. skills/outcomes å†…å®¹äº¤æ¢ï¼šoutcomes æ”¾"é€‚é…ç†æƒ³/ç›®æ ‡"ï¼Œorganizer æ”¾"ç«èµ›è‡ªèº«ä»·å€¼"
+3. link_status å®‰å…¨é™çº§ï¼šç©º URL å¯¹åº”çš„ link_status å¼ºåˆ¶ä¸º"å¾…ç¡®è®¤"
 """
 import json
 import sqlite3
@@ -15,54 +15,54 @@ SAMPLE_IDS = ["c_001_ai_challenge", "c_002_biz_plan"]
 conn = sqlite3.connect(DB)
 cur = conn.cursor()
 
-# 1. É¾³ıÑùÀı
+# 1. åˆ é™¤æ ·ä¾‹
 for sid in SAMPLE_IDS:
     cur.execute("DELETE FROM contests WHERE id=?", (sid,))
-    print(f"É¾³ı {sid}: affected={cur.rowcount}")
+    print(f"åˆ é™¤ {sid}: affected={cur.rowcount}")
 
-# 2. ĞŞÕı skills/outcomes/organizer ×Ö¶ÎÓ³Éä
-# µ±Ç°: skills=ÊÊÅäÀíÏë/Ä¿±ê(Ó¦·Åoutcomes), outcomes=¾ºÈü×ÔÉí¼ÛÖµ(Ó¦·Åorganizer)
-# ĞŞÕı: outcomes<-skills, organizer<-outcomes, skills<-Çå¿Õ(µÈÎÄ²©»Ü²¹³äÕæÊµÄÜÁ¦ÑµÁ·ËµÃ÷)
+# 2. ä¿®æ­£ skills/outcomes/organizer å­—æ®µæ˜ å°„
+# å½“å‰: skills=é€‚é…ç†æƒ³/ç›®æ ‡(åº”æ”¾outcomes), outcomes=ç«èµ›è‡ªèº«ä»·å€¼(åº”æ”¾organizer)
+# ä¿®æ­£: outcomes<-skills, organizer<-outcomes, skills<-æ¸…ç©º(ç­‰æ–‡åšå‰è¡¥å……çœŸå®èƒ½åŠ›è®­ç»ƒè¯´æ˜)
 cur.execute("SELECT id, skills, outcomes, organizer FROM contests WHERE id LIKE 'imp_%'")
 rows = cur.fetchall()
 for cid, old_skills, old_outcomes, old_organizer in rows:
-    new_outcomes = old_skills or ""      # ÊÊÅäÀíÏë/Ä¿±ê -> outcomes
-    new_organizer = old_outcomes or ""   # ¾ºÈü×ÔÉí¼ÛÖµ -> organizer
-    # skills ÔİÊ±Çå¿Õ£ºµ±Ç°ÄÚÈİÊÇÄ¿±ê²»ÊÇÄÜÁ¦ÑµÁ·ËµÃ÷£¬µÈÊı¾İ¹æ·¶ºóÔÙÌî
+    new_outcomes = old_skills or ""      # é€‚é…ç†æƒ³/ç›®æ ‡ -> outcomes
+    new_organizer = old_outcomes or ""   # ç«èµ›è‡ªèº«ä»·å€¼ -> organizer
+    # skills æš‚æ—¶æ¸…ç©ºï¼šå½“å‰å†…å®¹æ˜¯ç›®æ ‡ä¸æ˜¯èƒ½åŠ›è®­ç»ƒè¯´æ˜ï¼Œç­‰æ•°æ®è§„èŒƒåå†å¡«
     cur.execute(
         "UPDATE contests SET skills=?, outcomes=?, organizer=? WHERE id=?",
         ("", new_outcomes, new_organizer, cid),
     )
-    print(f"ĞŞÕı {cid}: outcomes<-'{new_outcomes[:20]}' organizer<-'{new_organizer[:20]}'")
+    print(f"ä¿®æ­£ {cid}: outcomes<-'{new_outcomes[:20]}' organizer<-'{new_organizer[:20]}'")
 
-# 3. link_status °²È«½µ¼¶£º¿Õ URL µÄ link_status Ç¿ÖÆÎª"´ıÈ·ÈÏ"
+# 3. link_status å®‰å…¨é™çº§ï¼šç©º URL çš„ link_status å¼ºåˆ¶ä¸º"å¾…ç¡®è®¤"
 cur.execute("SELECT id, notice_url, registration_url, link_status FROM contests")
 for cid, notice_url, reg_url, ls_raw in cur.fetchall():
-    ls = json.loads(ls_raw or '{"notice":"´ıÈ·ÈÏ","registration":"´ıÈ·ÈÏ"}')
+    ls = json.loads(ls_raw or '{"notice":"å¾…ç¡®è®¤","registration":"å¾…ç¡®è®¤"}')
     changed = False
     if not notice_url or not notice_url.strip().lower().startswith(("http://", "https://")):
-        if ls.get("notice") != "´ıÈ·ÈÏ":
-            ls["notice"] = "´ıÈ·ÈÏ"
+        if ls.get("notice") != "å¾…ç¡®è®¤":
+            ls["notice"] = "å¾…ç¡®è®¤"
             changed = True
     if not reg_url or not reg_url.strip().lower().startswith(("http://", "https://")):
-        if ls.get("registration") != "´ıÈ·ÈÏ":
-            ls["registration"] = "´ıÈ·ÈÏ"
+        if ls.get("registration") != "å¾…ç¡®è®¤":
+            ls["registration"] = "å¾…ç¡®è®¤"
             changed = True
     if changed:
         cur.execute(
             "UPDATE contests SET link_status=? WHERE id=?",
             (json.dumps(ls, ensure_ascii=False), cid),
         )
-        print(f"link_status ½µ¼¶ {cid}: {ls}")
+        print(f"link_status é™çº§ {cid}: {ls}")
 
 conn.commit()
 
-# ÑéÖ¤
+# éªŒè¯
 cur.execute("SELECT COUNT(*) FROM contests")
-print(f"\nÇåÀíºóÊı¾İ¿â¹² {cur.fetchone()[0]} Ìõ¼ÇÂ¼")
+print(f"\næ¸…ç†åæ•°æ®åº“å…± {cur.fetchone()[0]} æ¡è®°å½•")
 cur.execute("SELECT id, skills, outcomes, organizer FROM contests LIMIT 3")
 for r in cur.fetchall():
     print(f"  {r[0]}: skills='{r[1][:20]}' outcomes='{r[2][:20]}' organizer='{r[3][:20]}'")
 
 conn.close()
-print("\nÇåÀíÍê³É")
+print("\næ¸…ç†å®Œæˆ")

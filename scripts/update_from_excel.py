@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""´ÓÎÄ²©»ÜA°æExcel¸üÐÂÊý¾Ý¿â15Ìõ¾ºÈü¼ÇÂ¼¡£
+"""ä»Žæ–‡åšå‰Aç‰ˆExcelæ›´æ–°æ•°æ®åº“15æ¡ç«žèµ›è®°å½•ã€‚
 
-ÐÞÕýÏî£º
-1. major_limit -> ÓÃExcel±ê×¼10´óÀà´Ê±í
-2. notice_url/registration_url -> ÌáÈ¡ÓÐÐ§URL£¬·ÇURLÎÄ×ÖÇå¿Õ
-3. status -> ¸ù¾Ý"¹Ù·½±¨ÃûÈë¿Ú×´Ì¬"ÅÉÉú£¨ÒÑ¿ª·Å=±¨ÃûÖÐ/ÒÑ½áÊø=ÒÑ½ØÖ¹/Î´¿ª·Å=´ýÈ·ÈÏ£©
-4. link_status -> ¸ù¾Ý±¨ÃûÈë¿Ú×´Ì¬ºÍURLÓÐÐ§ÐÔÅÉÉú
-5. skills <- ÊÊÅäÀíÏë/Ä¿±ê
-6. outcomes <- ¾ºÈü×ÔÉí¼ÛÖµ(¿Í¹Û)
-7. review_note <- Ñ§Ð£ÈÏ¶¨ËµÃ÷(ÒÑºËÊµ²ÅÂ¼Èë)
-8. materials/process/verified_at/session/school_limit Í¬²½¸üÐÂ
-9. tags <- ±ÈÈüµÈ¼¶£¨Èç"A+¼¶","AÀà","°×Ãûµ¥"£©
+ä¿®æ­£é¡¹ï¼š
+1. major_limit -> ç”¨Excelæ ‡å‡†10å¤§ç±»è¯è¡¨
+2. notice_url/registration_url -> æå–æœ‰æ•ˆURLï¼ŒéžURLæ–‡å­—æ¸…ç©º
+3. status -> æ ¹æ®"å®˜æ–¹æŠ¥åå…¥å£çŠ¶æ€"æ´¾ç”Ÿï¼ˆå·²å¼€æ”¾=æŠ¥åä¸­/å·²ç»“æŸ=å·²æˆªæ­¢/æœªå¼€æ”¾=å¾…ç¡®è®¤ï¼‰
+4. link_status -> æ ¹æ®æŠ¥åå…¥å£çŠ¶æ€å’ŒURLæœ‰æ•ˆæ€§æ´¾ç”Ÿ
+5. skills <- é€‚é…ç†æƒ³/ç›®æ ‡
+6. outcomes <- ç«žèµ›è‡ªèº«ä»·å€¼(å®¢è§‚)
+7. review_note <- å­¦æ ¡è®¤å®šè¯´æ˜Ž(å·²æ ¸å®žæ‰å½•å…¥)
+8. materials/process/verified_at/session/school_limit åŒæ­¥æ›´æ–°
+9. tags <- æ¯”èµ›ç­‰çº§ï¼ˆå¦‚"A+çº§","Aç±»","ç™½åå•"ï¼‰
 """
 import json
 import re
@@ -22,7 +22,7 @@ from datetime import date
 import openpyxl
 
 DB = r"d:\contest-hub\contests.db"
-XLSX = r"C:\Users\Lenovo\Documents\xwechat_files\wxid_xiyy9d1l0ic222_0726\msg\file\2026-09\ÎÄµÚÒ»Ìì½»¸¶ÐÞ¸ÄA°æ£¨°´Ê®Ïî·ÖÀà£©.xlsx"
+XLSX = r"C:\Users\Lenovo\Documents\xwechat_files\wxid_xiyy9d1l0ic222_0726\msg\file\2026-09\æ–‡ç¬¬ä¸€å¤©äº¤ä»˜ä¿®æ”¹Aç‰ˆï¼ˆæŒ‰åé¡¹åˆ†ç±»ï¼‰.xlsx"
 
 URL_RE = re.compile(r"https?://[A-Za-z0-9\-._~:/?#\[\]@!$&'*+,;=%]+")
 
@@ -34,47 +34,47 @@ def extract_url(raw):
     m = URL_RE.search(raw)
     if m:
         url = m.group(0)
-        # ½Ø¶ÏÀ¨ºÅºóµÄ¸½¼ÓËµÃ÷
-        url = re.split(r"[\s£¨(]", url, maxsplit=1)[0].rstrip(".,¡£")
+        # æˆªæ–­æ‹¬å·åŽçš„é™„åŠ è¯´æ˜Ž
+        url = re.split(r"[\sï¼ˆ(]", url, maxsplit=1)[0].rstrip(".,ã€‚")
         return url
     return ""
 
 
 def map_entry_status(raw):
     if not raw:
-        return "´ýÈ·ÈÏ"
-    if "ÒÑ½áÊø" in raw:
-        return "ÒÑ½ØÖ¹"
-    if "ÒÑ¿ª·Å" in raw or "²¿·ÖÐ£ÒÑ¿ª·Å" in raw:
-        return "±¨ÃûÖÐ"
-    if "Î´¿ª·Å" in raw:
-        return "´ýÈ·ÈÏ"
-    return "´ýÈ·ÈÏ"
+        return "å¾…ç¡®è®¤"
+    if "å·²ç»“æŸ" in raw:
+        return "å·²æˆªæ­¢"
+    if "å·²å¼€æ”¾" in raw or "éƒ¨åˆ†æ ¡å·²å¼€æ”¾" in raw:
+        return "æŠ¥åä¸­"
+    if "æœªå¼€æ”¾" in raw:
+        return "å¾…ç¡®è®¤"
+    return "å¾…ç¡®è®¤"
 
 
 def map_link_status(entry_raw, url):
-    """¸ù¾Ý±¨ÃûÈë¿Ú×´Ì¬ºÍURLÓÐÐ§ÐÔÍÆ¶Ïlink_status¡£"""
+    """æ ¹æ®æŠ¥åå…¥å£çŠ¶æ€å’ŒURLæœ‰æ•ˆæ€§æŽ¨æ–­link_statusã€‚"""
     if not url:
-        return "´ýÈ·ÈÏ"
-    if "ÒÑ½áÊø" in (entry_raw or ""):
-        return "Ê§Ð§"
-    if "ÒÑ¿ª·Å" in (entry_raw or "") or "²¿·ÖÐ£ÒÑ¿ª·Å" in (entry_raw or ""):
-        return "¿ÉÓÃ"
-    return "´ýÈ·ÈÏ"
+        return "å¾…ç¡®è®¤"
+    if "å·²ç»“æŸ" in (entry_raw or ""):
+        return "å¤±æ•ˆ"
+    if "å·²å¼€æ”¾" in (entry_raw or "") or "éƒ¨åˆ†æ ¡å·²å¼€æ”¾" in (entry_raw or ""):
+        return "å¯ç”¨"
+    return "å¾…ç¡®è®¤"
 
 
 def parse_deadline(raw):
-    """³¢ÊÔ´ÓÎÄ±¾ÖÐÌáÈ¡YYYY-MM-DD¸ñÊ½µÄ½ØÖ¹ÈÕÆÚ¡£"""
+    """å°è¯•ä»Žæ–‡æœ¬ä¸­æå–YYYY-MM-DDæ ¼å¼çš„æˆªæ­¢æ—¥æœŸã€‚"""
     if not raw:
         return ""
     raw = str(raw)
-    # ÓÅÏÈÆ¥Åä 2026ÄêXÔÂXÈÕ »ò 2026-X-X
-    m = re.search(r"(20\d{2})[Äê\-/](\d{1,2})[ÔÂ\-/](\d{1,2})", raw)
+    # ä¼˜å…ˆåŒ¹é… 2026å¹´XæœˆXæ—¥ æˆ– 2026-X-X
+    m = re.search(r"(20\d{2})[å¹´\-/](\d{1,2})[æœˆ\-/](\d{1,2})", raw)
     if m:
         y, mo, d = m.group(1), int(m.group(2)), int(m.group(3))
         return f"{y}-{mo:02d}-{d:02d}"
-    # Æ¥Åä 2026ÄêXÔÂ£¨ÎÞ¾ßÌåÈÕ£¬È¡ÔÂµ×£©
-    m = re.search(r"(20\d{2})[Äê\-](\d{1,2})ÔÂ?", raw)
+    # åŒ¹é… 2026å¹´Xæœˆï¼ˆæ— å…·ä½“æ—¥ï¼Œå–æœˆåº•ï¼‰
+    m = re.search(r"(20\d{2})[å¹´\-](\d{1,2})æœˆ?", raw)
     if m:
         y, mo = m.group(1), int(m.group(2))
         return f"{y}-{mo:02d}"
@@ -82,65 +82,65 @@ def parse_deadline(raw):
 
 
 def extract_grade_level(raw):
-    """´Ó'±ÈÈüµÈ¼¶'ÌáÈ¡¼ò¶Ì±êÇ©£¬Èç A+¼¶/AÀà/°×Ãûµ¥/×¨ÏîÈü¡£"""
+    """ä»Ž'æ¯”èµ›ç­‰çº§'æå–ç®€çŸ­æ ‡ç­¾ï¼Œå¦‚ A+çº§/Aç±»/ç™½åå•/ä¸“é¡¹èµ›ã€‚"""
     if not raw:
         return []
     raw = str(raw)
     tags = []
     if "A+" in raw:
-        tags.append("A+¼¶")
-    elif "AÀà" in raw or "AÀà" in raw:
-        tags.append("AÀà")
-    if "°×Ãûµ¥" in raw:
-        tags.append("°×Ãûµ¥")
-    if "×¨ÏîÈü" in raw:
-        tags.append("×¨ÏîÈü")
-    if "Ê¡¼¶" in raw:
-        tags.append("Ê¡¼¶")
-    if "´«Í³ÈüÊÂ" in raw:
-        tags.append("´«Í³ÈüÊÂ")
+        tags.append("A+çº§")
+    elif "Aç±»" in raw or "Aç±»" in raw:
+        tags.append("Aç±»")
+    if "ç™½åå•" in raw:
+        tags.append("ç™½åå•")
+    if "ä¸“é¡¹èµ›" in raw:
+        tags.append("ä¸“é¡¹èµ›")
+    if "çœçº§" in raw:
+        tags.append("çœçº§")
+    if "ä¼ ç»Ÿèµ›äº‹" in raw:
+        tags.append("ä¼ ç»Ÿèµ›äº‹")
     if not tags:
         tags.append(raw[:6])
     return tags
 
 
-# ¶ÁÈ¡Excel
+# è¯»å–Excel
 wb = openpyxl.load_workbook(XLSX, data_only=True)
 ws = wb.active
 headers = [cell.value for cell in ws[1]]
 hidx = {h: i for i, h in enumerate(headers) if h}
 
-# Á¬½ÓÊý¾Ý¿â
+# è¿žæŽ¥æ•°æ®åº“
 conn = sqlite3.connect(DB)
 cur = conn.cursor()
 
 changes_log = []
 
 for row in ws.iter_rows(min_row=2, values_only=True):
-    seq = row[hidx["ÐòºÅ"]]
+    seq = row[hidx["åºå·"]]
     cid = f"imp_{seq:03d}"
 
-    # ´ÓExcelÌáÈ¡¸÷×Ö¶Î
-    name = row[hidx["¾ºÈüÃû³Æ"]] or ""
-    session = row[hidx["±¾½ì½ì´Î"]] or ""
-    grade_level_raw = row[hidx["±ÈÈüµÈ¼¶"]] or ""
-    major_limit = row[hidx["ÊÊÅä×¨Òµ"]] or ""
-    ideal_goal = row[hidx.get("ÊÊÅäÀíÏë/Ä¿±ê", -1)] or ""
-    detail_qual = row[hidx.get("ÏêÏ¸²ÎÈü×Ê¸ñ", -1)] or ""
-    cycle = row[hidx.get("±ÈÈüÖÜÆÚ(±¾½ì)", -1)] or ""
-    deadline_raw = row[hidx["±¨Ãû½ØÖ¹(±¾½ì)"]] or ""
-    entry_status_raw = row[hidx["¹Ù·½±¨ÃûÈë¿Ú×´Ì¬"]] or ""
-    notice_raw = row[hidx["¹Ù·½Í¨ÖªURL"]] or ""
-    reg_url_raw = row[hidx["±¨ÃûÁ´½Ó"]] or ""
-    materials = row[hidx.get("Ðè×¼±¸²ÄÁÏ", -1)] or ""
-    process = row[hidx.get("Ìá½»Á÷³Ì", -1)] or ""
-    school_limit = row[hidx["ÊÊÓÃÑ§Ð£Àà±ð"]] or ""
-    value_obj = row[hidx.get("¾ºÈü×ÔÉí¼ÛÖµ(¿Í¹Û)", -1)] or ""
-    school_note = row[hidx.get("Ñ§Ð£ÈÏ¶¨ËµÃ÷(ÒÑºËÊµ²ÅÂ¼Èë)", -1)] or ""
-    verified_at = str(row[hidx["×î½üºË²é"]] or "").replace("/", "-")
-    status_raw = row[hidx["×´Ì¬"]] or ""
+    # ä»ŽExcelæå–å„å­—æ®µ
+    name = row[hidx["ç«žèµ›åç§°"]] or ""
+    session = row[hidx["æœ¬å±Šå±Šæ¬¡"]] or ""
+    grade_level_raw = row[hidx["æ¯”èµ›ç­‰çº§"]] or ""
+    major_limit = row[hidx["é€‚é…ä¸“ä¸š"]] or ""
+    ideal_goal = row[hidx.get("é€‚é…ç†æƒ³/ç›®æ ‡", -1)] or ""
+    detail_qual = row[hidx.get("è¯¦ç»†å‚èµ›èµ„æ ¼", -1)] or ""
+    cycle = row[hidx.get("æ¯”èµ›å‘¨æœŸ(æœ¬å±Š)", -1)] or ""
+    deadline_raw = row[hidx["æŠ¥åæˆªæ­¢(æœ¬å±Š)"]] or ""
+    entry_status_raw = row[hidx["å®˜æ–¹æŠ¥åå…¥å£çŠ¶æ€"]] or ""
+    notice_raw = row[hidx["å®˜æ–¹é€šçŸ¥URL"]] or ""
+    reg_url_raw = row[hidx["æŠ¥åé“¾æŽ¥"]] or ""
+    materials = row[hidx.get("éœ€å‡†å¤‡ææ–™", -1)] or ""
+    process = row[hidx.get("æäº¤æµç¨‹", -1)] or ""
+    school_limit = row[hidx["é€‚ç”¨å­¦æ ¡ç±»åˆ«"]] or ""
+    value_obj = row[hidx.get("ç«žèµ›è‡ªèº«ä»·å€¼(å®¢è§‚)", -1)] or ""
+    school_note = row[hidx.get("å­¦æ ¡è®¤å®šè¯´æ˜Ž(å·²æ ¸å®žæ‰å½•å…¥)", -1)] or ""
+    verified_at = str(row[hidx["æœ€è¿‘æ ¸æŸ¥"]] or "").replace("/", "-")
+    status_raw = row[hidx["çŠ¶æ€"]] or ""
 
-    # ÅÉÉú×Ö¶Î
+    # æ´¾ç”Ÿå­—æ®µ
     notice_url = extract_url(notice_raw)
     registration_url = extract_url(reg_url_raw)
     status = map_entry_status(entry_status_raw)
@@ -150,7 +150,7 @@ for row in ws.iter_rows(min_row=2, values_only=True):
     registration_deadline = parse_deadline(deadline_raw)
     tags = extract_grade_level(grade_level_raw)
 
-    # ¸üÐÂÊý¾Ý¿â
+    # æ›´æ–°æ•°æ®åº“
     cur.execute(
         """UPDATE contests SET
             name=?, session=?, major_limit=?, school_limit=?,
@@ -173,15 +173,15 @@ for row in ws.iter_rows(min_row=2, values_only=True):
         changes_log.append(
             f"[{cid}] {name[:20]}: "
             f"status={status} major={major_limit[:20]} "
-            f"notice={'ÓÐ' if notice_url else '¿Õ'} reg={'ÓÐ' if registration_url else '¿Õ'} "
-            f"link=({link_notice}/{link_reg}) deadline={registration_deadline or 'ÎÞ'}"
+            f"notice={'æœ‰' if notice_url else 'ç©º'} reg={'æœ‰' if registration_url else 'ç©º'} "
+            f"link=({link_notice}/{link_reg}) deadline={registration_deadline or 'æ— '}"
         )
     else:
-        changes_log.append(f"[{cid}] Î´ÕÒµ½¼ÇÂ¼£¡")
+        changes_log.append(f"[{cid}] æœªæ‰¾åˆ°è®°å½•ï¼")
 
 conn.commit()
 conn.close()
 
-print(f"¸üÐÂÍê³É£¬¹² {len(changes_log)} Ìõ£º")
+print(f"æ›´æ–°å®Œæˆï¼Œå…± {len(changes_log)} æ¡ï¼š")
 for log in changes_log:
     print(log)

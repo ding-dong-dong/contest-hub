@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""´ÓÌïÁÜÔª¼ÛÖµÅĞ¶¨±í¸üĞÂÊı¾İ¿â¡£
+"""ä»ç”°æ·‹å…ƒä»·å€¼åˆ¤å®šè¡¨æ›´æ–°æ•°æ®åº“ã€‚
 
-¸üĞÂÏî£º
-1. skills <- skillsÁĞ£¨ÄÜÁ¦¹Ø¼ü´Ê£©
-2. outcomes <- outcomesÁĞ£¨³É¹û²ú³ö£¬Ìæ»»Ö®Ç°µÄÄ¿±êÎÄ±¾£©
-3. estimated_time <- estimated_timeÁĞ£¨±ê×¼»¯Ê±¼äµµÎ»£º¡Ü3/4-7/8-14/¡İ15£©
-4. review_note <- ºÏ²¢£ºÄÜÁ¦ÒÀ¾İ + ³É¹ûÒÀ¾İ + Í¶ÈëÒÀ¾İ + Ñ§·ÖÈÏ¶¨ + ÈÏ¶¨ÒÀ¾İ
-5. notice_url <- À´Ô´Á´½ÓÁĞ£¨ÌáÈ¡URL£©
-6. verified_at <- ºË²éÊ±¼äÁĞ
-7. ability_training ±£Áô²»±ä£¨ÉÏÒ»°æÒÑÌîÈë£¬±¾±íÎŞ´ËÁĞ£©
+æ›´æ–°é¡¹ï¼š
+1. skills <- skillsåˆ—ï¼ˆèƒ½åŠ›å…³é”®è¯ï¼‰
+2. outcomes <- outcomesåˆ—ï¼ˆæˆæœäº§å‡ºï¼Œæ›¿æ¢ä¹‹å‰çš„ç›®æ ‡æ–‡æœ¬ï¼‰
+3. estimated_time <- estimated_timeåˆ—ï¼ˆæ ‡å‡†åŒ–æ—¶é—´æ¡£ä½ï¼šâ‰¤3/4-7/8-14/â‰¥15ï¼‰
+4. review_note <- åˆå¹¶ï¼šèƒ½åŠ›ä¾æ® + æˆæœä¾æ® + æŠ•å…¥ä¾æ® + å­¦åˆ†è®¤å®š + è®¤å®šä¾æ®
+5. notice_url <- æ¥æºé“¾æ¥åˆ—ï¼ˆæå–URLï¼‰
+6. verified_at <- æ ¸æŸ¥æ—¶é—´åˆ—
+7. ability_training ä¿ç•™ä¸å˜ï¼ˆä¸Šä¸€ç‰ˆå·²å¡«å…¥ï¼Œæœ¬è¡¨æ— æ­¤åˆ—ï¼‰
 """
 import json
 import re
@@ -29,7 +29,7 @@ def extract_url(raw):
     raw = str(raw).strip()
     m = URL_RE.search(raw)
     if m:
-        return m.group(0).rstrip(".,¡£")
+        return m.group(0).rstrip(".,ã€‚")
     return ""
 
 
@@ -44,41 +44,41 @@ cur = conn.cursor()
 changes = []
 
 for row in ws.iter_rows(min_row=2, values_only=True):
-    seq = row[hidx["ĞòºÅ"]]
+    seq = row[hidx["åºå·"]]
     cid = f"imp_{seq:03d}"
 
-    skills_new = row[hidx["skills£¨ÄÜÁ¦£¬ÓÃ¡¸¡¢¡¹·Ö¸ô£©"]] or ""
-    outcomes_new = row[hidx["outcomes£¨³É¹û£¬ÓÃ¡¸¡¢¡¹·Ö¸ô£©"]] or ""
-    time_new = row[hidx["estimated_time£¨¡Ü3 / 4-7 / 8-14 / ¡İ15 Ğ¡Ê±/ÖÜ£©"]] or ""
-    ability_evidence = row[hidx["ÄÜÁ¦ÒÀ¾İ£¨¹Ù·½Í¨ÖªÀïµÄÀ¸Ä¿/Ô­ÎÄÎ»ÖÃ£©"]] or ""
-    outcomes_evidence = row[hidx["³É¹ûÒÀ¾İ£¨¹Ù·½Í¨Öª¡¸Ìá½»²ÄÁÏ¡¹²¿·Ö£©"]] or ""
-    time_evidence = row[hidx["Í¶ÈëÒÀ¾İ£¨¹Ù·½Èü³Ì/Íù½ìÁ÷³Ì/¿É¿¿·ÃÌ¸£©"]] or ""
-    credit = row[hidx["Ñ§·Ö/×Û²âÈÏ¶¨£¨Ğ´ÊÊÓÃÑ§Ğ£ºÍ×´Ì¬£©"]] or ""
-    credit_evidence = row[hidx["ÈÏ¶¨ÒÀ¾İ£¨Ñ§Ğ£ÕıÊ½ÎÄ¼şÁ´½Ó£¬Ã»ÓĞÁô¿Õ£©"]] or ""
-    source_url = row[hidx["À´Ô´Á´½Ó£¨ÓÅÏÈ¹Ù·½Í¨Öª£©"]] or ""
-    verified = row[hidx["ºË²éÊ±¼ä"]] or ""
-    review_status = row[hidx["¸´ºË×´Ì¬£¨´ıÉóºË/¿ÉÂ¼Èë/Ğè²¹³ä/ÒÑÂ¼Èë£©"]] or ""
+    skills_new = row[hidx["skillsï¼ˆèƒ½åŠ›ï¼Œç”¨ã€Œã€ã€åˆ†éš”ï¼‰"]] or ""
+    outcomes_new = row[hidx["outcomesï¼ˆæˆæœï¼Œç”¨ã€Œã€ã€åˆ†éš”ï¼‰"]] or ""
+    time_new = row[hidx["estimated_timeï¼ˆâ‰¤3 / 4-7 / 8-14 / â‰¥15 å°æ—¶/å‘¨ï¼‰"]] or ""
+    ability_evidence = row[hidx["èƒ½åŠ›ä¾æ®ï¼ˆå®˜æ–¹é€šçŸ¥é‡Œçš„æ ç›®/åŸæ–‡ä½ç½®ï¼‰"]] or ""
+    outcomes_evidence = row[hidx["æˆæœä¾æ®ï¼ˆå®˜æ–¹é€šçŸ¥ã€Œæäº¤ææ–™ã€éƒ¨åˆ†ï¼‰"]] or ""
+    time_evidence = row[hidx["æŠ•å…¥ä¾æ®ï¼ˆå®˜æ–¹èµ›ç¨‹/å¾€å±Šæµç¨‹/å¯é è®¿è°ˆï¼‰"]] or ""
+    credit = row[hidx["å­¦åˆ†/ç»¼æµ‹è®¤å®šï¼ˆå†™é€‚ç”¨å­¦æ ¡å’ŒçŠ¶æ€ï¼‰"]] or ""
+    credit_evidence = row[hidx["è®¤å®šä¾æ®ï¼ˆå­¦æ ¡æ­£å¼æ–‡ä»¶é“¾æ¥ï¼Œæ²¡æœ‰ç•™ç©ºï¼‰"]] or ""
+    source_url = row[hidx["æ¥æºé“¾æ¥ï¼ˆä¼˜å…ˆå®˜æ–¹é€šçŸ¥ï¼‰"]] or ""
+    verified = row[hidx["æ ¸æŸ¥æ—¶é—´"]] or ""
+    review_status = row[hidx["å¤æ ¸çŠ¶æ€ï¼ˆå¾…å®¡æ ¸/å¯å½•å…¥/éœ€è¡¥å……/å·²å½•å…¥ï¼‰"]] or ""
 
-    # ÌáÈ¡URL
+    # æå–URL
     notice_url = extract_url(source_url)
 
-    # ¹¹½¨review_note£ººÏ²¢ËùÓĞÒÀ¾İ
+    # æ„å»ºreview_noteï¼šåˆå¹¶æ‰€æœ‰ä¾æ®
     parts = []
     if ability_evidence:
-        parts.append(f"ÄÜÁ¦ÒÀ¾İ: {ability_evidence}")
+        parts.append(f"èƒ½åŠ›ä¾æ®: {ability_evidence}")
     if outcomes_evidence:
-        parts.append(f"³É¹ûÒÀ¾İ: {outcomes_evidence}")
+        parts.append(f"æˆæœä¾æ®: {outcomes_evidence}")
     if time_evidence:
-        parts.append(f"Í¶ÈëÒÀ¾İ: {time_evidence}")
+        parts.append(f"æŠ•å…¥ä¾æ®: {time_evidence}")
     if credit:
-        parts.append(f"Ñ§·ÖÈÏ¶¨: {credit}")
+        parts.append(f"å­¦åˆ†è®¤å®š: {credit}")
     if credit_evidence:
-        parts.append(f"ÈÏ¶¨ÒÀ¾İ: {credit_evidence}")
+        parts.append(f"è®¤å®šä¾æ®: {credit_evidence}")
     if review_status:
-        parts.append(f"¸´ºË×´Ì¬: {review_status}")
+        parts.append(f"å¤æ ¸çŠ¶æ€: {review_status}")
     review_note = "\n".join(parts)
 
-    # ±ê×¼»¯estimated_time
+    # æ ‡å‡†åŒ–estimated_time
     time_new = str(time_new).strip()
 
     cur.execute(
@@ -91,22 +91,22 @@ for row in ws.iter_rows(min_row=2, values_only=True):
 
     changes.append(
         f"[{cid}] skills='{skills_new[:20]}' outcomes='{outcomes_new[:20]}' "
-        f"time='{time_new}' url={'ÓĞ' if notice_url else '¿Õ'} verified='{verified}'"
+        f"time='{time_new}' url={'æœ‰' if notice_url else 'ç©º'} verified='{verified}'"
     )
 
 conn.commit()
 
-# ÑéÖ¤
+# éªŒè¯
 cur.execute("SELECT id, outcomes, estimated_time FROM contests WHERE id LIKE 'imp_%' LIMIT 5")
-print("=== ÑéÖ¤Ç°5Ìõ ===")
+print("=== éªŒè¯å‰5æ¡ ===")
 for r in cur.fetchall():
     print(f"  {r[0]}: outcomes='{r[1][:30]}' time='{r[2]}'")
 
 cur.execute("SELECT COUNT(*) FROM contests WHERE estimated_time != '' AND estimated_time IS NOT NULL")
 has_time = cur.fetchone()[0]
-print(f"\nÓĞ estimated_time µÄ¼ÇÂ¼: {has_time}/15")
+print(f"\næœ‰ estimated_time çš„è®°å½•: {has_time}/15")
 
 conn.close()
-print("\n¸üĞÂÍê³É:")
+print("\næ›´æ–°å®Œæˆ:")
 for c in changes:
     print(c)

@@ -11,6 +11,7 @@ JSON_FIELDS = {
     "eligible_grades": [],
     "tags": [],
     "link_status": {"notice": "待确认", "registration": "待确认"},
+    "recommended_majors": [],
 }
 
 
@@ -58,8 +59,16 @@ def list_contests(
     if eligible_grades:
         result = [c for c in result if eligible_grades in c.eligible_grades]
     if major:
-        # 产品文档 R2：按专业方向筛选；「不限」专业的竞赛对所有专业可见
-        result = [c for c in result if c.major_limit == "不限" or major in c.major_limit]
+        # V1.0 规则：专业筛选只用于展示，不做硬删除——
+        # 资格开放/命中/待确认，或推荐专业包含该专业，均保留；仅明确不符的隐藏
+        from .recommend import major_eligibility
+
+        def _visible(c):
+            if major in (c.recommended_majors or []):
+                return True
+            return major_eligibility(c, major) in ("open", "match", "pending")
+
+        result = [c for c in result if _visible(c)]
     return result
 
 

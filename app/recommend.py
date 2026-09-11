@@ -71,6 +71,38 @@ MAJOR_KEYWORDS = {
     "其他": [],
 }
 
+# major_limit 中表示「不设专业门槛」的官方写法（保留原文，判断时归一）
+OPEN_MAJOR_TEXTS = {"不限", "不限专业", "专业不限", "无专业限制", "专业无限制"}
+PENDING_MAJOR_TEXTS = {"待确认", "", "未知", "待定"}
+
+
+def major_eligibility(contest, user_major: str) -> str:
+    """V1.0 专业资格判断，返回：open(不限) / pending(待确认) / match(符合) / mismatch(明确不符)。
+
+    规则：只依据官方 major_limit 原文做资格硬判断；recommended_majors 不参与排除。
+    - 写明不限专业 / 「包括但不限于」式开放列举 → open
+    - 待确认/空 → pending（保留并提示，不排除）
+    - 用户专业名或其关联词出现在限制原文 → match
+    - 原文只谈学历/院校身份、未指向任何具体专业（如「在校师范生」）→ open
+    - 其余情况 → mismatch（明确不符合才排除）
+    """
+    ml = (getattr(contest, "major_limit", "") or "").strip()
+    if ml in OPEN_MAJOR_TEXTS:
+        return "open"
+    if ml in PENDING_MAJOR_TEXTS:
+        return "pending"
+    if "包括但不限于" in ml or "不限专业" in ml:
+        return "open"
+    if user_major and (
+        user_major in ml or any(kw in ml for kw in MAJOR_KEYWORDS.get(user_major, []))
+    ):
+        return "match"
+    # 文本中没有任何一个枚举专业的关联词：限制的是学历/院校而非专业，不作专业排除
+    any_major_mentioned = any(
+        any(kw in ml for kw in kws) for kws in MAJOR_KEYWORDS.values() if kws
+    )
+    return "mismatch" if any_major_mentioned else "open"
+
 
 def _parse_date(s: str) -> Optional[date]:
     if not s:
@@ -114,13 +146,14 @@ def _hard_filter(contest: schemas.ContestOut, user: schemas.UserProfile) -> Opti
     if contest.status in EXCLUDED_STATUS:
         return f"状态为「{contest.status}」，不进入推荐"
     deadline = _parse_date(contest.registration_deadline)
-    if deadline and deadline < date.today():
+    # 状态待确认（通知未发布）时赛程日期可能是往届口径，不因日期误杀，仅在告警中提示
+    if deadline and deadline < date.today() and contest.status != "待确认":
         return f"报名已于 {deadline.isoformat()} 截止"
     if contest.eligible_grades and user.grade not in contest.eligible_grades:
         return f"年级不匹配（要求 {contest.eligible_grades}）"
-    if contest.major_limit and contest.major_limit != "不限":
-        if user.major not in contest.major_limit:
-            return f"专业受限于「{contest.major_limit}」"
+    # V1.0：仅官方专业限制明确不符时排除；不限/待确认均保留
+    if major_eligibility(contest, user.major) == "mismatch":
+        return f"官方参赛专业限制为「{contest.major_limit}」，专业「{user.major}」不在范围"
     if contest.school_limit and not contest.school_limit.startswith("\u5168\u56fd"):
         if contest.school_limit not in {"\u5f85\u786e\u8ba4"}:
             if user.school and user.school not in contest.school_limit:
@@ -132,16 +165,25 @@ def _hard_filter(contest: schemas.ContestOut, user: schemas.UserProfile) -> Opti
 def _major_interest_score(
     contest: schemas.ContestOut, user: schemas.UserProfile
 ) -> Tuple[float, str, bool, List[str]]:
-    """专业与兴趣 30：专业命中 20；兴趣按命中比例 0–10。"""
+    """专业与兴趣 30（V1.0）：完全命中推荐专业 20 / 相关或不限 12 / 资格待确认 8；
+    明确不符已在硬过滤排除；兴趣按命中比例 0–10。"""
     text = " ".join(
         [contest.category, " ".join(contest.tags), contest.skills, contest.name, contest.major_limit]
     )
-    major_hit = (
-        contest.major_limit == "不限"
-        or bool(user.major and user.major in contest.major_limit)
-        or any(kw in text for kw in MAJOR_KEYWORDS.get(user.major, []))
-    )
-    major_part = 20.0 if major_hit else 0.0
+    rec_majors = contest.recommended_majors or []
+    elig = major_eligibility(contest, user.major)
+    if user.major and user.major in rec_majors:
+        major_part, major_note = 20.0, f"专业「{user.major}」完全命中推荐专业（20/20）"
+        major_hit = True
+    elif elig == "match":
+        major_part, major_note = 12.0, f"专业「{user.major}」在官方参赛范围内（相关，12/20）"
+        major_hit = True
+    elif elig == "open":
+        major_part, major_note = 12.0, "官方不限专业，人人可报（中性 12/20）"
+        major_hit = True
+    else:  # pending
+        major_part, major_note = 8.0, "参赛专业限制待确认，专业项按中性 8/20"
+        major_hit = False
 
     hits: List[str] = []
     if not user.interests:
@@ -156,7 +198,7 @@ def _major_interest_score(
         interest_note = f"兴趣命中：{'、'.join(hits)}" if hits else "兴趣标签未命中（0/10）"
 
     score = round(major_part + interest_part, 2)
-    note = f"专业{'命中' if major_hit else '未命中'}（{major_part:g}/20）；{interest_note}（{interest_part:g}/10）"
+    note = f"{major_note}；{interest_note}（{interest_part:g}/10）"
     return score, note, major_hit, hits
 
 
@@ -260,6 +302,12 @@ def _build_warnings(
 
     if not contest.registration_deadline:
         warnings.append("报名截止日期待确认，请以官网通知为准")
+    # V1.0：专业资格与推荐专业待确认（均不报错、不排除）
+    if (contest.major_limit or "").strip() in {"待确认", "", "未知", "待定"}:
+        qualification_pending = True
+        warnings.append("官方参赛专业限制待确认，请以主办方最新通知为准")
+    if not contest.recommended_majors:
+        warnings.append("推荐专业待确认（不影响报名，仅缺少优先推荐依据）")
     if contest.school_limit == "待确认" or not contest.eligible_grades:
         qualification_pending = True
         warnings.append("适用院校/年级范围待人工确认")

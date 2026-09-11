@@ -38,3 +38,6 @@ class Contest(Base):
     status = Column(String, default="待确认")
     link_status = Column(String, default='{"notice": "待确认", "registration": "待确认"}')
     review_note = Column(String, default="")
+    # ---- V1.0 推荐专业（田淋元规则 2026-09-11）----
+    recommended_majors = Column(String, default="[]")  # 10 枚举 JSON 数组；无依据为 []
+    recommended_major_reason = Column(String, nullable=True, default=None)  # 30-150 字依据；无依据为 NULL

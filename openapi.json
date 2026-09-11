@@ -440,6 +440,39 @@
             "title": "Major Limit",
             "default": "不限"
           },
+          "recommended_majors": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "计算机",
+                "电子信息",
+                "经管",
+                "设计",
+                "机械",
+                "材料",
+                "理学",
+                "文法",
+                "医学",
+                "其他"
+              ]
+            },
+            "type": "array",
+            "title": "Recommended Majors",
+            "description": "推荐专业枚举数组；无依据返回 []"
+          },
+          "recommended_major_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 150
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Major Reason",
+            "description": "推荐依据（30-150字，基于赛道/任务/材料/评审标准）；无依据返回 null"
+          },
           "school_limit": {
             "type": "string",
             "title": "School Limit",
@@ -626,6 +659,39 @@
             "type": "string",
             "title": "Major Limit",
             "default": "不限"
+          },
+          "recommended_majors": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "计算机",
+                "电子信息",
+                "经管",
+                "设计",
+                "机械",
+                "材料",
+                "理学",
+                "文法",
+                "医学",
+                "其他"
+              ]
+            },
+            "type": "array",
+            "title": "Recommended Majors",
+            "description": "推荐专业枚举数组；无依据返回 []"
+          },
+          "recommended_major_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 150
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Major Reason",
+            "description": "推荐依据（30-150字，基于赛道/任务/材料/评审标准）；无依据返回 null"
           },
           "school_limit": {
             "type": "string",
@@ -1012,6 +1078,44 @@
               }
             ],
             "title": "Source Type"
+          },
+          "recommended_majors": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "计算机",
+                    "电子信息",
+                    "经管",
+                    "设计",
+                    "机械",
+                    "材料",
+                    "理学",
+                    "文法",
+                    "医学",
+                    "其他"
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Majors"
+          },
+          "recommended_major_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 150
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Major Reason"
           },
           "verified_at": {
             "anyOf": [

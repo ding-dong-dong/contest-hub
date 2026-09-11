@@ -29,6 +29,74 @@ def normalize_source_type(value) -> str:
     return _SOURCE_TYPE_ALIASES.get(key, _SOURCE_TYPE_ALIASES.get(key.lower(), "其他"))
 
 
+# 推荐专业枚举（田淋元《推荐专业规则与验收清单 V1.0》第 2 节，禁止其他表述）
+RECOMMENDED_MAJOR_VALUES = (
+    "计算机", "电子信息", "经管", "设计", "机械",
+    "材料", "理学", "文法", "医学", "其他",
+)
+# 常见近义/英文写法 -> 统一枚举（入参宽容，出参严格）
+_RECOMMENDED_MAJOR_ALIASES = {
+    "计算机": "计算机", "软件": "计算机", "软件工程": "计算机", "cs": "计算机",
+    "电子信息": "电子信息", "电子": "电子信息", "通信": "电子信息", "通信工程": "电子信息",
+    "经管": "经管", "经济": "经管", "管理": "经管", "工商管理": "经管", "金融": "经管",
+    "设计": "设计", "艺术设计": "设计", "数字媒体": "设计", "数媒": "设计",
+    "机械": "机械", "机电": "机械", "机械工程": "机械",
+    "材料": "材料", "材料科学": "材料", "高分子": "材料",
+    "理学": "理学", "数学": "理学", "物理": "理学", "化学": "理学", "生物": "理学", "统计": "理学",
+    "文法": "文法", "中文": "文法", "外语": "文法", "英语": "文法", "新闻": "文法",
+    "传播": "文法", "新媒体": "文法", "法学": "文法", "法律": "文法",
+    "医学": "医学", "临床": "医学", "护理": "医学", "药学": "医学", "医": "医学",
+    "其他": "其他", "其它": "其他",
+}
+_MAJOR_SPLIT_RE_CHARS = "、,，;；/|"
+
+
+def normalize_recommended_majors(value) -> list:
+    """归一为枚举数组：接受 list 或「计算机、设计」/json 字符串；非法项剔除，未知安全忽略。
+
+    「待确认」/空 -> []（规则：空推荐专业不报错，标记待确认）。
+    """
+    if value is None:
+        return []
+    if isinstance(value, str):
+        s = value.strip()
+        if not s or s in ("待确认", "无", "暂无", "[]", "null"):
+            return []
+        if s.startswith("["):
+            try:
+                import json
+                value = json.loads(s)
+            except ValueError:
+                value = [s]
+        else:
+            for ch in _MAJOR_SPLIT_RE_CHARS:
+                s = s.replace(ch, "、")
+            value = [x for x in s.split("、")]
+    if not isinstance(value, (list, tuple)):
+        return []
+    out = []
+    for item in value:
+        key = str(item).strip()
+        if not key or key == "待确认":
+            continue
+        norm = key if key in RECOMMENDED_MAJOR_VALUES else _RECOMMENDED_MAJOR_ALIASES.get(
+            key, _RECOMMENDED_MAJOR_ALIASES.get(key.lower())
+        )
+        if norm and norm not in out:
+            out.append(norm)
+    return out
+
+
+def normalize_recommended_major_reason(value):
+    """30-150 字依据；「待确认」/空 -> None（旧数据无此字段时接口返回 null，不报错）。"""
+    if value is None:
+        return None
+    s = str(value).strip()
+    if not s or s in ("待确认", "无", "暂无", "null", "None"):
+        return None
+    return s
+
+
 class LinkStatus(BaseModel):
     notice: str = "待确认"        # 官方通知链接复核状态
     registration: str = "待确认"  # 官方报名链接复核状态
@@ -42,7 +110,15 @@ class ContestBase(BaseModel):
     category: str = ""
     organizer: str = ""
     eligible_grades: List[str] = Field(default_factory=list)
-    major_limit: str = "不限"
+    major_limit: str = "不限"  # 官方限制原文（不限专业/待确认/原文摘录），禁止改写成推荐专业
+    recommended_majors: List[Literal["计算机", "电子信息", "经管", "设计", "机械",
+                                     "材料", "理学", "文法", "医学", "其他"]] = Field(
+        default_factory=list, description="推荐专业枚举数组；无依据返回 []"
+    )
+    recommended_major_reason: Optional[str] = Field(
+        default=None, max_length=150,
+        description="推荐依据（30-150字，基于赛道/任务/材料/评审标准）；无依据返回 null",
+    )
     school_limit: str = "待确认"
     registration_deadline: Optional[str] = ""  # ISO 8601, null=未知
     registration_deadline_note: str = ""  # 补充说明（校内截止/赛道差异等）
@@ -63,6 +139,17 @@ class ContestBase(BaseModel):
     def _normalize_source_type(cls, value):
         # 归一化历史英文值（official/baidu_baike/repost）与近义写法为中文契约值
         return None if value is None else normalize_source_type(value)
+
+    @field_validator("recommended_majors", mode="before")
+    @classmethod
+    def _normalize_recommended_majors(cls, value):
+        return normalize_recommended_majors(value)
+
+    @field_validator("recommended_major_reason", mode="before")
+    @classmethod
+    def _normalize_recommended_major_reason(cls, value):
+        return normalize_recommended_major_reason(value)
+
     verified_at: str = ""
     status: str = "待确认"
     link_status: LinkStatus = Field(default_factory=LinkStatus)
@@ -96,6 +183,9 @@ class ContestUpdate(BaseModel):
     notice_url: Optional[str] = None
     registration_url: Optional[str] = None
     source_type: Optional[Literal["官网", "百度百科", "转载", "其他"]] = None
+    recommended_majors: Optional[List[Literal["计算机", "电子信息", "经管", "设计", "机械",
+                                              "材料", "理学", "文法", "医学", "其他"]]] = None
+    recommended_major_reason: Optional[str] = Field(default=None, max_length=150)
     verified_at: Optional[str] = None
     status: Optional[str] = None
     link_status: Optional[LinkStatus] = None
@@ -105,6 +195,16 @@ class ContestUpdate(BaseModel):
     @classmethod
     def _normalize_source_type(cls, value):
         return None if value is None else normalize_source_type(value)
+
+    @field_validator("recommended_majors", mode="before")
+    @classmethod
+    def _normalize_recommended_majors(cls, value):
+        return None if value is None else normalize_recommended_majors(value)
+
+    @field_validator("recommended_major_reason", mode="before")
+    @classmethod
+    def _normalize_recommended_major_reason(cls, value):
+        return None if value is None else normalize_recommended_major_reason(value)
 
 
 class ContestOut(ContestBase):

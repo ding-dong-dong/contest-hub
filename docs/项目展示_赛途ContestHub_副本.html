@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赛途 ContestHub · 项目展示（副本）</title>
+<style>
+  :root{
+    --ink:#1f2733; --ink-2:#5b6675; --line:#e4e8ee; --bg:#f6f8fa; --card:#ffffff;
+    --brand:#2b6cb0; --brand-soft:#eaf2fb; --accent:#c05621; --accent-soft:#fdf0e7;
+    --ok:#2f855a; --ok-soft:#e8f5ee; --warn:#b7791f; --warn-soft:#fdf6e3;
+    --tag:#edf2f7;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif; color:var(--ink); background:var(--bg); line-height:1.7; font-size:15px;}
+  .page{max-width:960px; margin:0 auto; padding:32px 28px 80px;}
+  /* 顶部说明条 */
+  .notice{background:var(--warn-soft); border:1px solid #f0d98c; border-radius:10px; padding:12px 18px; font-size:13px; color:#744210; margin-bottom:28px;}
+  .notice b{color:#5f3808;}
+  /* 头部 */
+  header{background:linear-gradient(135deg,#2b6cb0,#4c51bf); color:#fff; border-radius:14px; padding:34px 36px; margin-bottom:36px;}
+  header .kicker{font-size:12px; letter-spacing:3px; opacity:.85; margin-bottom:8px;}
+  header h1{font-size:28px; font-weight:700; margin-bottom:6px;}
+  header p{font-size:15px; opacity:.95; max-width:640px;}
+  header .meta{margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;}
+  header .meta span{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.25); border-radius:99px; padding:3px 12px; font-size:12.5px;}
+  /* 章节标题 */
+  .sec-title{display:flex; align-items:center; gap:12px; margin:44px 0 18px;}
+  .sec-title .num{background:var(--brand); color:#fff; border-radius:8px; min-width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px;}
+  .sec-title h2{font-size:21px;}
+  .sec-title .en{color:var(--ink-2); font-size:13px; font-weight:400; margin-left:2px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 24px; margin-bottom:18px;}
+  .card h3{font-size:16px; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+  .card h3 .dot{width:8px; height:8px; border-radius:50%; background:var(--brand); flex:none;}
+  .muted{color:var(--ink-2); font-size:13.5px;}
+  .tag{display:inline-block; background:var(--tag); color:#4a5568; border-radius:6px; padding:2px 10px; font-size:12.5px; margin:2px 4px 2px 0;}
+  .tag.blue{background:var(--brand-soft); color:var(--brand);}
+  .tag.ok{background:var(--ok-soft); color:var(--ok);}
+  .tag.warn{background:var(--warn-soft); color:var(--warn);}
+  .tag.accent{background:var(--accent-soft); color:var(--accent);}
+  /* 概览三列 */
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .kv{background:var(--brand-soft); border-radius:10px; padding:14px 16px;}
+  .kv .k{font-size:12.5px; color:var(--brand); font-weight:600; margin-bottom:4px;}
+  .kv .v{font-size:14px;}
+  /* 对比表 */
+  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  th,td{padding:9px 12px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{background:var(--brand-soft); color:#2a4d7f; font-weight:600; white-space:nowrap;}
+  tr:last-child td{border-bottom:none;}
+  td.yes{color:var(--ok); font-weight:600;}
+  td.no{color:#c53030;}
+  /* 分数条形图 */
+  .bar-row{display:grid; grid-template-columns:110px 1fr 46px; align-items:center; gap:10px; margin:9px 0; font-size:13px;}
+  .bar-track{background:#edf1f5; border-radius:99px; height:16px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:99px; background:linear-gradient(90deg,#2b6cb0,#4c51bf);}
+  .bar-row .score{font-weight:700; color:var(--brand); text-align:right;}
+  /* 状态分布（横向堆叠） */
+  .stack{display:flex; border-radius:8px; overflow:hidden; height:34px; margin:10px 0 6px; font-size:12px; color:#fff; text-align:center; line-height:34px;}
+  .stack div{min-width:0; white-space:nowrap;}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; font-size:12.5px; color:var(--ink-2);}
+  .legend i{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px;}
+  /* 故事卡 */
+  .story{border-left:4px solid var(--brand); background:#f9fbfd; border-radius:0 10px 10px 0; padding:12px 16px; margin-top:12px; font-size:13.5px;}
+  .story b{color:var(--brand);}
+  /* 功能块 */
+  .feature{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 24px; margin-bottom:20px;}
+  .feature .fnum{display:inline-block; background:var(--accent-soft); color:var(--accent); font-weight:700; border-radius:7px; padding:2px 10px; font-size:13px; margin-bottom:8px;}
+  .feature h3{font-size:17px; margin-bottom:8px;}
+  .feature .intent{font-size:14px; margin-bottom:14px;}
+  .feature .intent b{color:var(--accent);}
+  /* 代码块 */
+  pre{background:#20293a; color:#dbe4f0; border-radius:10px; padding:14px 16px; font-size:12.5px; overflow-x:auto; font-family:Consolas,"Courier New",monospace; line-height:1.6;}
+  pre .k{color:#7fdba7;} pre .s{color:#f6c177;} pre .n{color:#8abfff;} pre .c{color:#7d8ba1;}
+  /* 截图占位 */
+  .shot{border:2px dashed #b9c4d1; border-radius:10px; background:#fbfcfe; padding:0; overflow:hidden;}
+  .shot .ph{padding:34px 16px; text-align:center; color:#8a94a3; font-size:13px;}
+  .shot .cap{border-top:1px solid var(--line); background:#f3f6fa; padding:7px 14px; font-size:12.5px; color:var(--ink-2);}
+  .shot svg{display:block; width:100%; height:auto;}
+  /* 步骤流程 */
+  .steps{display:flex; align-items:stretch; gap:8px; flex-wrap:wrap;}
+  .step{flex:1; min-width:120px; background:#f4f7fb; border:1px solid var(--line); border-radius:9px; padding:10px 12px; font-size:12.5px; text-align:center;}
+  .step b{display:block; color:var(--brand); font-size:13px; margin-bottom:3px;}
+  .arrow{align-self:center; color:#9aa7b6; font-size:16px; flex:none;}
+  /* 告警示例 */
+  .warn-box{background:var(--warn-soft); border:1px solid #eddba8; border-radius:9px; padding:10px 14px; font-size:12.5px; color:#6b4c0a; margin-top:8px;}
+  /* Demo 链接 */
+  .link-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 0; border-bottom:1px dashed var(--line); font-size:14px;}
+  .link-row:last-child{border-bottom:none;}
+  .link-row .icon{width:30px; height:30px; border-radius:8px; background:var(--brand-soft); color:var(--brand); display:flex; align-items:center; justify-content:center; font-size:15px; flex:none;}
+  .link-row code{background:var(--tag); border-radius:6px; padding:2px 8px; font-size:12.5px; color:#4a5568;}
+  a{color:var(--brand); text-decoration:none; border-bottom:1px dashed var(--brand);}
+  .todo{background:#fff8e6; border:1px dashed #d6b656; border-radius:8px; padding:8px 12px; font-size:12.5px; color:#8a6d1a; margin-top:12px;}
+  footer{text-align:center; color:var(--ink-2); font-size:12px; margin-top:48px;}
+  @media (max-width:720px){ .grid-3,.grid-2{grid-template-columns:1fr;} .page{padding:16px 12px 60px;} }
+  @media print{ body{background:#fff;} .notice{display:none;} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="notice">
+    <b>使用说明（保留自模板，提交前可删除本条）：</b>① 本文件为<b>副本</b>，直接在本页修改，勿改原件；② 每节文字均控制在 200 字内，细节交给图表；③ 分享链接时请将仓库 / 文档权限设为<b>「获得链接的互联网任何人可阅读」</b>，避免评审打不开。
+  </div>
+
+  <!-- ============ 一、项目概览 ============ -->
+  <header>
+    <div class="kicker">PROJECT OVERVIEW · 项目概览</div>
+    <h1>赛途 ContestHub — 大学生竞赛智能推荐平台</h1>
+    <p>把散落在各官网、公众号里的竞赛信息，变成「你能报、值得报、来得及」的个性化推荐。后端以「硬过滤 + 五维评分」为核心引擎，每条推荐都附带可解释的打分理由与风险提示。</p>
+    <div class="meta">
+      <span>FastAPI + SQLAlchemy + SQLite</span>
+      <span>Render 云端自动部署</span>
+      <span>30 条真实竞赛数据</span>
+      <span>联调测试 6/6 通过</span>
+    </div>
+  </header>
+
+  <div class="grid-3">
+    <div class="kv"><div class="k">项目名称</div><div class="v">赛途 ContestHub<br><span class="muted">大学生竞赛信息平台（后端与推荐服务）</span></div></div>
+    <div class="kv"><div class="k">一句话介绍</div><div class="v">竞赛信息聚合 + 资格硬过滤 + 五维评分推荐，让每个学生 3 分钟找到「现在就能报」的比赛。</div></div>
+    <div class="kv"><div class="k">团队分工</div><div class="v">产品规则：田淋元<br>前端契约：连诗钰 · 数据：文博卉 · 后端：陈玉婷</div></div>
+  </div>
+
+  <!-- ============ 二、为什么做 ============ -->
+  <div class="sec-title"><div class="num">二</div><h2>为什么做 <span class="en">Why</span></h2></div>
+
+  <div class="card">
+    <h3><span class="dot"></span>1. 受众是谁</h3>
+    <span class="tag blue">大一～研一在校生</span><span class="tag blue">18–24 岁</span><span class="tag">信息检索成本高</span><span class="tag">看重履历与保研/求职加分</span>
+    <p style="margin-top:10px; font-size:14px;">
+      <b>遇见场景：</b>开学初规划学期、综测/保研材料冲刺、求职前补获奖经历——他们在竞赛官网、校园公众号、学长群聊之间反复横跳，信息零散且真假难辨。
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>2. 想为他们创造什么</h3>
+    <p style="font-size:14px;">解决三个真实痛点：<b>不知道有什么比赛、不确定自己能不能报、不知道值不值得报。</b></p>
+
+    <div class="story">
+      <b>故事一 · 信息过期（来自我们的数据复盘）：</b>整理 30 条竞赛数据时发现，<b>14 条已截止、11 条状态待确认</b>——近半数信息被学生看到时已经"过期"。组员就曾因公众号推送延迟，错过一项数学建模赛事的报名节点。
+    </div>
+    <div class="story">
+      <b>故事二 · 资格误判（来自联调实测 M02）：</b>一位文法专业的同学看到某医学类赛事"限医学及相关专业"，默认所有"带专业字样"的比赛都与自己无关而直接放弃。实测中大量<b>"不限专业"赛事被信息噪音淹没</b>——这正是我们要修的判断断层。
+    </div>
+    <div class="todo">📌 可补充：问卷 / 访谈数据（如回收 N 份校园调研）——建议在此插入调研图表增强说服力。</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>3. 现有方案还缺什么</h3>
+    <table>
+      <tr><th>现有渠道</th><th>优点</th><th>缺口</th></tr>
+      <tr><td><b>竞赛官网 / 主办方</b></td><td>权威</td><td class="no">极度分散，需逐个查找，无个性化</td></tr>
+      <tr><td><b>公众号 / 资讯聚合</b></td><td>覆盖广</td><td class="no">推送滞后、广告混杂、不做资格判断</td></tr>
+      <tr><td><b>学长学姐 / 社群</b></td><td>有经验</td><td class="no">主观、覆盖面窄、难验证时效</td></tr>
+      <tr><td><b>日历 / 待办工具</b></td><td>管时间</td><td class="no">只提醒截止，不判断"值不值得报"</td></tr>
+      <tr><td><b style="color:var(--brand);">赛途 ContestHub</b></td><td class="yes">结构化数据</td><td class="yes">资格硬过滤 + 五维评分 + 可信度告警，三缺口全补</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>数据佐证 · 平台收录 30 条竞赛的现状</h3>
+    <div class="stack">
+      <div style="flex:4;  background:#2f855a;" title="报名中 4">报名中 4</div>
+      <div style="flex:1;  background:#b7791f;">即将截止 1</div>
+      <div style="flex:14; background:#c53030;">已截止 14</div>
+      <div style="flex:11; background:#718096;">待确认 11</div>
+    </div>
+    <div class="legend">
+      <span><i style="background:#2f855a;"></i>报名中（可立即行动）</span>
+      <span><i style="background:#b7791f;"></i>即将截止</span>
+      <span><i style="background:#c53030;"></i>已截止（信息噪音）</span>
+      <span><i style="background:#718096;"></i>状态待确认</span>
+    </div>
+    <p class="muted" style="margin-top:8px;">来源：文博卉《推荐专业数据表_B版》30 条实测导入 · 2026-09-11。仅 17% 的信息处于"可立即行动"状态——<b>时效过滤本身就是刚需</b>，这正是"已截止不进推荐、但列表仍可回溯"规则的设计依据。</p>
+  </div>
+
+  <!-- ============ 三、做了什么 ============ -->
+  <div class="sec-title"><div class="num">三</div><h2>做了什么 <span class="en">What · 核心功能 × 3</span></h2></div>
+
+  <!-- 功能 1 -->
+  <div class="feature">
+    <span class="fnum">功能 1</span>
+    <h3>五维智能推荐引擎</h3>
+    <p class="intent"><b>设计意图：</b>回答"值不值得报"。不是罗列信息，而是先硬过滤掉报不了的，再按五个可解释维度打分排序，每条推荐附带人话版理由。</p>
+
+    <div class="bar-row"><span>专业与兴趣</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="score">30</span></div>
+    <div class="bar-row"><span>年级与经验</span><div class="bar-track"><div class="bar-fill" style="width:83%"></div></div><span class="score">25</span></div>
+    <div class="bar-row"><span>时间可行性</span><div class="bar-track"><div class="bar-fill" style="width:67%"></div></div><span class="score">20</span></div>
+    <div class="bar-row"><span>可验证价值</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div><span class="score">15</span></div>
+    <div class="bar-row"><span>信息可信度</span><div class="bar-track"><div class="bar-fill" style="width:33%"></div></div><span class="score">10</span></div>
+
+    <div style="margin-top:16px;">
+      <div class="steps">
+        <div class="step"><b>用户画像输入</b>年级 · 专业 · 兴趣<br>经验 · 每周可投入时间</div>
+        <div class="arrow">→</div>
+        <div class="step"><b>硬过滤（5 条）</b>已截止/取消 · 年级<br>专业 · 院校 · 不可核验</div>
+        <div class="arrow">→</div>
+        <div class="step"><b>软评分</b>五维打分<br>满分 100</div>
+        <div class="arrow">→</div>
+        <div class="step"><b>排序输出</b>同分按未截止优先<br>→ 截止更近 → 核查更新</div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:10px;">实测（计算机 / AI·编程画像）：推荐 15 条，Top3 = 蓝桥杯 <b>73 分</b>、imp_012 <b>70</b>、imp_010 <b>70</b>；80+ 高度匹配 / 60+ 较为匹配 / 0-59 可进一步了解，三级分层展示。</p>
+  </div>
+
+  <!-- 功能 2 -->
+  <div class="feature">
+    <span class="fnum">功能 2</span>
+    <h3>专业资格双字段体系（major_limit / recommended_majors）</h3>
+    <p class="intent"><b>设计意图：</b>把"官方限制"与"推荐方向"拆成两个字段，杜绝把建议当门槛——推荐专业只加分、<b>永不参与排除</b>，从机制上修复"故事二"里的资格误判。</p>
+
+    <div class="steps">
+      <div class="step"><b>open · 12 分</b>写明不限专业 /<br>"包括但不限于"式开放列举</div>
+      <div class="step"><b>match · 12 分</b>用户专业（或关联词）<br>出现在官方限制原文</div>
+      <div class="step"><b>pending · 8 分</b>限制待确认 → 保留展示<br>并标记"资格待确认"</div>
+      <div class="step"><b>mismatch · 排除</b>明确指向具体专业<br>且不含用户专业</div>
+    </div>
+    <p class="muted" style="margin-top:10px;">命中 recommended_majors 十大枚举（计算机/电子信息/经管/设计/机械/材料/理学/文法/医学/其他）则专业项 <b>20/20 满分</b>。反向用例：计算机用户 × 限"医学及相关专业"（imp_016）→ 正确判定 mismatch 并剔除；M02 文法用户可正常看到不限专业赛事，<b>无误杀</b>。</p>
+  </div>
+
+  <!-- 功能 3 -->
+  <div class="feature">
+    <span class="fnum">功能 3</span>
+    <h3>信息可信度与风险告警</h3>
+    <p class="intent"><b>设计意图：</b>回答"这条信息靠谱吗"。每条竞赛维护链接核查状态（link_status）与核查时间，推荐结果自动附带风险提示，把"信不信"变成可核验的字段而非直觉。</p>
+
+    <div class="grid-2">
+      <div>
+        <table>
+          <tr><th>可信度构成</th><th>分值</th></tr>
+          <tr><td>官方通知链接可访问</td><td>4</td></tr>
+          <tr><td>官方报名入口可访问</td><td>3</td></tr>
+          <tr><td>近 30 天内完成核查</td><td>3</td></tr>
+        </table>
+        <p class="muted" style="margin-top:8px;">配套 <code>check_links.py</code> 批量核查脚本，生成 CSV 巡检报告；30 条数据中 25 条来源为官网，4 条转载均单独标注。</p>
+      </div>
+      <div>
+        <div class="warn-box">
+          ⚠ 告警自动生成示例：<br>
+          · 官方参赛专业限制待确认，请以主办方最新通知为准<br>
+          · 推荐专业待确认（不影响报名，仅缺少优先推荐依据）<br>
+          · 官方报名链接待复核/失效<br>
+          · 预计投入暂无可靠数据，时间可行性按中性评估
+        </div>
+        <p class="muted" style="margin-top:8px;">资料缺失一律<b>中性分</b>处理而非清零，避免"没数据"变相惩罚老实录入的赛事。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 四、Demo 展示 ============ -->
+  <div class="sec-title"><div class="num">四</div><h2>Demo 展示 <span class="en">Demo</span></h2></div>
+
+  <div class="grid-2">
+    <div class="shot">
+      <svg viewBox="0 0 440 210" xmlns="http://www.w3.org/2000/svg">
+        <rect width="440" height="210" fill="#f8fafc"/>
+        <rect x="0" y="0" width="440" height="26" fill="#e2e8f0"/>
+        <circle cx="14" cy="13" r="4" fill="#fc8181"/><circle cx="28" cy="13" r="4" fill="#f6e05e"/><circle cx="42" cy="13" r="4" fill="#68d391"/>
+        <text x="120" y="17" font-size="10" fill="#718096" font-family="sans-serif">127.0.0.1:8000/docs — Swagger UI</text>
+        <rect x="14" y="38" width="200" height="160" rx="6" fill="#fff" stroke="#d8e0ea"/>
+        <text x="24" y="56" font-size="10" fill="#2d3748" font-family="sans-serif" font-weight="bold">GET /contests/recommend</text>
+        <text x="24" y="74" font-size="9" fill="#4a5568" font-family="sans-serif">grade=大二&amp;major=计算机</text>
+        <text x="24" y="88" font-size="9" fill="#4a5568" font-family="sans-serif">interests=AI&amp;interests=编程</text>
+        <text x="24" y="102" font-size="9" fill="#4a5568" font-family="sans-serif">experience=无经验</text>
+        <text x="24" y="116" font-size="9" fill="#4a5568" font-family="sans-serif">time_per_week=8-14小时</text>
+        <rect x="24" y="130" width="86" height="20" rx="4" fill="#38a169"/>
+        <text x="40" y="144" font-size="9" fill="#fff" font-family="sans-serif">200 OK</text>
+        <text x="24" y="170" font-size="9" fill="#718096" font-family="sans-serif">15 条结果 · 耗时 &lt;50ms</text>
+        <rect x="228" y="38" width="198" height="160" rx="6" fill="#fff" stroke="#d8e0ea"/>
+        <text x="238" y="56" font-size="10" fill="#2d3748" font-family="sans-serif" font-weight="bold">推荐结果 Top 3</text>
+        <rect x="238" y="66" width="178" height="34" rx="5" fill="#eaf2fb" stroke="#bcd4ee"/>
+        <text x="246" y="80" font-size="9" fill="#2b6cb0" font-family="sans-serif">① 蓝桥杯 73 · 高度匹配</text>
+        <text x="246" y="93" font-size="8" fill="#718096" font-family="sans-serif">专业命中20 + 时间20 + 价值15…</text>
+        <rect x="238" y="106" width="178" height="34" rx="5" fill="#f0f4f8" stroke="#d8e0ea"/>
+        <text x="246" y="120" font-size="9" fill="#4a5568" font-family="sans-serif">② imp_012 70 · 较为匹配</text>
+        <text x="246" y="133" font-size="8" fill="#718096" font-family="sans-serif">含推荐理由与风险告警</text>
+        <rect x="238" y="146" width="178" height="34" rx="5" fill="#f0f4f8" stroke="#d8e0ea"/>
+        <text x="246" y="160" font-size="9" fill="#4a5568" font-family="sans-serif">③ imp_010 70 · 较为匹配</text>
+        <text x="246" y="173" font-size="8" fill="#718096" font-family="sans-serif">同分按截止日期更近排序</text>
+      </svg>
+      <div class="cap">▲ 示意图：推荐接口调用与结果（替换为 Swagger UI / 前端页面真实截图）</div>
+    </div>
+
+    <div class="shot">
+      <div style="padding:16px 18px 0;">
+<pre><span class="c">// GET /contests/recommend 真实响应（节选）</span>
+{
+  <span class="k">"total_score"</span>: <span class="n">73.0</span>,
+  <span class="k">"match_level"</span>: <span class="s">"较为匹配"</span>,
+  <span class="k">"scores"</span>: {
+    <span class="k">"major_interest"</span>: <span class="n">25.0</span>,
+    <span class="k">"grade_experience"</span>: <span class="n">15.0</span>,
+    <span class="k">"time"</span>: <span class="n">20.0</span>,
+    <span class="k">"value"</span>: <span class="n">10.0</span>,
+    <span class="k">"trust"</span>: <span class="n">3.0</span>
+  },
+  <span class="k">"reasons"</span>: [<span class="s">"专业「计算机」完全命中…"</span>],
+  <span class="k">"warnings"</span>: [<span class="s">"官方报名链接待复核…"</span>]
+}</pre>
+      </div>
+      <div class="cap">▲ 接口真实返回结构（完整示例见 docs/推荐专业接口响应示例.json）</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;">
+    <h3><span class="dot"></span>链接与仓库</h3>
+    <div class="link-row"><div class="icon">🖥</div><div><b>代码仓库：</b><code>（待填）Gitee 地址</code>&nbsp;· 记得设为「获得链接的人可阅读」</div></div>
+    <div class="link-row"><div class="icon">🚀</div><div><b>线上 API：</b><code>（待填）Render 地址</code>&nbsp;· 免费实例首次请求可能休眠数十秒属正常</div></div>
+    <div class="link-row"><div class="icon">🎬</div><div><b>Demo 视频：</b><code>（待粘贴）</code>&nbsp;· 建议 1-2 分钟：输入画像 → 看推荐 → 展示理由与告警</div></div>
+    <div class="link-row"><div class="icon">📄</div><div><b>接口文档：</b><code>/docs</code>（Swagger UI）· <code>/redoc</code> · <code>/openapi.json</code> 自动生成</div></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>质量佐证 · 联调测试（2026-09-11）</h3>
+    <table>
+      <tr><th>用例</th><th>画像 × 场景</th><th>结论</th></tr>
+      <tr><td>M01</td><td>计算机 × 已截止样例赛</td><td class="yes">硬过滤正确拦截，在报赛事同逻辑验证通过</td></tr>
+      <tr><td>M02</td><td>文法 × 不限专业赛</td><td class="yes">不因未命中推荐专业而误排除</td></tr>
+      <tr><td>M05</td><td>医学 × 限医学赛</td><td class="yes">专业项 25/30，资格完全命中</td></tr>
+      <tr><td>反向</td><td>计算机 × 限医学赛</td><td class="yes">mismatch 正确剔除</td></tr>
+      <tr><td>冒烟</td><td>本地 uvicorn 5 组 HTTP</td><td class="yes">全部 200，列表/详情/推荐/筛选正常</td></tr>
+    </table>
+    <p class="muted" style="margin-top:8px;">M01–M06 共 6 项画像实测全部通过，详见 <code>docs/推荐专业后端测试结果_20260911.txt</code>。</p>
+  </div>
+
+  <footer>赛途 ContestHub · 项目展示副本 · 生成于 2026-09-11 · 基于 V1.0 推荐规则（田淋元）与 B 版 30 条数据</footer>
+</div>
+</body>
+</html>
